@@ -4,28 +4,26 @@ import { RouterLink } from 'vue-router';
 
 <template>
   <nav>
-    <tr>
-      <th><RouterLink to="/seasons">Seasons</RouterLink></th>
-      <th><RouterLink to="/teams">Teams</RouterLink></th>
-      <th><RouterLink to="/games">Games</RouterLink></th>
-      <th><RouterLink to="/players">Players</RouterLink></th>
-    </tr>
+    <RouterLink to="/">Home</RouterLink>
+    <RouterLink to="/seasons">Seasons</RouterLink>
+    <RouterLink to="/teams">Teams</RouterLink>
+    <RouterLink to="/games">Games</RouterLink>
+    <RouterLink to="/players">Players</RouterLink>
   </nav>
 </template>
 
 <style scoped lang="sass">
 nav
-  tr
-    padding-inline: 0.5em
-    th
-      transition: linear 0.1s
-      cursor: pointer
-      padding: 0.5em
-      color: brown
-      &:hover
-        color: white
-        background-color: brown
-    a
-      text-decoration: none
-      color: unset
+  a
+    transition: linear 0.1s
+    cursor: pointer
+    display: inline-block
+    padding: 0.5em
+    position: relative
+    color: brown
+    text-align: center
+    text-decoration: unset
+    &:hover
+      color: white
+      background-color: brown
 </style>

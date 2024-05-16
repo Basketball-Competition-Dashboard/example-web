@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { Icon } from '@iconify/vue';
-</script>
-
 <template>
   <header>
     <section id="logo"><slot name="logo"></slot></section>
@@ -11,11 +7,19 @@ import { Icon } from '@iconify/vue';
 
 <style scoped lang="sass">
 header
-  width: 100%
   background-color: orange
-  #nav
+  display: flex
+  width: 100%
+  #logo
+    align-items: center
     display: flex
-    align-items: flex-end
+    justify-content: flex-start
+    padding: 0.25em
+    width: max-content
+  #nav
+    align-items: flex-start
+    display: flex
     justify-content: flex-end
+    padding-inline: 0.5em
     width: 100%
 </style>
