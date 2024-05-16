@@ -6,13 +6,19 @@ import Header from './views/Header.vue';
   <section id="header">
     <Header />
   </section>
-  <section id="content">
+  <section id="main">
     <RouterView />
   </section>
 </template>
 
 <style scoped lang="sass">
-#content
+#header
+  display: block
+  position: sticky
+  top: 0
+  left: 0
+  width: 100%
+#main
   background: brown
   width: 100%
 </style>

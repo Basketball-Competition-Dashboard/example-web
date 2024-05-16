@@ -21,7 +21,7 @@ header
     padding: 0.25em
     width: max-content
   #nav
-    align-items: flex-start
+    align-items: center
     display: flex
     justify-content: flex-end
     width: 100%
