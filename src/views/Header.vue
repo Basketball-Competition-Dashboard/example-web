@@ -1,7 +1,12 @@
+<script setup lang="ts">
+import Logo from '@/components/Logo.vue';
+import PageNav from '@/components/PageNav.vue';
+</script>
+
 <template>
   <header>
-    <section id="logo"><slot name="logo"></slot></section>
-    <section id="nav"><slot name="nav"></slot></section>
+    <section id="logo"><Logo /></section>
+    <section id="nav"><PageNav /></section>
   </header>
 </template>
 
@@ -9,17 +14,15 @@
 header
   background-color: orange
   display: flex
+  padding-block-end: 0.25em
   width: 100%
   #logo
-    align-items: center
-    display: flex
-    justify-content: flex-start
+    height: max-content
     padding: 0.25em
     width: max-content
   #nav
     align-items: flex-start
     display: flex
     justify-content: flex-end
-    padding-inline: 0.5em
     width: 100%
 </style>

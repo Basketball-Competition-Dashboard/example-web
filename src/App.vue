@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
 import Header from './views/Header.vue';
-import Logo from './components/Logo.vue';
-import PageNav from './components/PageNav.vue';
 </script>
 
 <template>
-  <Header>
-    <template #logo><Logo /></template>
-    <template #nav><PageNav /></template>
-  </Header>
+  <section id="header">
+    <Header />
+  </section>
   <section id="content">
     <RouterView />
   </section>
 </template>
 
 <style scoped lang="sass">
-#app-view
+#content
   background: brown
+  width: 100%
 </style>

@@ -14,10 +14,11 @@ import { RouterLink } from 'vue-router';
 
 <style scoped lang="sass">
 nav
+  display: flex
+  align-items: center
   a
     transition: linear 0.1s
     cursor: pointer
-    display: inline-block
     padding: 0.5em
     position: relative
     color: brown
