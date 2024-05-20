@@ -1,6 +1,8 @@
 # web
 
-This template should help get you started developing with Vue 3 in Vite.
+## Architecture
+
+See the documentation [here](./docs/architecture.md).
 
 ## Recommended IDE Setup
 
