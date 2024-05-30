@@ -5,16 +5,22 @@
   margin: 0;
   font-weight: 400;
 }
+button {
+  background: unset;
+  border: unset;
+}
 body {
-  min-height: 100vh;
-  color: white;
   background: brown;
-  line-height: 1.5;
+  color: white;
+  display: block;
   font-family: 'Noto Sans', sans-serif;
   font-size: 16px;
+  line-height: 1.5;
   margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
   position: relative;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }

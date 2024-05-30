@@ -32,13 +32,6 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'Nav',
-});
-</script>
 <!-- Should use Sass over css module -->
 <style module>
 .navigationChild {

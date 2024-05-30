@@ -91,7 +91,7 @@
       <p>Ball Ball Ball</p>
       <p>Ball Ball Ball</p>
       <p>Ball Ball Ball</p>
-      <p>Ball Ball Ball</p>
+      <p>Basketball !!!</p>
     </section>
   </main>
 </template>

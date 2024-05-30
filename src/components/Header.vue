@@ -1,26 +1,47 @@
-<script setup lang="ts">
-import Head from '@/components/Head.vue';
-</script>
-
 <template>
   <header>
-    <section id="logo"><Head /></section>
+    <img
+      alt="Logo with a basketball"
+      id="logo"
+      src="@/assets/basketball.png" />
+    <h1 id="title">籃球戰情室</h1>
+    <button id="auth">Logout</button>
   </header>
 </template>
 
 <style scoped lang="sass">
 header
-  background-color: orange
+  align-items: center
+  background-color: #ffc368
   display: flex
-  padding-block-end: 0.25em
+  height: auto
+  flex-direction: row
+  position: relative
   width: 100%
+
   #logo
-    height: max-content
-    padding: 0.25em
+    display: block
+    height: 9em
+    padding-inline: 1.5em
+    position: relative
+    width: auto
+
+  #title
+    color: #000000
+    display: block
+    height: auto
+    font-size: 5em
+    font-weight: 700
+    position: relative
     width: 100%
-  #nav
-    align-items: center
-    display: flex
-    justify-content: flex-end
-    width: 15%
+  
+  #auth
+    color: #ffffff
+    cursor: pointer
+    display: block
+    height: auto
+    font-size: 2.25em
+    text-decoration: underline
+    padding-inline-end: 1em
+    width: auto
 </style>
