@@ -1,47 +1,50 @@
 <template>
-  <header>
-    <img
-      alt="Logo with a basketball"
-      id="logo"
-      src="@/assets/basketball.png" />
-    <h1 id="title">籃球戰情室</h1>
-    <button id="auth">Logout</button>
-  </header>
+  <div class="header-vue">
+    <header id="grid">
+      <img
+        alt="Logo with a basketball"
+        id="logo"
+        src="@/assets/basketball.png" />
+      <h1 id="title">籃球戰情室</h1>
+      <button id="auth">Logout</button>
+    </header>
+  </div>
 </template>
 
 <style scoped lang="sass">
-header
+#grid
+  display: grid
+  grid-template-areas: "logo title auth"
+  grid-template-columns: min-content auto min-content
+  grid-template-rows: min-content
   align-items: center
-  background-color: #ffc368
-  display: flex
-  height: auto
-  flex-direction: row
-  position: relative
-  width: 100%
 
   #logo
-    display: block
-    height: 9em
-    padding-inline: 1.5em
-    position: relative
-    width: auto
+    grid-area: logo
 
   #title
-    color: #000000
-    display: block
-    height: auto
-    font-size: 5em
-    font-weight: 700
-    position: relative
-    width: 100%
-  
+    grid-area: title
+
   #auth
-    color: #ffffff
-    cursor: pointer
-    display: block
-    height: auto
-    font-size: 2.25em
-    text-decoration: underline
-    padding-inline-end: 1em
-    width: auto
+    grid-area: auth
+
+header
+  background-color: #ffc368
+
+img#logo
+  aspect-ratio: 160 / 145
+  height: 9em
+  margin: 0.35em 1.5em
+
+h1#title
+  color: #000000
+  font-size: 5em
+  font-weight: 700
+
+button#auth
+  color: #ffffff
+  cursor: pointer
+  font-size: 2.25em
+  text-decoration: underline
+  padding-inline: 1em
 </style>
