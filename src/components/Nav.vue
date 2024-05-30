@@ -19,10 +19,14 @@ nav
   display: flex
   flex-direction: column
   font-size: 2.25em
-  height: 100%
+  height: 100vh
+  overflow-y: auto
   padding: 1em 0.85em
   position: relative
   width: 100%
+
+  *:last-child
+    margin-block-end: 100%
 
   a
     color: black
