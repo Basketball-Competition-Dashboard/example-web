@@ -39,6 +39,7 @@ export default defineComponent({
   name: 'Nav',
 });
 </script>
+<!-- Should use Sass over css module -->
 <style module>
 .navigationChild {
   height: 42.438rem;
@@ -129,6 +130,7 @@ export default defineComponent({
   letter-spacing: normal;
 }
 
+/* We are not going to maintain this style of RWD */
 @media screen and (max-width: 750px) {
   .div {
     font-size: var(--font-size-10xl);

@@ -20,12 +20,10 @@ import Nav from './components/Nav.vue';
 <style scoped lang="sass">
 #header
   display: block
-  position: -webkit-sticky  // For Safari support
-  position: relative
+  position: sticky
   top: 0
   left: 0
   width: 100%
-  z-index: 1000  // Ensure it stays above other content if necessary
 
 #main
   background: brown

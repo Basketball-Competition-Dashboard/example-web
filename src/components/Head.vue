@@ -5,7 +5,7 @@
         :class="$style.basketball1Icon"
         loading="lazy"
         alt=""
-        src="../assets/basketball%201.png" />
+        src="../assets/basketball.png" />
       <div :class="$style.wrapper">
         <h1 :class="$style.h1">籃球戰情室</h1>
       </div>
@@ -22,6 +22,7 @@ export default defineComponent({
   name: 'Head',
 });
 </script>
+<!-- Should use Sass over css module -->
 <style module>
 .basketball1Icon {
   height: 9.063rem;
