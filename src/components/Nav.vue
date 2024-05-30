@@ -20,7 +20,7 @@ nav
   flex-direction: column
   font-size: 2.25em
   height: 100%
-  padding: 1em 0.65em
+  padding: 1em 0.85em
   position: relative
   width: 100%
 

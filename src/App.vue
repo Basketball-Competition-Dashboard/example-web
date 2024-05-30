@@ -21,8 +21,9 @@ import Nav from '@/components/Nav.vue';
 <style scoped lang="sass">
 #base-grid
   display: grid
-  grid-template: min-content 100% / min-content 100%
   grid-template-areas: "header header" "sidebar content"
+  grid-template-columns: minmax(16%, min-content) auto
+  grid-template-rows: min-content 100%
   height: 100%
   width: 100%
 
