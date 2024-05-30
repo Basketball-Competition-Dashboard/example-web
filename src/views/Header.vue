@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import Logo from '@/components/Logo.vue';
-import PageNav from '@/components/PageNav.vue';
+import Head from '@/components/Head.vue';
+
 </script>
 
 <template>
   <header>
-    <section id="logo"><Logo /></section>
-    <section id="nav"><PageNav /></section>
+    <section id="logo"> <Head /> </section>
+
   </header>
 </template>
 
@@ -19,10 +19,10 @@ header
   #logo
     height: max-content
     padding: 0.25em
-    width: max-content
+    width: 100%
   #nav
     align-items: center
     display: flex
     justify-content: flex-end
-    width: 100%
+    width: 15%
 </style>
