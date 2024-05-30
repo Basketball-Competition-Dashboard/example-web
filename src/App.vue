@@ -5,44 +5,33 @@ import Nav from '@/components/Nav.vue';
 </script>
 
 <template>
-  <section id="header">
-    <Header />
-  </section>
-  <section id="main">
+  <div id="base-grid">
+    <section id="header">
+      <Header />
+    </section>
     <aside id="sidebar">
       <Nav />
     </aside>
     <article id="content">
       <RouterView />
     </article>
-  </section>
+  </div>
 </template>
 
 <style scoped lang="sass">
-#header
-  display: block
-  position: relative
-  height: auto
+#base-grid
+  display: grid
+  grid-template: min-content 100% / min-content 100%
+  grid-template-areas: "header header" "sidebar content"
+  height: 100%
   width: 100%
 
-#main
-  display: flex
-  flex-direction: row
-  height: auto
-  position: relative
-  width: 100%
+  #header
+    grid-area: header
 
   #sidebar
-    display: flex
-    flex-direction: column
-    height: auto
-    position: relative
-    width: auto
+    grid-area: sidebar
 
   #content
-    align-items: center
-    display: flex
-    flex-direction: column
-    height: auto
-    width: 100%
+    grid-area: content
 </style>

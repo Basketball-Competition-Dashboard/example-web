@@ -10,8 +10,8 @@ const router = createRouter({
       component: Home,
     },
     {
-      path: '/seasons',
-      name: 'seasons',
+      path: '/player-profiles',
+      name: 'player-profiles',
       component: () => import('../views/Seasons.vue'),
     },
     {
@@ -25,8 +25,8 @@ const router = createRouter({
       component: () => import('../views/Games.vue'),
     },
     {
-      path: '/players',
-      name: 'players',
+      path: '/player-stats',
+      name: 'player-stats',
       component: () => import('../views/Players.vue'),
     },
   ],
