@@ -1,26 +1,21 @@
 <script setup lang="ts">
 import Header from './views/Header.vue';
-import Nav from "./components/Nav.vue"
+import Nav from './components/Nav.vue';
 </script>
 
 <template>
   <section id="header">
-  <Header />
+    <Header />
   </section>
   <section id="main">
     <aside id="sidebar">
-    <Nav/>
+      <Nav />
     </aside>
-        <div id="content">
-    <RouterView />
+    <div id="content">
+      <RouterView />
     </div>
   </section>
 </template>
-
-
-
-
-
 
 <style scoped lang="sass">
 #header
@@ -50,6 +45,4 @@ import Nav from "./components/Nav.vue"
   flex-direction: column
   align-items: center
   padding: 1em
-
-
 </style>

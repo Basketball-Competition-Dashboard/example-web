@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import Head from '@/components/Head.vue';
-
 </script>
 
 <template>
   <header>
-    <section id="logo"> <Head /> </section>
-
+    <section id="logo"><Head /></section>
   </header>
 </template>
 
