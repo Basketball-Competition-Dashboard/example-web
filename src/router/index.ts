@@ -12,7 +12,7 @@ const router = createRouter({
     {
       path: '/player-profiles',
       name: 'player-profiles',
-      component: () => import('../views/Seasons.vue'),
+      component: () => import('../views/PlayerProfiles.vue'),
     },
     {
       path: '/teams',
@@ -27,7 +27,7 @@ const router = createRouter({
     {
       path: '/player-stats',
       name: 'player-stats',
-      component: () => import('../views/Players.vue'),
+      component: () => import('../views/PlayerStats.vue'),
     },
   ],
 });

@@ -1,7 +1,7 @@
 <template>
   <main id="home">
     <section id="title">
-      <h1>Seasons</h1>
+      <h1>Player Profiles</h1>
     </section>
   </main>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <main id="home">
     <section id="title">
-      <h1>Players</h1>
+      <h1>Player Stats</h1>
     </section>
   </main>
 </template>
