@@ -9,7 +9,7 @@ import Nav from '@/components/Nav.vue';
     <Header />
   </section>
   <section id="main">
-    <aside id="nav">
+    <aside id="sidebar">
       <Nav />
     </aside>
     <article id="content">
@@ -32,7 +32,7 @@ import Nav from '@/components/Nav.vue';
   position: relative
   width: 100%
 
-  #nav
+  #sidebar
     display: flex
     flex-direction: column
     height: auto
