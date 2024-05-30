@@ -1,8 +1,5 @@
 <template>
   <main id="home">
-    <section id="banner">
-      <Banner imgsrc="" />
-    </section>
     <section id="title">
       <h1>Players</h1>
     </section>
@@ -15,8 +12,8 @@
   flex-direction: column
   align-items: center
 #title
-  padding-block: 2em
   h1
+    padding-block: 1em
     color: white
     font-size: 3em
     font-weight: 700
