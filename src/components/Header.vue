@@ -31,20 +31,21 @@
 header
   background-color: #ffc368
 
-img#logo
-  aspect-ratio: 160 / 145
-  height: 9em
-  margin: 0.35em 1.5em
+  img#logo
+    aspect-ratio: 160 / 145
+    color: #ffffff
+    height: 9em
+    margin: 0.35em 1.5em
 
-h1#title
-  color: #000000
-  font-size: 5em
-  font-weight: 700
+  h1#title
+    color: #000000
+    font-size: 5em
+    font-weight: 700
 
-button#auth
-  color: #ffffff
-  cursor: pointer
-  font-size: 2.25em
-  text-decoration: underline
-  padding-inline: 1em
+  button#auth
+    color: #ffffff
+    cursor: pointer
+    font-size: 2.25em
+    text-decoration: underline
+    padding-inline: 1em
 </style>
