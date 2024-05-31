@@ -1,33 +1,33 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/Home.vue';
+import Main from '@/views/Main.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
+      name: '最新賽事',
+      component: Main,
     },
     {
-      path: '/seasons',
-      name: 'seasons',
-      component: () => import('../views/Seasons.vue'),
+      path: '/player-profiles',
+      name: '球員介紹',
+      component: Main,
     },
     {
       path: '/teams',
-      name: 'teams',
-      component: () => import('../views/Teams.vue'),
+      name: '球隊介紹',
+      component: Main,
     },
     {
       path: '/games',
-      name: 'games',
-      component: () => import('../views/Games.vue'),
+      name: '比賽紀錄',
+      component: Main,
     },
     {
-      path: '/players',
-      name: 'players',
-      component: () => import('../views/Players.vue'),
+      path: '/player-stats',
+      name: '比賽表現',
+      component: Main,
     },
   ],
 });

@@ -1,19 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap');
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
+}
+button {
+  background: unset;
+  border: unset;
 }
 body {
-  min-height: 100vh;
-  color: white;
-  background: brown;
+  background: #ffffff;
+  color: #000000;
+  display: block;
+  font-family: Inter, sans-serif;
+  font-size: calc(6px + 0.78vmax + 0.02vmin);
+  font-weight: 500;
   line-height: 1.5;
-  font-family: 'Noto Sans', sans-serif;
-  font-size: 16px;
+  margin: 0;
+  min-height: 100vh;
+  overflow: hidden;
   position: relative;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
