@@ -1,18 +1,20 @@
 import { defineStore } from 'pinia';
-import { getPing } from '@/codegen/web-api-client';
+import { getPing } from '@/generated/web-api';
 
-export default defineStore('ping', {
+const pingStore = defineStore('ping', {
   state: () => ({
-    value: '',
+    _value: '',
   }),
   getters: {
-    pong(state) {
-      return state.value;
+    value(state) {
+      return state._value;
     },
   },
   actions: {
-    async read() {
-      this.value = await getPing();
+    async ping() {
+      this._value = await getPing();
     },
   },
 });
+
+export default pingStore;

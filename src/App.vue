@@ -1,14 +1,15 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import Header from '@/components/Header.vue';
 import Nav from '@/components/Nav.vue';
 import pingStore from './stores/ping';
-import { onMounted } from 'vue';
 
 const ping = pingStore();
+
 onMounted(async () => {
-  await ping.read();
-  console.log(ping.pong);
+  await ping.ping();
+  console.log(ping.value);
 });
 </script>
 
@@ -21,7 +22,9 @@ onMounted(async () => {
       <aside id="sidebar">
         <Nav />
       </aside>
-      <article id="content">
+      <article
+        id="content"
+        :class="$router">
         <RouterView />
       </article>
     </div>
