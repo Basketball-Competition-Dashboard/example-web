@@ -2,6 +2,14 @@
 import { RouterView } from 'vue-router';
 import Header from '@/components/Header.vue';
 import Nav from '@/components/Nav.vue';
+import pingStore from './stores/ping';
+import { onMounted } from 'vue';
+
+const ping = pingStore();
+onMounted(async () => {
+  await ping.read();
+  console.log(ping.pong);
+});
 </script>
 
 <template>

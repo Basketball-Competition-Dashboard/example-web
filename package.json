@@ -4,15 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p format type-check \"build-only {@}\" --",
+    "build": "run-s codegen:* format check:* \"build-only {@}\" --",
+    "build-only": "vite build",
+    "check:type": "vue-tsc --build --force",
+    "codegen:web-api-client": "openapi --input https://raw.githubusercontent.com/Basketball-Competition-Dashboard/doc/main/api/web/openapi.yml --output src/codegen/web-api-client",
+    "dev": "run-s codegen:* dev-only",
+    "dev-only": "vite dev",
+    "format": "prettier --write .",
     "preview": "vite preview",
-    "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
-    "build-only": "vite build",
-    "format": "prettier --write .",
-    "type-check": "vue-tsc --build --force"
+    "test:unit": "vitest"
   },
   "dependencies": {
     "pinia": "^2.1.7",
@@ -30,6 +32,7 @@
     "cypress": "^13.9.0",
     "jsdom": "^24.0.0",
     "npm-run-all2": "^6.2.0",
+    "openapi-typescript-codegen": "0.29.0",
     "prettier": "^3.2.5",
     "sass": "^1.77.1",
     "start-server-and-test": "^2.0.3",
