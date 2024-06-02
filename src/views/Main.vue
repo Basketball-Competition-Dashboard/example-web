@@ -1,5 +1,5 @@
 <template>
-  <div class="view">
+  <div class="main-vue">
     <h1 id="title">{{ $route.name }}</h1>
   </div>
 </template>
