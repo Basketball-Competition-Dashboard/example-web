@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Service } from '@/codegen/web-api-client';
+import { getPing } from '@/codegen/web-api-client';
 
 export default defineStore('ping', {
   state: () => ({
@@ -12,7 +12,7 @@ export default defineStore('ping', {
   },
   actions: {
     async read() {
-      this.value = await Service.getPing();
+      this.value = await getPing();
     },
   },
 });
