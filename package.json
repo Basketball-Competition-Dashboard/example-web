@@ -11,9 +11,8 @@
     "dev": "run-s codegen-* dev-only",
     "dev-only": "vite dev",
     "format": "prettier --write .",
-    "preview": "vite preview",
-    "test-e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
-    "test-e2e-dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
+    "preview": "python3 ../main.py",
+    "test-e2e-api-val-readonly": "start-server-and-test preview http://127.0.0.1:5000 'cypress run --e2e --spec \"cypress/e2e/api-val-readonly/**/*.test.ts\"'",
     "test-unit": "vitest"
   },
   "dependencies": {
