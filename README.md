@@ -40,16 +40,16 @@ bun format
 bun run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+<!-- ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
 bun test-unit
-```
+``` -->
 
 ### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
-bun test-e2e-dev
+bun test-e2e
 ```
 
 This runs the end-to-end tests against the Vite development server.
