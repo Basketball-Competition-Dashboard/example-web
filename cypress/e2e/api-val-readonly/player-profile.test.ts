@@ -21,7 +21,7 @@ describe('Create', () => {
   it('should respond 401', () => {
     cy.request({
       method: 'POST',
-      url: '/api/web/players/profile',
+      url: '/api/web/player/profile',
       body: {},
       failOnStatusCode: false,
     }).then((response) => {

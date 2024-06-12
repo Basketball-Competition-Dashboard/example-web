@@ -2,7 +2,7 @@ describe('Login', () => {
   it('should respond 400', () => {
     cy.request({
       method: 'POST',
-      url: '/api/web/auth/login',
+      url: '/api/web/auth/session',
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.eq(400);
@@ -12,7 +12,7 @@ describe('Login', () => {
   it('should respond 404', () => {
     cy.request({
       method: 'POST',
-      url: '/api/web/auth/login',
+      url: '/api/web/auth/session',
       body: {
         name: '',
         credential: '',
@@ -27,8 +27,8 @@ describe('Login', () => {
 describe('Logout', () => {
   it('should respond 401', () => {
     cy.request({
-      method: 'POST',
-      url: '/api/web/auth/logout',
+      method: 'DELETE',
+      url: '/api/web/auth/session',
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.eq(401);
