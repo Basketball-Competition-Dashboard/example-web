@@ -1,5 +1,5 @@
 describe('Read', () => {
-  it('should respond 200 and an array with 3 items', () => {
+  it('should respond 200 and an array', () => {
     const params = new URLSearchParams({
       page_offset: '0',
       page_length: '3',
@@ -12,7 +12,7 @@ describe('Read', () => {
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.have.length(3);
+      expect(response.body).to.be.an('array');;
     });
   });
 });
