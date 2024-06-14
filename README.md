@@ -49,15 +49,15 @@ bun test-unit
 ### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
-bun test-e2e-api-val-readonly
+bun test-e2e-api-stub-readonly
 ```
 
 This runs the end-to-end tests against the Vite development server.
 It is much faster than the production build.
 
-But it's still recommended to test the production build with `test-e2e-api-val-readonly` before deploying (e.g. in CI environments):
+But it's still recommended to test the production build with `test-e2e-api-stub-readonly` before deploying (e.g. in CI environments):
 
 ```sh
 bun run build
-bun test-e2e-api-val-readonly
+bun test-e2e-api-stub-readonly
 ```

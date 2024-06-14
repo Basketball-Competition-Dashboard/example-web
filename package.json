@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "preview": "python3 ../main.py",
     "test-e2e": "run-s test-e2e-*",
-    "test-e2e-api-val-readonly": "start-server-and-test preview http://127.0.0.1:5000 'cypress run --e2e --spec \"cypress/e2e/api-val-readonly/**/*.test.ts\"'",
+    "test-e2e-api-stub-readonly": "start-server-and-test preview http://127.0.0.1:5000 'cypress run --e2e --spec \"cypress/e2e/api-stub-readonly/**/*.test.ts\"'",
     "test-unit": "vitest"
   },
   "dependencies": {
