@@ -12,7 +12,7 @@ describe('Read', () => {
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.body).to.be.an('array');;
+      expect(response.body).to.be.an('array');
     });
   });
 });
