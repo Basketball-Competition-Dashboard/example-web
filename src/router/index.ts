@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Main from '@/views/Main.vue';
+import Test from '@/views/Test.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/player-stats',
       name: '比賽表現',
       component: Main,
+    },
+    {
+      path: '/test',
+      name: 'testing',
+      component: Test,
     },
   ],
 });
