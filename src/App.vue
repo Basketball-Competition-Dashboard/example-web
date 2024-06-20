@@ -7,10 +7,10 @@ import pingStore from './stores/ping';
 
 const ping = pingStore();
 
-onMounted(async () => {
-  await ping.ping();
-  console.log(ping.value);
-});
+// onMounted(async () => {
+//   await ping.ping();
+//   console.log(ping.value);
+// });
 </script>
 
 <template>
