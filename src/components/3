@@ -56,7 +56,7 @@
 <style scoped lang="sass">
 table
     width: 80%
-    height: 50%
+    height: 30%
     text-align: center
     margin: 0 auto
     /*border-collapse: collapse*/
@@ -71,14 +71,18 @@ table
     tr:nth-child(odd)
         background-color: #fff
 
-    tr:first-child
+    tr:nth-child(1)
         color: black
-        border: 1px solid #ddd
+        border-left: 1px solid #ddd
+        border-right: 1px solid #ddd
+        border-up: 1px solid #ddd
+        border-bottom: 1px solid #ddd
 
     .update_button
         font-weight: normal
         background-color: #4CAF50
         color: white
+        padding: 4px 8px
         text-decoration: none
-        padding: 0px
+
 </style>
