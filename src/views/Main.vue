@@ -46,7 +46,7 @@ import Table from '@/components/Table.vue';
   color: #000000
   font-size: 2.5em
   font-weight: 600
-  padding-block-start: 0.85em
+  padding-block-start: 1em
   text-align: center
 
 #center

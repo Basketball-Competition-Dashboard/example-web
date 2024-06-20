@@ -19,7 +19,9 @@ onMounted(() => {
 
 <template>
   <div id="table-vue">
-    <section id="edit-switches">
+    <section
+      v-if="editable"
+      id="edit-switches">
       <div class="edit-switch">
         <TableEditButton
           :mode="'Create'"
@@ -28,7 +30,10 @@ onMounted(() => {
       <div class="edit-switch">
         <TableEditButton
           :mode="'Delete'"
-          @edit="table.switchDeleteRecord" />
+          :style="{
+            filter: !deletable && 'grayscale(1) opacity(0.5)',
+          }"
+          @edit="deletable && table.switchDeleteRecord()" />
       </div>
     </section>
     <table>
@@ -71,6 +76,7 @@ onMounted(() => {
 #edit-switches
   display: flex
   font-size: 1.15em
+  height: 2.65em
   justify-content: flex-end
   width: 100%
 
@@ -89,6 +95,13 @@ table
   thead
     border: 0.05em solid #c3c5cb
 
+  tbody
+    tr
+      border-block-end: 0.05em solid #dddfe1
+
+      &:nth-child(odd)
+        background-color: #f3f3f3
+
   td, th
     padding-inline: 1.0em
     text-align: center
@@ -105,13 +118,6 @@ table
     font-weight: 600
     font-size: 90%
     padding-block: 1.2em
-
-  tbody
-    tr
-      border-block-end: 0.05em solid #dddfe1
-
-      &:nth-child(odd)
-        background-color: #f3f3f3
 
   td.edit-button, th.edit-button
     font-size: 75%
