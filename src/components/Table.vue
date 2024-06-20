@@ -1,16 +1,11 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import TableEditButton from './TableEditButton.vue';
 
-defineProps({
-  headers: {
-    type: Array<[string, string]>,
-    required: true,
-  },
-  records: {
-    type: Array<Record<string, string>>,
-    required: true,
-  },
-});
+defineProps<{
+  editable: boolean;
+  headers: Record<string, string | number>;
+  records: Record<string, string | number>[];
+}>();
 </script>
 
 <template>
@@ -19,10 +14,11 @@ defineProps({
       <thead>
         <tr>
           <th
-            v-for="[schemaName, displayName] in headers"
+            v-for="(displayName, schemaName) of headers"
             :key="schemaName">
             {{ displayName }}
           </th>
+          <th class="button"></th>
         </tr>
       </thead>
       <tbody>
@@ -30,9 +26,15 @@ defineProps({
           v-for="record in records"
           :key="record.id">
           <td
-            v-for="[schemaName, _] in headers"
+            v-for="(_, schemaName) of headers"
             :key="schemaName">
             {{ record[schemaName] }}
+          </td>
+          <td class="button">
+            <TableEditButton
+              :editable="editable"
+              :label="'Delete'"
+              @click="(label) => console.log(label, record.id)" />
           </td>
         </tr>
       </tbody>
@@ -49,7 +51,7 @@ table
   width: 100%
 
   thead
-    border: 1px solid #c3c5cb
+    border: 0.05em solid #c3c5cb
 
   td, th
     padding-inline: 1.0em
@@ -70,8 +72,14 @@ table
 
   tbody
     tr
-      border-block-end: 1px solid #dddfe1
+      border-block-end: 0.05em solid #dddfe1
 
       &:nth-child(odd)
         background-color: #f3f3f3
+
+  td.button, th.button
+    font-size: 75%
+    padding: 0
+    text-align: left
+    width: 6em
 </style>

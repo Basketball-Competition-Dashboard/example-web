@@ -8,33 +8,34 @@ import Table from '@/components/Table.vue';
     <section id="center">
       <Table
         id="table"
-        :headers="[
-          ['id', 'ID'],
-          ['name', 'Name'],
-          ['email', 'Email'],
-        ]"
+        :headers="{
+          id: 'ID',
+          name: 'NAME',
+          email: 'EMAIL',
+        }"
         :records="[
           {
-            id: '1',
+            id: 1,
             name: 'John Doe',
             email: 'gg@gmail.com',
           },
           {
-            id: '2',
+            id: 2,
             name: 'Jane Doe',
             email: 'aaa@gmail.com',
           },
           {
-            id: '3',
+            id: 3,
             name: 'John Smith',
             email: '?@gmail.com',
           },
           {
-            id: '4',
+            id: 4,
             name: 'Jane Smith',
             email: 'sddssd@gmail.com',
           },
-        ]" />
+        ]"
+        :editable="true" />
     </section>
   </div>
 </template>
