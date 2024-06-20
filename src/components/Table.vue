@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import TableEditButton from './TableEditButton.vue';
-import { ref } from 'vue';
+import { useTableStore } from '@/stores/table';
 
-defineProps<{
+const { records } = defineProps<{
   deletable: boolean;
   editable: boolean;
   headers: Record<string, string>;
   records: (Record<string, unknown> & { id: number })[];
 }>();
 
-const editMode = ref<'Create' | 'Delete' | 'Update'>('Update');
+const table = useTableStore();
 
-function switchCreateRecord(): void {
-  console.log('Creating record');
-}
+onMounted(() => {
+  table.setRecords(records);
+});
 </script>
 
 <template>
@@ -21,15 +22,13 @@ function switchCreateRecord(): void {
     <section id="edit-switches">
       <div class="edit-switch">
         <TableEditButton
-          :label="'Create'"
-          @edit="switchCreateRecord" />
+          :mode="'Create'"
+          @edit="table.switchCreateRecord" />
       </div>
       <div class="edit-switch">
         <TableEditButton
-          :label="'Delete'"
-          @edit="
-            editMode = editMode !== 'Delete' ? 'Delete' : 'Update'
-          " />
+          :mode="'Delete'"
+          @edit="table.switchDeleteRecord" />
       </div>
     </section>
     <table>
@@ -48,19 +47,19 @@ function switchCreateRecord(): void {
 
       <tbody>
         <tr
-          v-for="record in records"
+          v-for="(record, index) of records"
           :key="record.id">
           <td
-            v-for="(_, schemaName) of headers"
+            v-for="(value, schemaName) of record"
             :key="schemaName">
-            {{ record[schemaName] }}
+            {{ value }}
           </td>
           <td
             class="edit-button"
             v-if="editable">
             <TableEditButton
-              :label="editMode"
-              @edit="(label) => console.log(label, record)" />
+              :mode="table.getEditModes[index] ?? 'Update'"
+              @edit="() => table.editRecord(index, record)" />
           </td>
         </tr>
       </tbody>
@@ -118,5 +117,6 @@ table
     font-size: 75%
     padding: 0
     text-align: left
+    user-select: none
     width: 6em
 </style>
