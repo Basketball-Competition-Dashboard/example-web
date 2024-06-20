@@ -1,6 +1,5 @@
 <script setup lang="ts">
 defineProps<{
-  editable: boolean;
   label: 'Create' | 'Delete' | 'Save' | 'Update';
 }>();
 defineEmits<{

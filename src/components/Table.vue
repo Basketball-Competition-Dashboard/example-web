@@ -18,7 +18,9 @@ defineProps<{
             :key="schemaName">
             {{ displayName }}
           </th>
-          <th class="button"></th>
+          <th
+            class="button"
+            v-if="editable"></th>
         </tr>
       </thead>
       <tbody>
@@ -30,9 +32,10 @@ defineProps<{
             :key="schemaName">
             {{ record[schemaName] }}
           </td>
-          <td class="button">
+          <td
+            class="button"
+            v-if="editable">
             <TableEditButton
-              :editable="editable"
               :label="'Delete'"
               @click="(label) => console.log(label, record.id)" />
           </td>

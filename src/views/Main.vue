@@ -35,7 +35,7 @@ import Table from '@/components/Table.vue';
             email: 'sddssd@gmail.com',
           },
         ]"
-        :editable="true" />
+        :editable="false" />
     </section>
   </div>
 </template>
