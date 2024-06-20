@@ -1,15 +1,37 @@
 <script setup lang="ts">
 import TableEditButton from './TableEditButton.vue';
+import { ref } from 'vue';
 
 defineProps<{
+  deletable: boolean;
   editable: boolean;
-  headers: Record<string, string | number>;
-  records: Record<string, string | number>[];
+  headers: Record<string, string>;
+  records: (Record<string, unknown> & { id: number })[];
 }>();
+
+const editMode = ref<'Create' | 'Delete' | 'Update'>('Update');
+
+function switchCreateRecord(): void {
+  console.log('Creating record');
+}
 </script>
 
 <template>
   <div id="table-vue">
+    <section id="edit-switches">
+      <div class="edit-switch">
+        <TableEditButton
+          :label="'Create'"
+          @edit="switchCreateRecord" />
+      </div>
+      <div class="edit-switch">
+        <TableEditButton
+          :label="'Delete'"
+          @edit="
+            editMode = editMode !== 'Delete' ? 'Delete' : 'Update'
+          " />
+      </div>
+    </section>
     <table>
       <thead>
         <tr>
@@ -19,10 +41,11 @@ defineProps<{
             {{ displayName }}
           </th>
           <th
-            class="button"
+            class="edit-button"
             v-if="editable"></th>
         </tr>
       </thead>
+
       <tbody>
         <tr
           v-for="record in records"
@@ -33,11 +56,11 @@ defineProps<{
             {{ record[schemaName] }}
           </td>
           <td
-            class="button"
+            class="edit-button"
             v-if="editable">
             <TableEditButton
-              :label="'Delete'"
-              @click="(label) => console.log(label, record.id)" />
+              :label="editMode"
+              @edit="(label) => console.log(label, record)" />
           </td>
         </tr>
       </tbody>
@@ -46,6 +69,17 @@ defineProps<{
 </template>
 
 <style scoped lang="sass">
+#edit-switches
+  display: flex
+  font-size: 1.15em
+  justify-content: flex-end
+  width: 100%
+
+  .edit-switch
+    padding-inline: 1em
+    padding-block-end: 1em
+    width: 6em
+
 table
   border-collapse: collapse
   font-family: "Anek Tamil", sans-serif
@@ -80,7 +114,7 @@ table
       &:nth-child(odd)
         background-color: #f3f3f3
 
-  td.button, th.button
+  td.edit-button, th.edit-button
     font-size: 75%
     padding: 0
     text-align: left

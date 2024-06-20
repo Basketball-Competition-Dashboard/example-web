@@ -3,14 +3,14 @@ defineProps<{
   label: 'Create' | 'Delete' | 'Save' | 'Update';
 }>();
 defineEmits<{
-  click: [label: 'Create' | 'Delete' | 'Save' | 'Update'];
+  edit: [label: 'Create' | 'Delete' | 'Save' | 'Update'];
 }>();
 </script>
 
 <template>
   <div id="table-edit-button-vue">
     <button
-      @click="$emit('click', label)"
+      @click="$emit('edit', label)"
       :data-label="label">
       {{ label }}
     </button>
@@ -23,7 +23,7 @@ button
   font-family: Inter, sans-serif
   font-size: inherit
   padding-block: 0.25em
-  padding-inline: 0.30em
+  padding-inline: 0.35em
   transition: filter 0.25s linear
 
   &:hover

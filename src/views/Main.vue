@@ -35,7 +35,8 @@ import Table from '@/components/Table.vue';
             email: 'sddssd@gmail.com',
           },
         ]"
-        :editable="false" />
+        :deletable="true"
+        :editable="true" />
     </section>
   </div>
 </template>
@@ -46,7 +47,6 @@ import Table from '@/components/Table.vue';
   font-size: 2.5em
   font-weight: 600
   padding-block-start: 0.85em
-  padding-block-end: 1em
   text-align: center
 
 #center
