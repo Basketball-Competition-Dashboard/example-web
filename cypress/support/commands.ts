@@ -8,32 +8,47 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      createSession(): Chainable<void>;
+      deleteSession(): Chainable<void>;
+    }
+  }
+}
 
 export {};
+
+Cypress.Commands.overwrite('log', function (log, ...args) {
+  if (Cypress.browser.isHeadless) {
+    return cy.task('log', args, { log: false }).then(() => {
+      return log(...args);
+    });
+  } else {
+    console.log(...args);
+    return log(...args);
+  }
+});
+
+Cypress.Commands.add('createSession', () => {
+  cy.request({
+    method: 'POST',
+    url: '/api/web/auth/session',
+    body: {
+      name: Cypress.env('AUTH_SESSION_NAME'),
+      credential: Cypress.env('AUTH_SESSION_CREDENTIAL'),
+    },
+  }).then((response) => {
+    expect(response.status).to.eq(201);
+  });
+});
+
+Cypress.Commands.add('deleteSession', () => {
+  cy.request({
+    method: 'DELETE',
+    url: '/api/web/auth/session',
+  }).then((response) => {
+    expect(response.status).to.eq(204);
+  });
+});
