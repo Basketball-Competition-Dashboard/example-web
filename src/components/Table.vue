@@ -63,7 +63,9 @@ onMounted(() => {
                 table.getEditModes[index] === 'Save' &&
                 table.getFields.includes(schemaName)
               "
-              v-model="record[schemaName]" />
+              v-model="record[schemaName]"
+              type="text"
+              />
             <span v-else>
               {{ record[schemaName] }}
             </span>
@@ -127,6 +129,15 @@ table
     font-weight: 600
     font-size: 90%
     padding-block: 1.2em
+
+    input
+      border: 0.05em solid #000000
+      font-family: inherit
+      font-size: inherit
+      font-weight: inherit
+      padding: 0.2em
+      text-align: center
+      width: 75%
 
   td.edit-button, th.edit-button
     font-size: 75%
