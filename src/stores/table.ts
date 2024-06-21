@@ -1,17 +1,15 @@
 import { checkResponse } from '@/utils/checkResponse';
 import { defineStore } from 'pinia';
 
-export interface RecordTypeNew {
+export interface RecordType {
   [key: string]: unknown;
-}
-
-export interface RecordType extends RecordTypeNew {
-  id: number;
+  id?: number;
 }
 
 export interface TableState {
   editModes: ('Create' | 'Delete' | 'Save' | 'Update')[];
-  fields: string[];
+  fieldsNew: string[];
+  fieldsPatch: string[];
   records: RecordType[];
   redundantRecord?: RecordType;
   offset: number;
@@ -22,7 +20,8 @@ export const useTableStore = defineStore('table', {
   state: () =>
     <TableState>{
       editModes: [],
-      fields: [],
+      fieldsNew: [],
+      fieldsPatch: [],
       records: [],
       redundantRecord: undefined,
       offset: 0,
@@ -32,8 +31,11 @@ export const useTableStore = defineStore('table', {
     getEditModes(state) {
       return state.editModes;
     },
-    getFields(state) {
-      return state.fields;
+    getFieldsNew(state) {
+      return state.fieldsNew;
+    },
+    getFieldsPatch(state) {
+      return state.fieldsPatch;
     },
     getRecords(state) {
       return state.records;
@@ -55,12 +57,27 @@ export const useTableStore = defineStore('table', {
     setNextPage() {
       this.offset += this.length;
     },
-    setFields(fields: string[]) {
-      this.fields = fields;
+    setFieldsNew(fields: string[]) {
+      this.fieldsNew = fields;
+    },
+    setFieldsPatch(fields: string[]) {
+      this.fieldsPatch = fields;
     },
     setRecords(records: RecordType[]) {
       this.editModes = new Array(records.length).fill('Update');
       this.records = records;
+    },
+    async createRemoteRecord(
+      call: (record: RecordType) => Promise<Response>,
+    ) {
+      const record = this.records[0]!;
+      const response = await call(record);
+      if (!(await checkResponse(response))) {
+        return;
+      }
+      const newRecord: RecordType = await response.json();
+      this.records[0] = newRecord;
+      this.editModes[0] = 'Update';
     },
     async readRemoteRecords(
       call: (offset: number, length: number) => Promise<Response>,
@@ -72,18 +89,6 @@ export const useTableStore = defineStore('table', {
       const records = await response.json();
       this.setRecords(records);
     },
-    async createRemoteRecord(
-      call: (record: RecordTypeNew) => Promise<Response>,
-    ) {
-      const record = this.records[0]!;
-      const response = await call(record);
-      if (!(await checkResponse(response))) {
-        return;
-      }
-      const newRecord: RecordType = await response.json();
-      this.records[0] = newRecord;
-      this.editModes[0] = 'Update';
-    },
     async updateRemoteRecord(
       index: number,
       call: (record: RecordType) => Promise<Response>,
@@ -93,9 +98,9 @@ export const useTableStore = defineStore('table', {
         return;
       }
       const filtedRecord: RecordType = { id: record.id };
-      for (const field of this.fields) {
+      for (const field of this.fieldsPatch) {
         const fieldValue = record[field];
-        if (typeof fieldValue !== 'undefined') {
+        if (fieldValue === undefined) {
           filtedRecord[field] = fieldValue;
         }
       }
@@ -115,9 +120,14 @@ export const useTableStore = defineStore('table', {
         if (!record) {
           return;
         }
-        const response = await deleteCall(record.id);
-        if (!(await checkResponse(response))) {
-          return;
+        if (record.id === undefined) {
+          this.records.splice(index, 1);
+          this.editModes.splice(index, 1);
+        } else {
+          const response = await deleteCall(record.id);
+          if (!(await checkResponse(response))) {
+            return;
+          }
         }
       }
       {
@@ -131,7 +141,7 @@ export const useTableStore = defineStore('table', {
     },
     async commitEditRecord(
       index: number,
-      createCall: (record: RecordTypeNew) => Promise<Response>,
+      createCall: (record: RecordType) => Promise<Response>,
       readCall: (offset: number, length: number) => Promise<Response>,
       updateCall: (record: RecordType) => Promise<Response>,
       deleteCall: (id: number) => Promise<Response>,
@@ -143,7 +153,7 @@ export const useTableStore = defineStore('table', {
         await this.deleteRemoteRecord(index, deleteCall, readCall);
       } else if (mode === 'Save') {
         console.log('Saving record:', record);
-        if (typeof record?.id === 'undefined') {
+        if (record?.id === undefined) {
           await this.createRemoteRecord(createCall);
         } else {
           await this.updateRemoteRecord(index, updateCall);
@@ -171,9 +181,7 @@ export const useTableStore = defineStore('table', {
     },
     toggleDeleteEditMode() {
       this.editModes = this.editModes.fill(
-        this.editModes.findIndex((mode) => mode === 'Delete') < 0
-          ? 'Delete'
-          : 'Update',
+        this.editModes.includes('Delete') ? 'Delete' : 'Update',
       );
     },
   },

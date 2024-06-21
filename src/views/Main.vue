@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import Table from '@/components/Table.vue';
 import { useRoute } from 'vue-router';
-import type { RecordType, RecordTypeNew } from '@/stores/table';
+import type { RecordType } from '@/stores/table';
 
 const route = useRoute();
 const tableHeaders = route.meta.tableHeaders as
   | Record<string, string>
   | undefined;
+const tableFieldsNew = route.meta.tableFieldsNew as string[];
+const tableFieldsPatch = route.meta.tableFieldsPatch as string[];
 const createCall = route.meta.createCall as (
-  record: RecordTypeNew,
+  record: RecordType,
 ) => Promise<Response>;
 const readCall = route.meta.readCall as (
   offset: number,
@@ -31,6 +33,8 @@ const deleteCall = route.meta.deleteCall as (
         id="table"
         :deletable="true"
         :editable="true"
+        :fieldsNew="tableFieldsNew"
+        :fieldsPatch="tableFieldsPatch"
         :headers="tableHeaders"
         :createCall="createCall"
         :readCall="readCall"

@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Main from '@/views/Main.vue';
-import type { Game, Team, PlayerProfile, PlayerStat } from '@/generated/web-api';
+import type {
+  Game,
+  Team,
+  PlayerProfile,
+  PlayerStat,
+} from '@/generated/web-api';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,19 +14,35 @@ const router = createRouter({
       path: '/',
       name: '最新賽事',
       component: Main,
-      meta: {
-        tableHeaders: undefined,
-      }
+      meta: {},
     },
     {
-      path: '/player-profiles',
-      name: '球員介紹',
+      path: '/games',
+      name: '比賽紀錄',
       component: Main,
       meta: {
         tableHeaders: {
-          id: 'ID',
-          name: '姓名',
-        } as PlayerProfile,
+          date: 'DATE',
+          home: 'HOME TEAM',
+          away: 'AWAY TEAM',
+          home_score: 'HOME SCORE',
+          away_score: 'AWAY SCORE',
+          winner: 'WINNER',
+        },
+        tableFieldsNew: [
+          'date',
+          'home',
+          'away',
+          'home_score',
+          'away_score',
+          'winner',
+        ],
+        // TODO
+        tableFieldsPatch: [
+          'home_score',
+          'away_score',
+          'winner',
+        ],
       },
     },
     {
@@ -30,18 +51,56 @@ const router = createRouter({
       component: Main,
       meta: {
         tableHeaders: {
-
+          name: 'TEAM',
+          abbr: 'ABBR.',
+          city: 'CITY',
+          year_founded: 'YEAR FOUNDED',
+          coach: 'COACH',
         },
+        tableFieldsNew: [
+          'name',
+          'abbr',
+          'city',
+          'year_founded',
+          'coach',
+        ],
+        tableFieldsPatch: [
+          'coach',
+        ],
       },
     },
     {
-      path: '/games',
-      name: '比賽紀錄',
+      path: '/player-profiles',
+      name: '球員介紹',
       component: Main,
       meta: {
         tableHeaders: {
-
+          name: 'PLAYER',
+          team_name: 'TEAM',
+          position: 'POSITION',
+          birthdate: 'BIRTHDATE',
+          height: 'HEIGHT',
+          weight: 'WEIGHT',
+          country: 'COUNTRY',
         },
+        tableFieldsNew: [
+          'name',
+          'team_name',
+          'position',
+          'birthdate',
+          'height',
+          'weight',
+          'country',
+        ],
+        tableFieldsPatch: [
+          'name',
+          'team_name',
+          'position',
+          'birthdate',
+          'height',
+          'weight',
+          'country',
+        ],
       },
     },
     {
@@ -50,8 +109,33 @@ const router = createRouter({
       component: Main,
       meta: {
         tableHeaders: {
-
+          player: 'PLAYER',
+          game: 'GAME',
+          assist: 'ASSIST',
+          hit: 'HIT',
+          steal: 'STEAL',
+          rebound: 'REBOUND',
+          free_throw: 'FREE THROW',
+          score: 'SCORE',
         },
+        tableFieldsNew: [
+          'player',
+          'game',
+          'assist',
+          'hit',
+          'steal',
+          'rebound',
+          'free_throw',
+          'score',
+        ],
+        tableFieldsPatch: [
+          'assist',
+          'hit',
+          'steal',
+          'rebound',
+          'free_throw',
+          'score',
+        ],
       },
     },
   ],

@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import TableEditButton from './TableEditButton.vue';
-import {
-  useTableStore,
-  type RecordType,
-  type RecordTypeNew,
-} from '@/stores/table';
+import { useTableStore, type RecordType } from '@/stores/table';
 
 const props = defineProps<{
   deletable: boolean;
   editable: boolean;
-  fields: string[];
+  fieldsNew: string[];
+  fieldsPatch: string[];
   headers: Record<string, string>;
-  createCall: (record: RecordTypeNew) => Promise<Response>;
+  createCall: (record: RecordType) => Promise<Response>;
   readCall: (offset: number, length: number) => Promise<Response>;
   updateCall: (record: RecordType) => Promise<Response>;
   deleteCall: (id: number) => Promise<Response>;
@@ -21,7 +18,8 @@ const props = defineProps<{
 const table = useTableStore();
 
 onMounted(async () => {
-  table.setFields(props.fields);
+  table.setFieldsNew(props.fieldsNew);
+  table.setFieldsPatch(props.fieldsPatch);
   table.readRemoteRecords(props.readCall);
 });
 </script>
@@ -69,7 +67,9 @@ onMounted(async () => {
             <input
               v-if="
                 table.getEditModes[index] === 'Save' &&
-                table.getFields.includes(schemaName)
+                table.getRecords[index]!.id === undefined
+                  ? table.getFieldsNew.includes(schemaName)
+                  : table.getFieldsPatch.includes(schemaName)
               "
               v-model="record[schemaName]"
               type="text" />
