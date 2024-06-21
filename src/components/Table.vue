@@ -3,7 +3,7 @@ import { onMounted } from 'vue';
 import TableEditButton from './TableEditButton.vue';
 import { useTableStore } from '@/stores/table';
 
-const { records } = defineProps<{
+const { headers, records } = defineProps<{
   deletable: boolean;
   editable: boolean;
   headers: Record<string, string>;
@@ -13,6 +13,7 @@ const { records } = defineProps<{
 const table = useTableStore();
 
 onMounted(() => {
+  table.setFields(Object.keys(headers));
   table.setRecords(records);
 });
 </script>
@@ -21,19 +22,19 @@ onMounted(() => {
   <div id="table-vue">
     <section
       v-if="editable"
-      id="edit-switches">
-      <div class="edit-switch">
+      id="edit-toggles">
+      <div class="edit-toggle">
         <TableEditButton
           :mode="'Create'"
-          @edit="table.switchCreateRecord" />
+          @edit="table.toggleCreateEditMode" />
       </div>
-      <div class="edit-switch">
+      <div class="edit-toggle">
         <TableEditButton
           :mode="'Delete'"
           :style="{
             filter: !deletable && 'grayscale(1) opacity(0.5)',
           }"
-          @edit="deletable && table.switchDeleteRecord()" />
+          @edit="deletable && table.toggleDeleteEditMode()" />
       </div>
     </section>
     <table>
@@ -52,19 +53,19 @@ onMounted(() => {
 
       <tbody>
         <tr
-          v-for="(record, index) of records"
-          :key="record.id">
+          v-for="(record, index) of table.getRecords"
+          :key="index">
           <td
-            v-for="(value, schemaName) of record"
+            v-for="(displayName, schemaName) of headers"
             :key="schemaName">
-            {{ value }}
+            {{ record[schemaName] }}
           </td>
           <td
             class="edit-button"
             v-if="editable">
             <TableEditButton
               :mode="table.getEditModes[index] ?? 'Update'"
-              @edit="() => table.editRecord(index, record)" />
+              @edit="() => table.commitEditRecord(index)" />
           </td>
         </tr>
       </tbody>
@@ -73,14 +74,14 @@ onMounted(() => {
 </template>
 
 <style scoped lang="sass">
-#edit-switches
+#edit-toggles
   display: flex
   font-size: 1.15em
   height: 2.65em
   justify-content: flex-end
   width: 100%
 
-  .edit-switch
+  .edit-toggle
     padding-inline: 1em
     padding-block-end: 1em
     width: 6em

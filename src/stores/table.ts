@@ -46,6 +46,9 @@ export const useTableStore = defineStore('table', {
     },
   },
   actions: {
+    setFields(fields: string[]) {
+      this.fields = fields;
+    },
     setRecords(records: RecordType[]) {
       this.editModes = new Array(records.length).fill('Update');
       this.records = records;
@@ -138,11 +141,15 @@ export const useTableStore = defineStore('table', {
     toggleCreateEditMode() {
       if (this.redundantRecord) {
         console.log('Uncreating record');
+        this.editModes.shift();
+        this.editModes.unshift('Update');
         this.records.shift();
         this.records.push(this.redundantRecord);
         this.redundantRecord = undefined;
       } else {
         console.log('Creating record');
+        this.editModes.pop();
+        this.editModes.unshift('Save');
         this.redundantRecord = this.records.pop();
         this.records.unshift(<RecordType>{});
       }
