@@ -6,21 +6,14 @@ import { useTableStore, type RecordType } from '@/stores/table';
 const props = defineProps<{
   deletable: boolean;
   editable: boolean;
-  fieldsNew: string[];
-  fieldsPatch: string[];
   headers: Record<string, string>;
-  createCall: (record: RecordType) => Promise<Response>;
-  readCall: (offset: number, length: number) => Promise<Response>;
-  updateCall: (record: RecordType) => Promise<Response>;
-  deleteCall: (id: number) => Promise<Response>;
+  table: ReturnType<typeof useTableStore>;
 }>();
 
 const table = useTableStore();
 
 onMounted(async () => {
-  table.setFieldsNew(props.fieldsNew);
-  table.setFieldsPatch(props.fieldsPatch);
-  table.readRemoteRecords(props.readCall);
+  await props.table.readRemoteRecords();
 });
 </script>
 
@@ -82,16 +75,7 @@ onMounted(async () => {
             v-if="editable">
             <TableEditButton
               :mode="table.getEditModes[index] ?? 'Update'"
-              @edit="
-                async () =>
-                  table.commitEditRecord(
-                    index,
-                    createCall,
-                    readCall,
-                    updateCall,
-                    deleteCall,
-                  )
-              " />
+              @edit="async () => await table.editRecord(index)" />
           </td>
         </tr>
       </tbody>

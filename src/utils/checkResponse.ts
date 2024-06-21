@@ -1,4 +1,6 @@
-export async function checkResponse(response: Response): Promise<boolean> {
+export async function checkResponse(
+  response: Response,
+): Promise<boolean> {
   if (!response.ok) {
     let message: string | undefined;
     try {

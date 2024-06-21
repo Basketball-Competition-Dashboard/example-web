@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Main from '@/views/Main.vue';
+import Dashboard from '@/views/Dashboard.vue';
 import type {
   Game,
   Team,
@@ -13,13 +13,13 @@ const router = createRouter({
     {
       path: '/',
       name: '最新賽事',
-      component: Main,
+      component: Dashboard,
       meta: {},
     },
     {
       path: '/games',
       name: '比賽紀錄',
-      component: Main,
+      component: Dashboard,
       meta: {
         tableHeaders: {
           date: 'DATE',
@@ -38,17 +38,13 @@ const router = createRouter({
           'winner',
         ],
         // TODO
-        tableFieldsPatch: [
-          'home_score',
-          'away_score',
-          'winner',
-        ],
+        tableFieldsPatch: ['home_score', 'away_score', 'winner'],
       },
     },
     {
       path: '/teams',
       name: '球隊介紹',
-      component: Main,
+      component: Dashboard,
       meta: {
         tableHeaders: {
           name: 'TEAM',
@@ -64,15 +60,13 @@ const router = createRouter({
           'year_founded',
           'coach',
         ],
-        tableFieldsPatch: [
-          'coach',
-        ],
+        tableFieldsPatch: ['coach'],
       },
     },
     {
       path: '/player-profiles',
       name: '球員介紹',
-      component: Main,
+      component: Dashboard,
       meta: {
         tableHeaders: {
           name: 'PLAYER',
@@ -106,7 +100,7 @@ const router = createRouter({
     {
       path: '/player-stats',
       name: '比賽表現',
-      component: Main,
+      component: Dashboard,
       meta: {
         tableHeaders: {
           player: 'PLAYER',
