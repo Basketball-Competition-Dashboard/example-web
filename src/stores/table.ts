@@ -7,13 +7,14 @@ export interface RecordType {
 }
 
 export interface TableState {
+  deletable: boolean;
   editModes: ('Create' | 'Delete' | 'Save' | 'Update')[];
   editModesToSwap: ('Create' | 'Delete' | 'Save' | 'Update')[];
-  fieldsNew: string[];
-  fieldsPatch: string[];
+  fieldsNew: string[]; // should be Record<string, Function> later
+  fieldsPatch: string[]; // should be Record<string, Function> later
   records: RecordType[];
-  offset: number;
-  length: number;
+  offset: number; // hardcoded for now
+  length: number; // hardcoded for now
   create: (record: RecordType) => Promise<RecordType | false>;
   read: (
     offset: number,
@@ -28,6 +29,7 @@ export type TableStore = ReturnType<typeof useTableStore>;
 export const useTableStore = defineStore('table', {
   state: () =>
     <TableState>{
+      deletable: false,
       editModes: [],
       editModesToSwap: [],
       fieldsNew: [],
@@ -42,6 +44,9 @@ export const useTableStore = defineStore('table', {
       delete: () => Promise.reject('table.delete is not implemented'),
     },
   getters: {
+    getDeletable(state) {
+      return state.deletable;
+    },
     getEditModes(state) {
       return state.editModes;
     },
@@ -54,14 +59,11 @@ export const useTableStore = defineStore('table', {
     getRecords(state) {
       return state.records;
     },
-    getOffset(state) {
-      return state.offset;
-    },
-    getLength(state) {
-      return state.length;
-    },
   },
   actions: {
+    setDeletable(deletable: TableState['deletable']) {
+      this.deletable = deletable;
+    },
     setFieldsNew(fields: TableState['fieldsNew']) {
       this.fieldsNew = fields;
     },
@@ -133,8 +135,8 @@ export const useTableStore = defineStore('table', {
         this.records.splice(index, 1);
       }
       {
-        const remoteIndex = this.offset + this.length - 1;
-        const records = await this.read(remoteIndex, 1);
+        const lastOffset = this.offset + this.length - 1;
+        const records = await this.read(lastOffset, 1);
         if (!records || records[0] === undefined) {
           return;
         }
@@ -158,6 +160,9 @@ export const useTableStore = defineStore('table', {
           console.log('Updating record:', record);
           await this.updateRecord(index);
         }
+      } else if (mode === 'Update') {
+        console.log('Editing record:', record);
+        this.editModes[index] = 'Save';
       }
     },
     createEmptyRecord(): void {
@@ -194,6 +199,9 @@ export const useTableStore = defineStore('table', {
       return mode === 'Save';
     },
     toggleDeleteMode(): void {
+      if (!this.deletable) {
+        return;
+      }
       if (!this.isDeleteMode()) {
         console.log('Entering delete mode');
         this.editModesToSwap = this.editModes.slice();

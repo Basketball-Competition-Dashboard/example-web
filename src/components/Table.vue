@@ -3,7 +3,6 @@ import TableEditButton from './TableEditButton.vue';
 import { type TableStore } from '@/stores/table';
 
 defineProps<{
-  deletable: boolean;
   editable: boolean;
   headers: Record<string, string>;
   table: TableStore;
@@ -25,9 +24,9 @@ defineProps<{
           <TableEditButton
             mode="Delete"
             :style="{
-              filter: !deletable && 'grayscale(1) opacity(0.5)',
+              filter: !table.deletable && 'grayscale(1) opacity(0.5)',
             }"
-            @click="deletable && table.toggleDeleteMode()" />
+            @click="table.toggleDeleteMode" />
           </div>
       </aside>
     </section>
