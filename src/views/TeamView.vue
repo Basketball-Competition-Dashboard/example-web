@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { useTableStore } from '@/stores/table';
 import Table from '@/components/Table.vue';
+import { postTeam, type PostTeamData } from '@/generated/web-api';
 
 const editable = true; // fake store
 const table = useTableStore();
@@ -9,8 +10,22 @@ const table = useTableStore();
 table.setFieldsNew(['name', 'abbr', 'city', 'year_founded', 'coach']);
 table.setFieldsPatch(['coach']);
 table.setCreate(async (record) => {
-  console.log('create', record);
-  return false;
+  console.log('create', { ...record });
+  const response = await postTeam({
+    requestBody: {
+      name: record.name as string,
+      abbr: record.abbr as string,
+      city: record.city as string,
+      year_founded: parseInt(record.year_founded as string),
+      coach: record.coach as string,
+    },
+  }).catch(alert);
+
+  if (response) {
+    return response;
+  } else {
+    return false;
+  }
 });
 table.setRead(async (offset, length) => {
   console.log('read', offset, length);
