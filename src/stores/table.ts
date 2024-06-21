@@ -46,6 +46,15 @@ export const useTableStore = defineStore('table', {
     },
   },
   actions: {
+    setPreviousPage() {
+      if (this.offset < this.length) {
+        return;
+      }
+      this.offset -= this.length;
+    },
+    setNextPage() {
+      this.offset += this.length;
+    },
     setFields(fields: string[]) {
       this.fields = fields;
     },
@@ -73,7 +82,7 @@ export const useTableStore = defineStore('table', {
       }
       const newRecord: RecordType = await response.json();
       this.records[0] = newRecord;
-      this.commitEditRecord(0);
+      this.editModes[0] = 'Update';
     },
     async updateRemoteRecord(
       index: number,
@@ -94,7 +103,7 @@ export const useTableStore = defineStore('table', {
       if (!(await checkResponse(response))) {
         return;
       }
-      this.commitEditRecord(index);
+      this.editModes[index] = 'Update';
     },
     async deleteRemoteRecord(
       index: number,
@@ -120,22 +129,28 @@ export const useTableStore = defineStore('table', {
         this.records[index] = record;
       }
     },
-    async commitEditRecord(index: number) {
+    async commitEditRecord(
+      index: number,
+      createCall: (record: RecordTypeNew) => Promise<Response>,
+      readCall: (offset: number, length: number) => Promise<Response>,
+      updateCall: (record: RecordType) => Promise<Response>,
+      deleteCall: (id: number) => Promise<Response>,
+    ) {
       const mode = this.editModes[index];
       const record = this.records[index];
       if (mode === 'Delete') {
         console.log('Deleting record:', record);
-        return;
-      }
-      if (mode === 'Save') {
+        await this.deleteRemoteRecord(index, deleteCall, readCall);
+      } else if (mode === 'Save') {
         console.log('Saving record:', record);
-        this.editModes[index] = 'Update';
-        return;
-      }
-      if (mode === 'Update') {
+        if (typeof record?.id === 'undefined') {
+          await this.createRemoteRecord(createCall);
+        } else {
+          await this.updateRemoteRecord(index, updateCall);
+        }
+      } else if (mode === 'Update') {
         console.log('Updating record:', record);
-        this.editModes[index] = 'Save';
-        return;
+        await this.updateRemoteRecord(index, updateCall);
       }
     },
     toggleCreateEditMode() {

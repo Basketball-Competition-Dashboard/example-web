@@ -1,5 +1,25 @@
 <script setup lang="ts">
 import Table from '@/components/Table.vue';
+import { useRoute } from 'vue-router';
+import type { RecordType, RecordTypeNew } from '@/stores/table';
+
+const route = useRoute();
+const tableHeaders = route.meta.tableHeaders as
+  | Record<string, string>
+  | undefined;
+const createCall = route.meta.createCall as (
+  record: RecordTypeNew,
+) => Promise<Response>;
+const readCall = route.meta.readCall as (
+  offset: number,
+  length: number,
+) => Promise<Response>;
+const updateCall = route.meta.updateCall as (
+  record: RecordType,
+) => Promise<Response>;
+const deleteCall = route.meta.deleteCall as (
+  id: number,
+) => Promise<Response>;
 </script>
 
 <template>
@@ -7,36 +27,15 @@ import Table from '@/components/Table.vue';
     <h1 id="title">{{ $route.name }}</h1>
     <section id="center">
       <Table
+        v-if="tableHeaders"
         id="table"
-        :headers="{
-          id: 'ID',
-          name: 'NAME',
-          email: 'EMAIL',
-        }"
-        :records="[
-          {
-            id: 1,
-            name: 'John Doe',
-            email: 'gg@gmail.com',
-          },
-          {
-            id: 2,
-            name: 'Jane Doe',
-            email: 'aaa@gmail.com',
-          },
-          {
-            id: 3,
-            name: 'John Smith',
-            email: '?@gmail.com',
-          },
-          {
-            id: 4,
-            name: 'Jane Smith',
-            email: 'sddssd@gmail.com',
-          },
-        ]"
         :deletable="true"
-        :editable="true" />
+        :editable="true"
+        :headers="tableHeaders"
+        :createCall="createCall"
+        :readCall="readCall"
+        :updateCall="updateCall"
+        :deleteCall="deleteCall" />
     </section>
   </div>
 </template>

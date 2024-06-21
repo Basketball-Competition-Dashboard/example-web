@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import TableEditButton from './TableEditButton.vue';
-import { useTableStore } from '@/stores/table';
+import {
+  useTableStore,
+  type RecordType,
+  type RecordTypeNew,
+} from '@/stores/table';
 
-const { headers, records } = defineProps<{
+const props = defineProps<{
   deletable: boolean;
   editable: boolean;
+  fields: string[];
   headers: Record<string, string>;
-  records: (Record<string, unknown> & { id: number })[];
+  createCall: (record: RecordTypeNew) => Promise<Response>;
+  readCall: (offset: number, length: number) => Promise<Response>;
+  updateCall: (record: RecordType) => Promise<Response>;
+  deleteCall: (id: number) => Promise<Response>;
 }>();
 
 const table = useTableStore();
 
-onMounted(() => {
-  table.setFields(Object.keys(headers)); // temporary, it should editable fields
-  table.setRecords(records);
+onMounted(async () => {
+  table.setFields(props.fields);
+  table.readRemoteRecords(props.readCall);
 });
 </script>
 
@@ -64,8 +72,7 @@ onMounted(() => {
                 table.getFields.includes(schemaName)
               "
               v-model="record[schemaName]"
-              type="text"
-              />
+              type="text" />
             <span v-else>
               {{ record[schemaName] }}
             </span>
@@ -75,7 +82,16 @@ onMounted(() => {
             v-if="editable">
             <TableEditButton
               :mode="table.getEditModes[index] ?? 'Update'"
-              @edit="() => table.commitEditRecord(index)" />
+              @edit="
+                async () =>
+                  table.commitEditRecord(
+                    index,
+                    createCall,
+                    readCall,
+                    updateCall,
+                    deleteCall,
+                  )
+              " />
           </td>
         </tr>
       </tbody>
