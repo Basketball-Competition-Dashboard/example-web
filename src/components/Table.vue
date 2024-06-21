@@ -16,18 +16,18 @@ defineProps<{
     <section class="top">
       <h1 class="title">{{ title }}</h1>
       <aside>
-        <div class="edit-toggle">
+        <div class="edit-button">
           <TableEditButton
             mode="Create"
-            @edit="table.toggleCreateEditMode" />
+            @click="table.createEmptyRecord" />
         </div>
-        <div class="edit-toggle">
+        <div class="edit-button">
           <TableEditButton
             mode="Delete"
             :style="{
               filter: !deletable && 'grayscale(1) opacity(0.5)',
             }"
-            @edit="deletable && table.toggleDeleteEditMode()" />
+            @click="deletable && table.toggleDeleteMode()" />
           </div>
       </aside>
     </section>
@@ -54,12 +54,8 @@ defineProps<{
               v-for="(displayName, schemaName) of headers"
               :key="schemaName">
               <input
-                v-if="
-                  table.getEditModes[index] === 'Save' &&
-                  table.getRecords[index]?.id === undefined
-                    ? table.getFieldsNew.includes(schemaName)
-                    : table.getFieldsPatch.includes(schemaName)
-                "
+                v-if="editable && table.isFieldEditable(index, schemaName)"
+                spellcheck="false"
                 v-model="record[schemaName]"
                 type="text" />
               <span v-else>
@@ -71,7 +67,7 @@ defineProps<{
               v-if="editable">
               <TableEditButton
                 :mode="table.getEditModes[index] ?? 'Update'"
-                @edit="async () => await table.editRecord(index)" />
+                @click="table.editRecord(index)" />
             </td>
           </tr>
         </tbody>
@@ -99,7 +95,7 @@ defineProps<{
     justify-content: flex-end
     width: 94%
 
-    .edit-toggle
+    .edit-button
       padding-inline: 0.8em
       font-size: 1.15em
 
@@ -139,11 +135,12 @@ defineProps<{
     td
       color: #000000
       font-weight: 600
-      font-size: 90%
+      font-size: 0.9em
       padding-block: 1.2em
 
       input
         border: 0.05em solid #000000
+        border-radius: 0.15em
         font-family: inherit
         font-size: inherit
         font-weight: inherit
@@ -152,9 +149,8 @@ defineProps<{
         width: 75%
 
     td.edit-button, th.edit-button
-      font-size: 75%
-      padding: 0
+      font-size: 0.75em
+      padding-block: 1.44em
       text-align: left
-      user-select: none
       width: 6em
 </style>

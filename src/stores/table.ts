@@ -8,10 +8,10 @@ export interface RecordType {
 
 export interface TableState {
   editModes: ('Create' | 'Delete' | 'Save' | 'Update')[];
+  editModesToSwap: ('Create' | 'Delete' | 'Save' | 'Update')[];
   fieldsNew: string[];
   fieldsPatch: string[];
   records: RecordType[];
-  redundantRecord?: RecordType;
   offset: number;
   length: number;
   create: (record: RecordType) => Promise<RecordType | false>;
@@ -29,10 +29,11 @@ export const useTableStore = defineStore('table', {
   state: () =>
     <TableState>{
       editModes: [],
+      editModesToSwap: [],
       fieldsNew: [],
       fieldsPatch: [],
       records: [],
-      redundantRecord: undefined,
+      recordToSwap: undefined,
       offset: 0,
       length: 4,
       create: () => Promise.reject('table.create is not implemented'),
@@ -79,19 +80,19 @@ export const useTableStore = defineStore('table', {
     setDelete(delele: TableState['delete']) {
       this.delete = delele;
     },
-    async createRemoteRecord() {
-      const newRecord = this.records[0];
+    async createRecord(index: number) {
+      const newRecord = this.records[index];
       if (!newRecord) {
-        return;
+        throw new RangeError('Invalid index');
       }
       const record = await this.create(newRecord);
       if (!record) {
         return;
       }
-      this.records[0] = record;
-      this.editModes[0] = 'Update';
+      this.editModes[index] = 'Update';
+      this.records[index] = record;
     },
-    async readRemoteRecords() {
+    async readRecords() {
       const records = await this.read(this.offset, this.length);
       if (!records) {
         return;
@@ -99,100 +100,108 @@ export const useTableStore = defineStore('table', {
       this.editModes = new Array(records.length).fill('Update');
       this.records = records;
     },
-    async updateRemoteRecord(index: number) {
+    async updateRecord(index: number) {
       const record = this.records[index];
       if (!record) {
-        return;
+        throw new RangeError('Invalid index');
       }
-      const filtedRecord: RecordType = { id: record.id };
+      const recordPatch: RecordType = { id: record.id };
       for (const field of this.fieldsPatch) {
         const fieldValue = record[field];
-        if (fieldValue === undefined) {
-          filtedRecord[field] = fieldValue;
+        if (fieldValue !== undefined) {
+          recordPatch[field] = fieldValue;
         }
       }
-      const isUpdated = await this.update(filtedRecord);
+      const isUpdated = await this.update(recordPatch);
       if (!isUpdated) {
         return;
       }
       this.editModes[index] = 'Update';
     },
-    async deleteRemoteRecord(index: number) {
+    async deleteRecord(index: number) {
       {
         const record = this.records[index];
         if (!record) {
-          return;
+          throw new RangeError('Invalid index');
         }
-        if (record.id === undefined) {
-          this.records.splice(index, 1);
-        } else {
+        if (record.id !== undefined) {
           const isDeleted = await this.delete(record.id);
           if (!isDeleted) {
             return;
           }
         }
+        this.records.splice(index, 1);
       }
       {
-        const record = await this.read(
-          this.offset + this.length - 1,
-          1,
-        );
-        if (!record || record[0] === undefined) {
+        const remoteIndex = this.offset + this.length - 1;
+        const records = await this.read(remoteIndex, 1);
+        if (!records || records[0] === undefined) {
           return;
         }
-        this.records.push(record[0]);
+        this.records.push(records[0]);
       }
     },
     async editRecord(index: number) {
       const mode = this.editModes[index];
       const record = this.records[index];
       if (!mode || !record) {
-        return;
+        throw new RangeError('Invalid index');
       }
       if (mode === 'Delete') {
         console.log('Deleting record:', record);
-        await this.deleteRemoteRecord(index);
+        await this.deleteRecord(index);
       } else if (mode === 'Save') {
-        console.log('Saving record:', record);
         if (record.id === undefined) {
-          await this.createRemoteRecord();
+          console.log('Creating record:', record);
+          await this.createRecord(index);
         } else {
-          await this.updateRemoteRecord(index);
+          console.log('Updating record:', record);
+          await this.updateRecord(index);
         }
-      } else if (mode === 'Update') {
-        console.log('Updating record:', record);
-        await this.updateRemoteRecord(index);
       }
     },
-    toggleCreateEditMode() {
-      if (this.redundantRecord) {
-        console.log('Uncreating record');
-        this.editModes.shift();
-        this.editModes.unshift('Update');
-        this.records.shift();
-        this.records.push(this.redundantRecord);
-        this.redundantRecord = undefined;
-      } else {
-        console.log('Creating record');
-        this.editModes.pop();
-        this.editModes.unshift('Save');
-        this.redundantRecord = this.records.pop();
-        this.records.unshift(<RecordType>{});
-      }
-    },
-    toggleDeleteEditMode() {
-      this.editModes = this.editModes.fill(
-        this.editModes.includes('Delete') ? 'Delete' : 'Update',
-      );
-    },
-    goPreviousPage() {
-      if (this.offset < this.length) {
+    createEmptyRecord(): void {
+      if (this.isDeleteMode()) {
         return;
       }
-      this.offset -= this.length;
+      console.log('Creating empty record');
+      this.editModes.unshift('Save');
+      this.records.unshift({});
+      if (this.records.length > this.length) {
+        console.log('Removing last record');
+        this.records.pop();
+        this.editModes.pop();
+      }
     },
-    goNextPage() {
-      this.offset += this.length;
+    isDeleteMode(): boolean {
+      return this.editModes.includes('Delete');
+    },
+    isFieldEditable(index: number, field: string): boolean {
+      if (this.isRecordEditable(index)) {
+        const record = this.records[index]!;
+        const fields =
+          record.id === undefined ? this.fieldsNew : this.fieldsPatch;
+        return fields.includes(field);
+      }
+      return false;
+    },
+    isRecordEditable(index: number): boolean {
+      const mode = this.editModes[index];
+      const record = this.records[index];
+      if (!mode || !record) {
+        throw new RangeError('Invalid index');
+      }
+      return mode === 'Save';
+    },
+    toggleDeleteMode(): void {
+      if (!this.isDeleteMode()) {
+        console.log('Entering delete mode');
+        this.editModesToSwap = this.editModes.slice();
+        this.editModes.fill('Delete');
+      } else {
+        console.log('Exiting delete mode');
+        this.editModes = this.editModesToSwap.slice();
+      }
     },
   },
 });

@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { useTableStore } from '@/stores/table';
 import Table from '@/components/Table.vue';
-import { postTeam, type PostTeamData } from '@/generated/web-api';
+import { getTeams, postTeam } from '@/generated/web-api';
 
 const editable = true; // fake store
 const table = useTableStore();
@@ -29,7 +29,18 @@ table.setCreate(async (record) => {
 });
 table.setRead(async (offset, length) => {
   console.log('read', offset, length);
-  return [];
+  const response = await getTeams({
+    pageLength: length,
+    pageOffset: offset,
+    sortField: 'name',
+    sortOrder: 'ascending',
+  }).catch(alert);
+
+  if (response) {
+    return response;
+  } else {
+    return false;
+  }
 });
 table.setUpdate(async (record) => {
   console.log('update', record);
@@ -40,7 +51,7 @@ table.setDelete(async (id) => {
   return false;
 });
 onMounted(async () => {
-  await table.readRemoteRecords();
+  await table.readRecords();
 });
 </script>
 

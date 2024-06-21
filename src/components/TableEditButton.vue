@@ -3,14 +3,14 @@ defineProps<{
   mode: 'Create' | 'Delete' | 'Save' | 'Update';
 }>();
 defineEmits<{
-  edit: [mode: 'Create' | 'Delete' | 'Save' | 'Update'];
+  click: [];
 }>();
 </script>
 
 <template>
   <div id="table-edit-button-vue">
     <button
-      @click="$emit('edit', mode)"
+      @click="$emit('click')"
       :data-mode="mode">
       {{ mode }}
     </button>
@@ -25,6 +25,7 @@ button
   padding-block: 0.25em
   padding-inline: 0.35em
   user-select: none
+  -webkit-user-select: none
   transition: filter 0.25s linear
 
   &:hover
