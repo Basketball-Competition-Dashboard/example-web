@@ -27,7 +27,7 @@ defineProps<{
               filter: !table.deletable && 'grayscale(1) opacity(0.5)',
             }"
             @click="table.toggleDeleteMode" />
-          </div>
+        </div>
       </aside>
     </section>
     <section class="bottom">
@@ -53,7 +53,9 @@ defineProps<{
               v-for="(displayName, schemaName) of headers"
               :key="schemaName">
               <input
-                v-if="editable && table.isFieldEditable(index, schemaName)"
+                v-if="
+                  editable && table.isFieldEditable(index, schemaName)
+                "
                 spellcheck="false"
                 v-model="record[schemaName]"
                 type="text" />
@@ -117,18 +119,21 @@ defineProps<{
       tr
         border-block-end: 0.05em solid #dddfe1
 
+        &:nth-child(even)
+          background-color: #ffffff
+
         &:nth-child(odd)
           background-color: #f3f3f3
 
     td, th
-      padding-inline: 1.0em
+      padding-inline: 1em
       text-align: center
       vertical-align: middle
 
     th
       color: #464a53
       font-weight: 700
-      font-size: 100%
+      font-size: 1em
       padding-block: 0.6em
 
     td
@@ -140,6 +145,7 @@ defineProps<{
       input
         border: 0.05em solid #000000
         border-radius: 0.15em
+        caret-color: #4186d7
         font-family: inherit
         font-size: inherit
         font-weight: inherit
@@ -147,9 +153,17 @@ defineProps<{
         text-align: center
         width: 75%
 
+        &:focus
+          outline: 0.05em solid #000000
+
+    ::selection
+      background-color: #d9d9d9
+
     td.edit-button, th.edit-button
       font-size: 0.75em
       padding-block: 1.44em
       text-align: left
       width: 6em
+      user-select: none
+      -webkit-user-select: none
 </style>
