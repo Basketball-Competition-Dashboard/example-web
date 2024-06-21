@@ -22,9 +22,7 @@ const ping = pingStore();
       <aside id="sidebar">
         <Nav />
       </aside>
-      <article
-        id="content"
-        :class="$router">
+      <article id="content">
         <RouterView />
       </article>
     </div>

@@ -1,11 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Dashboard from '@/views/Dashboard.vue';
-import type {
-  Game,
-  Team,
-  PlayerProfile,
-  PlayerStat,
-} from '@/generated/web-api';
+import TeamView from '@/views/TeamView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,13 +7,13 @@ const router = createRouter({
     {
       path: '/',
       name: '最新賽事',
-      component: Dashboard,
+      component: TeamView,
       meta: {},
     },
     {
       path: '/games',
       name: '比賽紀錄',
-      component: Dashboard,
+      component: TeamView,
       meta: {
         tableHeaders: {
           date: 'DATE',
@@ -43,8 +37,7 @@ const router = createRouter({
     },
     {
       path: '/teams',
-      name: '球隊介紹',
-      component: Dashboard,
+      component: TeamView,
       meta: {
         tableHeaders: {
           name: 'TEAM',
@@ -53,20 +46,12 @@ const router = createRouter({
           year_founded: 'YEAR FOUNDED',
           coach: 'COACH',
         },
-        tableFieldsNew: [
-          'name',
-          'abbr',
-          'city',
-          'year_founded',
-          'coach',
-        ],
-        tableFieldsPatch: ['coach'],
       },
     },
     {
       path: '/player-profiles',
       name: '球員介紹',
-      component: Dashboard,
+      component: TeamView,
       meta: {
         tableHeaders: {
           name: 'PLAYER',
@@ -100,7 +85,7 @@ const router = createRouter({
     {
       path: '/player-stats',
       name: '比賽表現',
-      component: Dashboard,
+      component: TeamView,
       meta: {
         tableHeaders: {
           player: 'PLAYER',

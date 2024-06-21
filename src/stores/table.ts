@@ -15,10 +15,15 @@ export interface TableState {
   offset: number;
   length: number;
   create: (record: RecordType) => Promise<RecordType | false>;
-  read: (offset: number, length: number) => Promise<RecordType[] | false>;
+  read: (
+    offset: number,
+    length: number,
+  ) => Promise<RecordType[] | false>;
   update: (record: RecordType) => Promise<boolean>;
   delete: (id: number) => Promise<boolean>;
 }
+
+export type TableStore = ReturnType<typeof useTableStore>;
 
 export const useTableStore = defineStore('table', {
   state: () =>
@@ -128,7 +133,10 @@ export const useTableStore = defineStore('table', {
         }
       }
       {
-        const record = await this.read(this.offset + this.length - 1, 1);
+        const record = await this.read(
+          this.offset + this.length - 1,
+          1,
+        );
         if (!record || record[0] === undefined) {
           return;
         }
