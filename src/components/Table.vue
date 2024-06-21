@@ -13,7 +13,7 @@ const { headers, records } = defineProps<{
 const table = useTableStore();
 
 onMounted(() => {
-  table.setFields(Object.keys(headers));
+  table.setFields(Object.keys(headers)); // temporary, it should editable fields
   table.setRecords(records);
 });
 </script>
@@ -58,7 +58,15 @@ onMounted(() => {
           <td
             v-for="(displayName, schemaName) of headers"
             :key="schemaName">
-            {{ record[schemaName] }}
+            <input
+              v-if="
+                table.getEditModes[index] === 'Save' &&
+                table.getFields.includes(schemaName)
+              "
+              v-model="record[schemaName]" />
+            <span v-else>
+              {{ record[schemaName] }}
+            </span>
           </td>
           <td
             class="edit-button"
