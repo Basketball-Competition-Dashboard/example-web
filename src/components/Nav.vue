@@ -25,10 +25,9 @@ nav
   overflow-y: auto
   padding: 1em 0.85em
   position: relative
+  user-select: none
+  -webkit-user-select: none
   width: 100%
-
-  *:last-child
-    margin-block-end: 100%
 
   a
     color: black
@@ -38,6 +37,9 @@ nav
     position: relative
     text-decoration: none
     width: max-content
+
+    &:last-child
+      margin-block-end: 100%
 
     &:hover
       color: initial

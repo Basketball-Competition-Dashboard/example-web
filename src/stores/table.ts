@@ -1,5 +1,6 @@
-import { checkResponse } from '@/utils/checkResponse';
 import { defineStore } from 'pinia';
+
+export type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
 
 export interface RecordType {
   [key: string]: unknown;
@@ -8,8 +9,8 @@ export interface RecordType {
 
 export interface TableState {
   deletable: boolean;
-  editModes: ('Create' | 'Delete' | 'Save' | 'Update')[];
-  editModesToSwap: ('Create' | 'Delete' | 'Save' | 'Update')[];
+  editModes: EditMode[];
+  editModesToSwap: EditMode[];
   fieldsNew: string[]; // should be Record<string, Function> later
   fieldsPatch: string[]; // should be Record<string, Function> later
   records: RecordType[];

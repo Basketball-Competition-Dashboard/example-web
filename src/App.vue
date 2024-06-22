@@ -1,16 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { RouterView } from 'vue-router';
 import Header from '@/components/Header.vue';
 import Nav from '@/components/Nav.vue';
-import pingStore from './stores/ping';
-
-const ping = pingStore();
-
-// onMounted(async () => {
-//   await ping.ping();
-//   console.log(ping.value);
-// });
 </script>
 
 <template>

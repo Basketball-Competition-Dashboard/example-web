@@ -50,7 +50,7 @@ defineProps<{
             v-for="(record, index) of table.getRecords"
             :key="index">
             <td
-              v-for="(displayName, schemaName) of headers"
+              v-for="(_displayName, schemaName) of headers"
               :key="schemaName">
               <input
                 v-if="
@@ -99,6 +99,9 @@ defineProps<{
     .edit-button
       padding-inline: 0.8em
       font-size: 1.15em
+
+  ::selection
+    background-color: #d9d9d9
 
 .bottom
   align-items: center
@@ -149,15 +152,15 @@ defineProps<{
         font-family: inherit
         font-size: inherit
         font-weight: inherit
-        padding: 0.2em
+        padding: 0.3em
         text-align: center
-        width: 75%
+        width: 80%
 
         &:focus
           outline: 0.05em solid #000000
-
-    ::selection
-      background-color: #d9d9d9
+        
+        &::selection
+          background-color: lighten(#4186d7, 25%)
 
     td.edit-button, th.edit-button
       font-size: 0.75em
@@ -166,4 +169,7 @@ defineProps<{
       width: 6em
       user-select: none
       -webkit-user-select: none
+
+  ::selection
+    background-color: #d9d9d9
 </style>
