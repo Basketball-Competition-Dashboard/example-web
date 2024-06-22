@@ -57,7 +57,6 @@ table.setFields({
   },
 });
 table.setCreate(async (record) => {
-  console.log('create', { ...record });
   try {
     return await postTeam({
       requestBody: {
@@ -74,7 +73,6 @@ table.setCreate(async (record) => {
   }
 });
 table.setRead(async (offset, length) => {
-  console.log('read', offset, length);
   try {
     return await getTeams({
       pageLength: length,
@@ -88,7 +86,6 @@ table.setRead(async (offset, length) => {
   }
 });
 table.setUpdate(async (record) => {
-  console.log('update', { ...record });
   try {
     await patchTeamsById({
       id: record.id as number,

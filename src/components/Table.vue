@@ -164,7 +164,7 @@ defineProps<{
         width: 80%
 
         &:focus
-          outline: 0.05em solid #000000
+          outline: 0.10em solid #000000
 
         &::selection
           background-color: lighten(#4186d7, 25%)

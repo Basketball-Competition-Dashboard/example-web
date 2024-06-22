@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import GameView from '@/views/GameView.vue';
 import TeamView from '@/views/TeamView.vue';
 
 const router = createRouter({
@@ -12,41 +13,11 @@ const router = createRouter({
     },
     {
       path: '/games',
-      name: '比賽紀錄',
-      component: TeamView,
-      meta: {
-        tableHeaders: {
-          date: 'DATE',
-          home: 'HOME TEAM',
-          away: 'AWAY TEAM',
-          home_score: 'HOME SCORE',
-          away_score: 'AWAY SCORE',
-          winner: 'WINNER',
-        },
-        tableFieldsNew: [
-          'date',
-          'home',
-          'away',
-          'home_score',
-          'away_score',
-          'winner',
-        ],
-        // TODO
-        tableFieldsPatch: ['home_score', 'away_score', 'winner'],
-      },
+      component: GameView,
     },
     {
       path: '/teams',
       component: TeamView,
-      meta: {
-        tableHeaders: {
-          name: 'TEAM',
-          abbr: 'ABBR.',
-          city: 'CITY',
-          year_founded: 'YEAR FOUNDED',
-          coach: 'COACH',
-        },
-      },
     },
     {
       path: '/player-profiles',
