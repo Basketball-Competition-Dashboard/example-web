@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 
-const isNewRecord = Symbol('isNewRecord');
-
 /**
  * A record is a dictionary type mapping field names to values.
  */
@@ -10,7 +8,7 @@ export interface RecordType {
   [isNewRecord]?: true;
 }
 
-type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
+const isNewRecord = Symbol('isNewRecord');
 
 export interface TableState {
   deletable: boolean;
@@ -38,7 +36,7 @@ export interface TableState {
   delete: (record: RecordType) => Promise<boolean>;
 }
 
-export type TableStore = ReturnType<typeof useTableStore>;
+type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
 
 export const useTableStore = defineStore('table', {
   /* State definition and initialization */
@@ -243,3 +241,5 @@ export const useTableStore = defineStore('table', {
     },
   },
 });
+
+export type TableStore = ReturnType<typeof useTableStore>;

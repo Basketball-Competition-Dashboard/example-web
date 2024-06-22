@@ -131,7 +131,7 @@ table.setUpdate(async (record) => {
         is_winner:
           record.winner === undefined
             ? undefined
-            : record.home_name=== record.winner,
+            : record.home_name === record.winner,
       },
     });
     await patchGamesByIdTeamsByTeamId({
