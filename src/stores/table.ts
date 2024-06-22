@@ -3,14 +3,14 @@ import { defineStore } from 'pinia';
 const isNewRecord = Symbol('isNewRecord');
 
 /**
- * A record is a map of fields.
+ * A record is a dictionary type mapping field names to values.
  */
 export interface RecordType {
   [key: string]: unknown;
   [isNewRecord]?: true;
 }
 
-export type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
+type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
 
 export interface TableState {
   deletable: boolean;
@@ -41,6 +41,7 @@ export interface TableState {
 export type TableStore = ReturnType<typeof useTableStore>;
 
 export const useTableStore = defineStore('table', {
+  /* State definition and initialization */
   state: () =>
     <TableState>{
       deletable: false,
@@ -55,6 +56,7 @@ export const useTableStore = defineStore('table', {
       update: () => Promise.reject('table.update is not implemented'),
       delete: () => Promise.reject('table.delete is not implemented'),
     },
+  /* Getters */
   getters: {
     getDeletable(state) {
       return state.deletable;
@@ -70,6 +72,8 @@ export const useTableStore = defineStore('table', {
     },
   },
   actions: {
+    /* Setters */
+
     setDeletable(deletable: TableState['deletable']) {
       this.deletable = deletable;
     },
@@ -105,6 +109,9 @@ export const useTableStore = defineStore('table', {
         return delele(record);
       };
     },
+
+    /* Remote operations */
+
     async createRecord(index: number) {
       let record = this.records[index];
       if (!record) {
@@ -177,6 +184,9 @@ export const useTableStore = defineStore('table', {
         this.editModes[index] = 'Save';
       }
     },
+
+    /* Local operations */
+
     coerceRecordType(record: RecordType): RecordType {
       const recordTyped: RecordType = {};
       for (const [field, { type }] of Object.entries(this.fields)) {
