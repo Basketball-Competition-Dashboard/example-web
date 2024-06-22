@@ -70,7 +70,7 @@ table.setCreate(async (record) => {
     });
   } catch (error) {
     alert(error);
-    return false;
+    return;
   }
 });
 table.setRead(async (offset, length) => {
@@ -84,7 +84,7 @@ table.setRead(async (offset, length) => {
     });
   } catch (error) {
     alert(error);
-    return false;
+    return;
   }
 });
 table.setUpdate(async (record) => {

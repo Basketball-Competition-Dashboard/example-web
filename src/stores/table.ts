@@ -29,11 +29,11 @@ export interface TableState {
   records: RecordType[];
   offset: number; // hardcoded for now
   length: number; // hardcoded for now
-  create: (record: RecordType) => Promise<RecordType | false>;
+  create: (record: RecordType) => Promise<RecordType | undefined>;
   read: (
     offset: number,
     length: number,
-  ) => Promise<RecordType[] | false>;
+  ) => Promise<RecordType[] | undefined>;
   update: (record: RecordType) => Promise<boolean>;
   delete: (record: RecordType) => Promise<boolean>;
 }
@@ -76,59 +76,60 @@ export const useTableStore = defineStore('table', {
     setFields(fields: TableState['fields']) {
       this.fields = fields;
     },
-    /**
-     * The fields of record are type-coerced before and after calling `create`.
-     */
     setCreate(create: TableState['create']) {
-      this.create = create;
+      this.create = async (record) => {
+        record = this.coerceRecordType(record);
+        const recordCreated = await create(record);
+        if (!recordCreated) {
+          return;
+        }
+        return this.coerceRecordType(recordCreated);
+      };
     },
-    /**
-     * The fields of record are type-coerced after calling `read`.
-     */
     setRead(read: TableState['read']) {
-      this.read = read;
+      this.read = async (offset, length) => {
+        return (await read(offset, length))?.map(
+          this.coerceRecordType,
+        );
+      };
     },
-    /**
-     * The fields of record are type-coerced before calling `update`.
-     */
     setUpdate(update: TableState['update']) {
-      this.update = update;
+      this.update = async (record) => {
+        record = this.coerceRecordType(record);
+        return update(record);
+      };
     },
-    /**
-     * The fields of record are type-coerced before calling `delete`.
-     */
     setDelete(delele: TableState['delete']) {
-      this.delete = delele;
+      this.delete = async (record) => {
+        record = this.coerceRecordType(record);
+        return delele(record);
+      };
     },
     async createRecord(index: number) {
-      const record = this.records[index];
-      if (!record) {
-        throw new RangeError('Invalid index');
-      }
-      const recordNew = this.coerceRecordType(record);
-      let recordCreated = await this.create(recordNew);
-      if (!recordCreated) {
-        return;
-      }
-      recordCreated = this.coerceRecordType(recordCreated);
-      this.editModes[index] = 'Update';
-      this.records[index] = recordCreated;
-    },
-    async readRecords() {
-      let records = await this.read(this.offset, this.length);
-      if (!records) {
-        return;
-      }
-      records = records.map(this.coerceRecordType);
-      this.editModes = new Array(records.length).fill('Update');
-      this.records = records;
-    },
-    async updateRecord(index: number) {
       let record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
       }
-      record = this.coerceRecordType(record);
+      record = await this.create(record);
+      if (!record) {
+        return;
+      }
+      this.editModes[index] = 'Update';
+      this.records[index] = record;
+    },
+    async readRecords() {
+      const records = await this.read(this.offset, this.length);
+      if (!records) {
+        return;
+      }
+      this.editModes = new Array(records.length).fill('Update');
+      this.records = records;
+    },
+    async updateRecord(index: number) {
+      const record = this.records[index];
+      if (!record) {
+        throw new RangeError('Invalid index');
+      }
       const isUpdated = await this.update(record);
       if (!isUpdated) {
         return;
@@ -136,29 +137,23 @@ export const useTableStore = defineStore('table', {
       this.editModes[index] = 'Update';
     },
     async deleteRecord(index: number) {
-      {
-        let record = this.records[index];
-        if (!record) {
-          throw new RangeError('Invalid index');
-        }
-        if (!record[isNewRecord]) {
-          record = this.coerceRecordType(record);
-          const isDeleted = await this.delete(record);
-          if (!isDeleted) {
-            return;
-          }
-        }
-        this.records.splice(index, 1);
+      const record = this.records[index];
+      if (!record) {
+        throw new RangeError('Invalid index');
       }
-      {
-        const lastOffset = this.offset + this.length - 1;
-        const records = await this.read(lastOffset, 1);
-        if (!records || records[0] === undefined) {
+      if (!record[isNewRecord]) {
+        const isDeleted = await this.delete(record);
+        if (!isDeleted) {
           return;
         }
-        const lastRecord = this.coerceRecordType(records[0]);
-        this.records.push(lastRecord);
       }
+      this.records.splice(index, 1);
+      const lastOffset = this.offset + this.length - 1;
+      const records = await this.read(lastOffset, 1);
+      if (!records || records[0] === undefined) {
+        return;
+      }
+      this.records.push(records[0]);
     },
     async editRecord(index: number) {
       const mode = this.editModes[index];
