@@ -77,16 +77,19 @@ export const useTableStore = defineStore('table', {
       this.fields = fields;
     },
     /**
-     * The fields of record are type-coerced and filtered before calling `create`.
+     * The fields of record are type-coerced before and after calling `create`.
      */
     setCreate(create: TableState['create']) {
       this.create = create;
     },
+    /**
+     * The fields of record are type-coerced after calling `read`.
+     */
     setRead(read: TableState['read']) {
       this.read = read;
     },
     /**
-     * The fields of record are type-coerced and filtered before calling `update`.
+     * The fields of record are type-coerced before calling `update`.
      */
     setUpdate(update: TableState['update']) {
       this.update = update;
@@ -102,10 +105,7 @@ export const useTableStore = defineStore('table', {
       if (!record) {
         throw new RangeError('Invalid index');
       }
-      let recordNew = this.coerceRecordType(record);
-      recordNew = this.filterRecordFields(recordNew, {
-        creatable: true,
-      });
+      const recordNew = this.coerceRecordType(record);
       let recordCreated = await this.create(recordNew);
       if (!recordCreated) {
         return;
@@ -115,24 +115,21 @@ export const useTableStore = defineStore('table', {
       this.records[index] = recordCreated;
     },
     async readRecords() {
-      const records = await this.read(this.offset, this.length);
+      let records = await this.read(this.offset, this.length);
       if (!records) {
         return;
       }
-      const recordsTyped = records.map(this.coerceRecordType);
+      records = records.map(this.coerceRecordType);
       this.editModes = new Array(records.length).fill('Update');
-      this.records = recordsTyped;
+      this.records = records;
     },
     async updateRecord(index: number) {
-      const record = this.records[index];
+      let record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
       }
-      let recordPatch = this.coerceRecordType(record);
-      recordPatch = this.filterRecordFields(recordPatch, {
-        updatable: true,
-      });
-      const isUpdated = await this.update(recordPatch);
+      record = this.coerceRecordType(record);
+      const isUpdated = await this.update(record);
       if (!isUpdated) {
         return;
       }
@@ -140,11 +137,12 @@ export const useTableStore = defineStore('table', {
     },
     async deleteRecord(index: number) {
       {
-        const record = this.records[index];
+        let record = this.records[index];
         if (!record) {
           throw new RangeError('Invalid index');
         }
         if (!record[isNewRecord]) {
+          record = this.coerceRecordType(record);
           const isDeleted = await this.delete(record);
           if (!isDeleted) {
             return;
@@ -184,6 +182,16 @@ export const useTableStore = defineStore('table', {
         this.editModes[index] = 'Save';
       }
     },
+    coerceRecordType(record: RecordType): RecordType {
+      const recordTyped: RecordType = {};
+      for (const [field, { type }] of Object.entries(this.fields)) {
+        const value = record[field];
+        if (value !== undefined) {
+          recordTyped[field] = type(value);
+        }
+      }
+      return recordTyped;
+    },
     createEmptyRecord(): void {
       if (this.isDeleteMode()) {
         return;
@@ -197,38 +205,16 @@ export const useTableStore = defineStore('table', {
         this.editModes.pop();
       }
     },
-    coerceRecordType(record: RecordType): RecordType {
-      const recordTyped: RecordType = {};
-      for (const [field, { type }] of Object.entries(this.fields)) {
-        const value = record[field];
-        if (value !== undefined) {
-          recordTyped[field] = type(value);
-        }
-      }
-      return recordTyped;
-    },
-    filterRecordFields(
-      record: RecordType,
-      mask: {
-        [key in 'creatable' | 'updatable']?: boolean;
-      },
-    ): RecordType {
-      const recordFiltered: RecordType = {};
-      for (const [field, descriptor] of Object.entries(this.fields)) {
-        for (const [key, condition] of Object.entries(mask)) {
-          if (condition && descriptor[key as keyof typeof mask]) {
-            recordFiltered[field] = record[field];
-          }
-        }
-      }
-      return recordFiltered;
-    },
     isDeleteMode(): boolean {
       return this.editModes.includes('Delete');
     },
     isFieldEditable(index: number, field: string): boolean {
-      if (this.isRecordEditable(index)) {
-        const record = this.records[index]!;
+      const mode = this.editModes[index];
+      const record = this.records[index];
+      if (!mode || !record) {
+        throw new RangeError('Invalid index');
+      }
+      if (mode === 'Save') {
         return Boolean(
           this.fields[field]?.[
             record[isNewRecord] ? 'creatable' : 'updatable'
@@ -236,14 +222,6 @@ export const useTableStore = defineStore('table', {
         );
       }
       return false;
-    },
-    isRecordEditable(index: number): boolean {
-      const mode = this.editModes[index];
-      const record = this.records[index];
-      if (!mode || !record) {
-        throw new RangeError('Invalid index');
-      }
-      return mode === 'Save';
     },
     toggleDeleteMode(): void {
       if (!this.deletable) {

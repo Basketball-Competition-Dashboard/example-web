@@ -14,18 +14,23 @@ defineProps<{
     <section class="top">
       <h1 class="title">{{ title }}</h1>
       <aside>
-        <div class="edit-button">
-          <TableEditButton
-            mode="Create"
-            @click="table.createEmptyRecord" />
-        </div>
-        <div class="edit-button">
-          <TableEditButton
-            mode="Delete"
-            :style="{
-              filter: !table.getDeletable && 'grayscale(1) opacity(0.5)',
-            }"
-            @click="table.toggleDeleteMode" />
+        <div
+          class="edit-buttons"
+          v-if="editable">
+          <div class="edit-button">
+            <TableEditButton
+              mode="Create"
+              @click="table.createEmptyRecord" />
+          </div>
+          <div class="edit-button">
+            <TableEditButton
+              mode="Delete"
+              :style="{
+                filter:
+                  !table.getDeletable && 'grayscale(1) opacity(0.5)',
+              }"
+              @click="table.toggleDeleteMode" />
+          </div>
         </div>
       </aside>
     </section>
@@ -34,7 +39,8 @@ defineProps<{
         <thead>
           <tr>
             <th
-              v-for="({ name }, field) of table.getFields"
+              v-for="({ name, visible }, field) of table.getFields"
+              v-show="visible"
               :key="field">
               {{ name }}
             </th>
@@ -49,12 +55,11 @@ defineProps<{
             v-for="(record, index) of table.getRecords"
             :key="index">
             <td
-              v-for="(, field) of table.getFields"
+              v-for="({ visible }, field) of table.getFields"
+              v-show="visible"
               :key="field">
               <input
-                v-if="
-                  editable && table.isFieldEditable(index, field)
-                "
+                v-if="editable && table.isFieldEditable(index, field)"
                 spellcheck="false"
                 v-model="record[field]"
                 type="text" />
@@ -91,13 +96,16 @@ defineProps<{
     text-align: center
 
   aside
-    display: flex
-    justify-content: flex-end
+    min-height: 1em
     width: 94%
 
-    .edit-button
-      padding-inline: 0.8em
-      font-size: 1.15em
+    .edit-buttons
+      display: flex
+      justify-content: flex-end
+
+      .edit-button
+        padding-inline: 0.8em
+        font-size: 1.15em
 
   ::selection
     background-color: #d9d9d9
@@ -165,7 +173,7 @@ defineProps<{
       font-size: 0.75em
       padding-block: 1.44em
       text-align: left
-      width: 6em
+      width: 6.25em
       user-select: none
       -webkit-user-select: none
 
