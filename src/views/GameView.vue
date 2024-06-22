@@ -56,14 +56,14 @@ table.setFields({
     visible: true,
   },
   home_score: {
-    name: 'HOME_SCORE',
+    name: 'HOME SCORE',
     type: Number,
     creatable: true,
     updatable: true,
     visible: true,
   },
   away_score: {
-    name: 'AWAY_SCORE',
+    name: 'AWAY SCORE',
     type: Number,
     creatable: true,
     updatable: true,
