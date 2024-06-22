@@ -4,7 +4,6 @@ import { type TableStore } from '@/stores/table';
 
 defineProps<{
   editable: boolean;
-  headers: Record<string, string>;
   table: TableStore;
   title: string;
 }>();
@@ -24,7 +23,7 @@ defineProps<{
           <TableEditButton
             mode="Delete"
             :style="{
-              filter: !table.deletable && 'grayscale(1) opacity(0.5)',
+              filter: !table.getDeletable && 'grayscale(1) opacity(0.5)',
             }"
             @click="table.toggleDeleteMode" />
         </div>
@@ -35,9 +34,9 @@ defineProps<{
         <thead>
           <tr>
             <th
-              v-for="(displayName, schemaName) of headers"
-              :key="schemaName">
-              {{ displayName }}
+              v-for="({ name }, field) of table.getFields"
+              :key="field">
+              {{ name }}
             </th>
             <th
               class="edit-button"
@@ -50,17 +49,17 @@ defineProps<{
             v-for="(record, index) of table.getRecords"
             :key="index">
             <td
-              v-for="(_displayName, schemaName) of headers"
-              :key="schemaName">
+              v-for="(, field) of table.getFields"
+              :key="field">
               <input
                 v-if="
-                  editable && table.isFieldEditable(index, schemaName)
+                  editable && table.isFieldEditable(index, field)
                 "
                 spellcheck="false"
-                v-model="record[schemaName]"
+                v-model="record[field]"
                 type="text" />
               <span v-else>
-                {{ record[schemaName] }}
+                {{ record[field] }}
               </span>
             </td>
             <td
@@ -158,7 +157,7 @@ defineProps<{
 
         &:focus
           outline: 0.05em solid #000000
-        
+
         &::selection
           background-color: lighten(#4186d7, 25%)
 

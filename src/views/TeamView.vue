@@ -6,25 +6,51 @@ import {
   getTeams,
   patchTeamsById,
   postTeam,
+  type Team,
+  type TeamPatch,
 } from '@/generated/web-api';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
 
 table.setDeletable(false);
-table.setFieldsNew(['name', 'abbr', 'city', 'year_founded', 'coach']);
-table.setFieldsPatch(['coach']);
+table.setFields({
+  name: {
+    name: 'TEAM',
+    type: String,
+    creatable: true,
+    updatable: false,
+  },
+  abbr: {
+    name: 'ABBR.',
+    type: String,
+    creatable: true,
+    updatable: false,
+  },
+  city: {
+    name: 'CITY',
+    type: String,
+    creatable: true,
+    updatable: false,
+  },
+  year_founded: {
+    name: 'YEAR FOUNDED',
+    type: Number,
+    creatable: true,
+    updatable: false,
+  },
+  coach: {
+    name: 'COACH',
+    type: String,
+    creatable: true,
+    updatable: true,
+  },
+});
 table.setCreate(async (record) => {
   console.log('create', { ...record });
   try {
     return await postTeam({
-      requestBody: {
-        name: record.name as string,
-        abbr: record.abbr as string,
-        city: record.city as string,
-        year_founded: parseInt(record.year_founded as string),
-        coach: record.coach as string,
-      },
+      requestBody: record as Team,
     });
   } catch (error) {
     alert(error);
@@ -50,9 +76,7 @@ table.setUpdate(async (record) => {
   try {
     await patchTeamsById({
       id: record.id as number,
-      requestBody: {
-        coach: record.coach as string,
-      },
+      requestBody: record as TeamPatch,
     });
     return true;
   } catch (error) {
@@ -69,13 +93,6 @@ onMounted(async () => {
   <div id="team-view-vue">
     <Table
       :editable="editable"
-      :headers="{
-        name: 'TEAM',
-        abbr: 'ABBR.',
-        city: 'CITY',
-        year_founded: 'YEAR FOUNDED',
-        coach: 'COACH',
-      }"
       :table="table"
       title="球隊介紹" />
   </div>
