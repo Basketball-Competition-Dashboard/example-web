@@ -56,8 +56,9 @@ nav
     height: max-content
     padding-block-end: 1em
     position: relative
+    text-align: center
     text-decoration: none
-    width: 100%
+    width: auto
     word-break: break-all
 
     &:last-child
