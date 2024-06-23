@@ -47,6 +47,7 @@ nav
   position: relative
   user-select: none
   -webkit-user-select: none
+  word-break: break-all
   width: 100%
 
   a
@@ -56,10 +57,11 @@ nav
     padding-block-end: 1em
     position: relative
     text-decoration: none
-    width: max-content
+    width: 100%
+    word-break: break-all
 
     &:last-child
-      padding-block-end: 100%
+      padding-block-end: 40vh
 
     &:hover
       color: initial

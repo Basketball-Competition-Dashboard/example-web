@@ -155,6 +155,7 @@ defineProps<{
     font-size: 1.25em
     table-layout: fixed
     text-indent: 0
+    word-break: break-all
     width: 100%
 
     thead
