@@ -12,26 +12,27 @@ defineProps<{
 <template>
   <div id="table-vue">
     <section class="top">
-      <h1 class="title">{{ title }}</h1>
+      <h1 id="title">{{ title }}</h1>
       <aside>
-        <div
+        <section
           class="edit-buttons"
           v-if="editable">
-          <div class="edit-button">
+          <div
+            class="edit-button"
+            id="create">
             <TableEditButton
               mode="Create"
               @click="table.createEmptyRecord" />
           </div>
-          <div class="edit-button">
+          <div
+            class="edit-button"
+            id="delete"
+            :class="{ disabled: !table.getDeletable }">
             <TableEditButton
               mode="Delete"
-              :style="{
-                filter:
-                  !table.getDeletable && 'grayscale(1) opacity(0.5)',
-              }"
               @click="table.toggleDeleteMode" />
           </div>
-        </div>
+        </section>
       </aside>
     </section>
     <section class="bottom">
@@ -41,7 +42,8 @@ defineProps<{
             <th
               v-for="({ name, visible }, field) of table.getFields"
               v-show="visible"
-              :key="field">
+              :key="field"
+              :id="field">
               {{ name }}
             </th>
             <th
@@ -53,11 +55,13 @@ defineProps<{
         <tbody>
           <tr
             v-for="(record, index) of table.getRecords"
-            :key="index">
+            :key="index"
+            :id="`${index}`">
             <td
               v-for="({ visible }, field) of table.getFields"
               v-show="visible"
-              :key="field">
+              :key="field"
+              :id="field">
               <input
                 v-if="editable && table.isFieldEditable(index, field)"
                 spellcheck="false"
@@ -88,7 +92,7 @@ defineProps<{
   flex-direction: column
   padding-block: 1em
 
-  .title
+  #title
     color: #000000
     font-size: 2.5em
     font-weight: 600
@@ -107,8 +111,9 @@ defineProps<{
         padding-inline: 0.8em
         font-size: 1.15em
 
-  ::selection
-    background-color: #d9d9d9
+        &.disabled
+          cursor: not-allowed
+          filter: grayscale(1) opacity(0.5)
 
 .bottom
   align-items: center
@@ -140,6 +145,12 @@ defineProps<{
       text-align: center
       vertical-align: middle
 
+      &.edit-button
+        font-size: 0.75em
+        padding-block: 1.44em
+        text-align: left
+        width: 6.25em
+
     th
       color: #464a53
       font-weight: 700
@@ -167,16 +178,12 @@ defineProps<{
           outline: 0.10em solid #000000
 
         &::selection
-          background-color: lighten(#4186d7, 25%)
+          background-color: #96bce9
 
-    td.edit-button, th.edit-button
-      font-size: 0.75em
-      padding-block: 1.44em
-      text-align: left
-      width: 6.25em
-      user-select: none
-      -webkit-user-select: none
+::selection
+  background-color: #d9d9d9
 
-  ::selection
-    background-color: #d9d9d9
+.edit-button
+  user-select: none
+  -webkit-user-select: none
 </style>

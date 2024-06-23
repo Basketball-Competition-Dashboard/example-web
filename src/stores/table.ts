@@ -149,6 +149,9 @@ export const useTableStore = defineStore('table', {
       this.editModes[index] = 'Update';
     },
     async deleteRecord(index: number): Promise<void> {
+      if (!this.deletable) {
+        return;
+      }
       const record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
@@ -167,12 +170,15 @@ export const useTableStore = defineStore('table', {
       }
       this.records.push(records[0]);
     },
-    async editOffsetAndLength(offset: number, length: number): Promise<void> {
+    async editOffsetAndLength(
+      offset: number,
+      length: number,
+    ): Promise<void> {
       const originalLength = this.length;
       const originalOffset = this.offset;
       this.length = length;
       this.offset = offset;
-      if (!await this.readRecords()) {
+      if (!(await this.readRecords())) {
         this.length = originalLength;
         this.offset = originalOffset;
         await this.readRecords();
