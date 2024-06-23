@@ -21,14 +21,14 @@ table.setFields({
     visible: false,
   },
   home_id: {
-    name: 'HOME_ID',
+    name: 'HOME-ID',
     type: Number,
     creatable: false,
     updatable: false,
     visible: false,
   },
   away_id: {
-    name: 'AWAY_ID',
+    name: 'AWAY-ID',
     type: Number,
     creatable: false,
     updatable: false,
@@ -56,14 +56,14 @@ table.setFields({
     visible: true,
   },
   home_score: {
-    name: 'HOME SCORE',
+    name: 'HOME-SCORE',
     type: Number,
     creatable: true,
     updatable: true,
     visible: true,
   },
   away_score: {
-    name: 'AWAY SCORE',
+    name: 'AWAY-SCORE',
     type: Number,
     creatable: true,
     updatable: true,
@@ -99,16 +99,9 @@ table.setCreate(async (record) => {
     return;
   }
 });
-table.setRead(async (offset, length) => {
+table.setRead(async (parameters) => {
   try {
-    return (
-      await getGames({
-        pageLength: length,
-        pageOffset: offset,
-        sortField: 'date',
-        sortOrder: 'ascending',
-      })
-    ).map((record: RecordType) => {
+    return (await getGames(parameters)).map((record: RecordType) => {
       if (record.is_home_winner !== undefined) {
         record.winner = record.is_home_winner
           ? record.home_name
@@ -152,7 +145,13 @@ table.setUpdate(async (record) => {
   }
 });
 onMounted(async () => {
-  await table.editOffsetAndLength(0, 3);
+  table.setReadParameters({
+    pageLength: 4,
+    pageOffset: 0,
+    sortField: 'date',
+    sortOrder: 'descending',
+  });
+  await table.readRecords();
 });
 </script>
 

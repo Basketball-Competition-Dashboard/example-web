@@ -24,21 +24,24 @@ export interface TableState {
       visible: boolean;
     }
   >;
+  readParameters: ReadParameters;
   records: RecordType[];
-  offset: number;
-  length: number;
-  sortField: string;
-  sortOrder: 'ascending' | 'descending';
   create: (record: RecordType) => Promise<RecordType | undefined>;
   read: (
-    offset: number,
-    length: number,
+    parameters: ReadParameters,
   ) => Promise<RecordType[] | undefined>;
   update: (record: RecordType) => Promise<boolean>;
   delete: (record: RecordType) => Promise<boolean>;
 }
 
-type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
+export type EditMode = 'Create' | 'Delete' | 'Save' | 'Update';
+
+export type ReadParameters = {
+  pageOffset: number;
+  pageLength: number;
+  sortField: string;
+  sortOrder: 'ascending' | 'descending';
+};
 
 export const useTableStore = defineStore('table', {
   /* State definition and initialization */
@@ -48,11 +51,13 @@ export const useTableStore = defineStore('table', {
       editModes: [],
       editModesToSwap: [],
       fields: {},
+      readParameters: {
+        pageOffset: 0,
+        pageLength: 0,
+        sortField: '',
+        sortOrder: 'ascending',
+      },
       records: [],
-      length: 0,
-      offset: 0,
-      sortField: 'id',
-      sortOrder: 'descending',
       create: () => Promise.reject('table.create is not implemented'),
       read: () => Promise.reject('table.read is not implemented'),
       update: () => Promise.reject('table.update is not implemented'),
@@ -69,20 +74,23 @@ export const useTableStore = defineStore('table', {
     getFields(state) {
       return state.fields;
     },
-    getLength(state) {
-      return state.length;
+    getReadParameters(state) {
+      return state.readParameters;
     },
-    getOffset(state) {
-      return state.offset;
+    getReadPageLength(state) {
+      return state.readParameters.pageLength;
+    },
+    getReadPageOffset(state) {
+      return state.readParameters.pageOffset;
+    },
+    getReadSortField(state) {
+      return state.readParameters.sortField;
+    },
+    getReadSortOrder(state) {
+      return state.readParameters.sortOrder;
     },
     getRecords(state) {
       return state.records;
-    },
-    getSortField(state) {
-      return state.sortField;
-    },
-    getSortOrder(state) {
-      return state.sortOrder;
     },
     getVisibleFields(state): TableState['fields'] {
       return Object.fromEntries(
@@ -101,6 +109,21 @@ export const useTableStore = defineStore('table', {
     setFields(fields: TableState['fields']) {
       this.fields = fields;
     },
+    setReadParameters(readParameters: TableState['readParameters']) {
+      this.readParameters = readParameters;
+    },
+    setReadPageLength(pageLength: ReadParameters['pageLength']) {
+      this.readParameters.pageLength = pageLength;
+    },
+    setReadPageOffset(pageOffset: ReadParameters['pageOffset']) {
+      this.readParameters.pageOffset = pageOffset;
+    },
+    setReadSortField(sortField: ReadParameters['sortField']) {
+      this.readParameters.sortField = sortField;
+    },
+    setReadSortOrder(sortOrder: ReadParameters['sortOrder']) {
+      this.readParameters.sortOrder = sortOrder;
+    },
     setCreate(create: TableState['create']) {
       this.create = async (record) => {
         record = this.coerceRecordType(record);
@@ -112,10 +135,8 @@ export const useTableStore = defineStore('table', {
       };
     },
     setRead(read: TableState['read']) {
-      this.read = async (offset, length) => {
-        return (await read(offset, length))?.map(
-          this.coerceRecordType,
-        );
+      this.read = async (parameters) => {
+        return (await read(parameters))?.map(this.coerceRecordType);
       };
     },
     setUpdate(update: TableState['update']) {
@@ -133,20 +154,21 @@ export const useTableStore = defineStore('table', {
 
     /* Remote operations */
 
-    async createRecord(index: number): Promise<void> {
+    async createRecord(index: number): Promise<boolean> {
       let record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
       }
       record = await this.create(record);
       if (!record) {
-        return;
+        return false;
       }
       this.editModes[index] = 'Update';
       this.records[index] = record;
+      return true;
     },
     async readRecords(): Promise<boolean> {
-      const records = await this.read(this.offset, this.length);
+      const records = await this.read(this.readParameters);
       if (!records) {
         return false;
       }
@@ -154,20 +176,21 @@ export const useTableStore = defineStore('table', {
       this.records = records;
       return true;
     },
-    async updateRecord(index: number): Promise<void> {
+    async updateRecord(index: number): Promise<boolean> {
       const record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
       }
       const isUpdated = await this.update(record);
       if (!isUpdated) {
-        return;
+        return false;
       }
       this.editModes[index] = 'Update';
+      return true;
     },
-    async deleteRecord(index: number): Promise<void> {
+    async deleteRecord(index: number): Promise<boolean> {
       if (!this.deletable) {
-        return;
+        return false;
       }
       const record = this.records[index];
       if (!record) {
@@ -176,29 +199,22 @@ export const useTableStore = defineStore('table', {
       if (!record[isNewRecord]) {
         const isDeleted = await this.delete(record);
         if (!isDeleted) {
-          return;
+          return false;
         }
       }
       this.records.splice(index, 1);
-      const lastOffset = this.offset + this.length - 1;
-      const records = await this.read(lastOffset, 1);
+      const missingOffset =
+        this.readParameters.pageOffset + this.records.length;
+      const records = await this.read({
+        ...this.readParameters,
+        pageLength: 1,
+        pageOffset: missingOffset,
+      });
       if (!records || records[0] === undefined) {
-        return;
+        return true;
       }
       this.records.push(records[0]);
-    },
-    async editOffsetAndLength(
-      offset: number,
-      length: number,
-    ): Promise<void> {
-      const originalLength = this.length;
-      const originalOffset = this.offset;
-      this.length = length;
-      this.offset = offset;
-      if (!(await this.readRecords())) {
-        this.length = originalLength;
-        this.offset = originalOffset;
-      }
+      return true;
     },
     async editRecord(index: number): Promise<void> {
       const mode = this.editModes[index];
@@ -222,19 +238,6 @@ export const useTableStore = defineStore('table', {
         this.editModes[index] = 'Save';
       }
     },
-    async sortRecords(
-      field: TableState['sortField'],
-      order: TableState['sortOrder'],
-    ): Promise<void> {
-      const originalField = this.sortField;
-      const originalOrder = this.sortOrder;
-      this.sortField = field;
-      this.sortOrder = order;
-      if (!(await this.readRecords())) {
-        this.sortField = originalField;
-        this.sortOrder = originalOrder;
-      }
-    },
 
     /* Local operations */
 
@@ -255,7 +258,7 @@ export const useTableStore = defineStore('table', {
       console.log('Creating empty record');
       this.editModes.unshift('Save');
       this.records.unshift({ [isNewRecord]: true });
-      if (this.records.length > this.length) {
+      if (this.records.length > this.readParameters.pageLength) {
         console.log('Removing last record');
         this.records.pop();
         this.editModes.pop();

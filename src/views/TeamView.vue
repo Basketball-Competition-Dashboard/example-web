@@ -28,7 +28,7 @@ table.setFields({
     visible: true,
   },
   abbr: {
-    name: 'ABBR.',
+    name: 'ABBR',
     type: String,
     creatable: true,
     updatable: false,
@@ -42,7 +42,7 @@ table.setFields({
     visible: true,
   },
   year_founded: {
-    name: 'YEAR FOUNDED',
+    name: 'YEAR-FOUNDED',
     type: Number,
     creatable: true,
     updatable: false,
@@ -72,14 +72,9 @@ table.setCreate(async (record) => {
     return;
   }
 });
-table.setRead(async (offset, length) => {
+table.setRead(async (parameters) => {
   try {
-    return await getTeams({
-      pageLength: length,
-      pageOffset: offset,
-      sortField: 'name',
-      sortOrder: 'ascending',
-    });
+    return await getTeams(parameters);
   } catch (error) {
     alert(error);
     return;
@@ -101,7 +96,13 @@ table.setUpdate(async (record) => {
 });
 
 onMounted(async () => {
-  await table.editOffsetAndLength(0, 4);
+  table.setReadParameters({
+    pageLength: 10,
+    pageOffset: 0,
+    sortField: 'name',
+    sortOrder: 'ascending',
+  });
+  await table.readRecords();
 });
 </script>
 
