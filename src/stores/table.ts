@@ -25,8 +25,8 @@ export interface TableState {
     }
   >;
   records: RecordType[];
-  offset: number; // hardcoded for now
-  length: number; // hardcoded for now
+  offset: number;
+  length: number;
   create: (record: RecordType) => Promise<RecordType | undefined>;
   read: (
     offset: number,
@@ -47,8 +47,8 @@ export const useTableStore = defineStore('table', {
       editModesToSwap: [],
       fields: {},
       records: [],
+      length: 0,
       offset: 0,
-      length: 4,
       create: () => Promise.reject('table.create is not implemented'),
       read: () => Promise.reject('table.read is not implemented'),
       update: () => Promise.reject('table.update is not implemented'),
@@ -64,6 +64,12 @@ export const useTableStore = defineStore('table', {
     },
     getFields(state) {
       return state.fields;
+    },
+    getLength(state) {
+      return state.length;
+    },
+    getOffset(state) {
+      return state.offset;
     },
     getRecords(state) {
       return state.records;
@@ -110,7 +116,7 @@ export const useTableStore = defineStore('table', {
 
     /* Remote operations */
 
-    async createRecord(index: number) {
+    async createRecord(index: number): Promise<void> {
       let record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
@@ -122,15 +128,16 @@ export const useTableStore = defineStore('table', {
       this.editModes[index] = 'Update';
       this.records[index] = record;
     },
-    async readRecords() {
+    async readRecords(): Promise<boolean> {
       const records = await this.read(this.offset, this.length);
       if (!records) {
-        return;
+        return false;
       }
       this.editModes = new Array(records.length).fill('Update');
       this.records = records;
+      return true;
     },
-    async updateRecord(index: number) {
+    async updateRecord(index: number): Promise<void> {
       const record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
@@ -141,7 +148,7 @@ export const useTableStore = defineStore('table', {
       }
       this.editModes[index] = 'Update';
     },
-    async deleteRecord(index: number) {
+    async deleteRecord(index: number): Promise<void> {
       const record = this.records[index];
       if (!record) {
         throw new RangeError('Invalid index');
@@ -160,7 +167,17 @@ export const useTableStore = defineStore('table', {
       }
       this.records.push(records[0]);
     },
-    async editRecord(index: number) {
+    async editOffsetAndLength(offset: number, length: number): Promise<void> {
+      const originalLength = this.length;
+      const originalOffset = this.offset;
+      this.length = length;
+      this.offset = offset;
+      if (!await this.readRecords()) {
+        this.length = originalLength;
+        this.offset = originalOffset;
+      }
+    },
+    async editRecord(index: number): Promise<void> {
       const mode = this.editModes[index];
       const record = this.records[index];
       if (!mode || !record) {

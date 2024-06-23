@@ -99,8 +99,9 @@ table.setUpdate(async (record) => {
     return false;
   }
 });
+
 onMounted(async () => {
-  await table.readRecords();
+  await table.editOffsetAndLength(0, 4);
 });
 </script>
 

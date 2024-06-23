@@ -152,7 +152,7 @@ table.setUpdate(async (record) => {
   }
 });
 onMounted(async () => {
-  await table.readRecords();
+  await table.editOffsetAndLength(0, 3);
 });
 </script>
 
