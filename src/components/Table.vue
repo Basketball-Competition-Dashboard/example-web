@@ -45,20 +45,9 @@ defineProps<{
                 v-for="({ name }, field) of table.getVisibleFields"
                 :key="field"
                 :id="field">
-                <div
-                  style="
-                    cursor: pointer;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: top;
-                    font-family: inherit;
-                    font-size: inherit;
-                    font-weight: inherit;
-                  ">
+                <div>
                   {{ name }}
                   <Icon
-                    width="0.8em"
                     :icon="
                       field === table.getReadSortField
                         ? table.getReadSortOrder === 'ascending'
@@ -68,10 +57,9 @@ defineProps<{
                     "
                     @click="
                       table.setReadSortOrder(
-                        field === table.getReadSortField
-                          ? table.getReadSortOrder === 'ascending'
-                            ? 'descending'
-                            : 'ascending'
+                        field === table.getReadSortField &&
+                          table.getReadSortOrder === 'ascending'
+                          ? 'descending'
                           : 'ascending',
                       );
                       table.setReadSortField(field);
@@ -204,11 +192,24 @@ defineProps<{
         font-size: 1em
         padding-block: 0.7em
 
-      th:first-child
-        border-inline-start: 0.08rem solid #c3c5cb
+        &:first-child
+          border-inline-start: 0.08rem solid #c3c5cb
 
-      th:last-child
-        border-inline-end: 0.08rem solid #c3c5cb
+        &:last-child
+          border-inline-end: 0.08rem solid #c3c5cb
+
+        div
+          align-items: center
+          display: flex
+          flex-direction: column
+          justify-content: flex-start
+          font-weight: inherit
+
+          svg
+            cursor: pointer
+            font-size: 0.8em
+            user-select: none
+            -webkit-user-select: none
 
     tbody
       tr
