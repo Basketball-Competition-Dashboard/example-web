@@ -202,6 +202,7 @@ export const useTableStore = defineStore('table', {
           return false;
         }
       }
+      this.editModesToSwap.splice(index, 1);
       this.records.splice(index, 1);
       const missingOffset =
         this.readParameters.pageOffset + this.records.length;
@@ -213,6 +214,7 @@ export const useTableStore = defineStore('table', {
       if (!records || records[0] === undefined) {
         return true;
       }
+      this.editModesToSwap.push('Update');
       this.records.push(records[0]);
       return true;
     },
@@ -245,7 +247,7 @@ export const useTableStore = defineStore('table', {
       const recordTyped: RecordType = {};
       for (const [field, { type }] of Object.entries(this.fields)) {
         const value = record[field];
-        if (value !== undefined) {
+        if (value !== undefined && value !== null) {
           recordTyped[field] = type(value);
         }
       }
