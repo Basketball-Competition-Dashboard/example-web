@@ -175,6 +175,7 @@ export const useTableStore = defineStore('table', {
       if (!await this.readRecords()) {
         this.length = originalLength;
         this.offset = originalOffset;
+        await this.readRecords();
       }
     },
     async editRecord(index: number): Promise<void> {
