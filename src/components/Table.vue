@@ -123,9 +123,9 @@ defineProps<{
 
   .table-overflow
     display: block
-    max-height: 17.5em
-    overflow: auto
-    overscroll-behavior: none
+    max-height: 19em
+    overflow-y: auto
+    overscroll-behavior-y: contain
     width: 94%
 
     $scrollbar-width: 0.3em
