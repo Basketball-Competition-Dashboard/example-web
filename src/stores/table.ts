@@ -65,6 +65,11 @@ export const useTableStore = defineStore('table', {
     getFields(state) {
       return state.fields;
     },
+    getVisibleFields(state): TableState['fields'] {
+      return Object.fromEntries(
+        Object.entries(state.fields).filter(([_, { visible }]) => visible),
+      );
+    },
     getLength(state) {
       return state.length;
     },

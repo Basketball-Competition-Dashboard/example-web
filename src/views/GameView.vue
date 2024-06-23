@@ -161,6 +161,6 @@ onMounted(async () => {
     <Table
       :editable="editable"
       :table="table"
-      title="球隊介紹" />
+      title="比賽紀錄" />
   </div>
 </template>

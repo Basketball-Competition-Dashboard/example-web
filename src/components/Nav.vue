@@ -59,7 +59,7 @@ nav
     width: max-content
 
     &:last-child
-      margin-block-end: 100%
+      padding-block-end: 100%
 
     &:hover
       color: initial
