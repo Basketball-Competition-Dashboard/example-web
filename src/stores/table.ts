@@ -27,6 +27,8 @@ export interface TableState {
   records: RecordType[];
   offset: number;
   length: number;
+  sortField: string;
+  sortOrder: 'ascending' | 'descending';
   create: (record: RecordType) => Promise<RecordType | undefined>;
   read: (
     offset: number,
@@ -49,6 +51,8 @@ export const useTableStore = defineStore('table', {
       records: [],
       length: 0,
       offset: 0,
+      sortField: 'id',
+      sortOrder: 'descending',
       create: () => Promise.reject('table.create is not implemented'),
       read: () => Promise.reject('table.read is not implemented'),
       update: () => Promise.reject('table.update is not implemented'),
@@ -65,11 +69,6 @@ export const useTableStore = defineStore('table', {
     getFields(state) {
       return state.fields;
     },
-    getVisibleFields(state): TableState['fields'] {
-      return Object.fromEntries(
-        Object.entries(state.fields).filter(([_, { visible }]) => visible),
-      );
-    },
     getLength(state) {
       return state.length;
     },
@@ -78,6 +77,19 @@ export const useTableStore = defineStore('table', {
     },
     getRecords(state) {
       return state.records;
+    },
+    getSortField(state) {
+      return state.sortField;
+    },
+    getSortOrder(state) {
+      return state.sortOrder;
+    },
+    getVisibleFields(state): TableState['fields'] {
+      return Object.fromEntries(
+        Object.entries(state.fields).filter(
+          ([_, { visible }]) => visible,
+        ),
+      );
     },
   },
   actions: {
@@ -186,7 +198,6 @@ export const useTableStore = defineStore('table', {
       if (!(await this.readRecords())) {
         this.length = originalLength;
         this.offset = originalOffset;
-        await this.readRecords();
       }
     },
     async editRecord(index: number): Promise<void> {
@@ -209,6 +220,19 @@ export const useTableStore = defineStore('table', {
       } else if (mode === 'Update') {
         console.log('Editing record:', record);
         this.editModes[index] = 'Save';
+      }
+    },
+    async sortRecords(
+      field: TableState['sortField'],
+      order: TableState['sortOrder'],
+    ): Promise<void> {
+      const originalField = this.sortField;
+      const originalOrder = this.sortOrder;
+      this.sortField = field;
+      this.sortOrder = order;
+      if (!(await this.readRecords())) {
+        this.sortField = originalField;
+        this.sortOrder = originalOrder;
       }
     },
 

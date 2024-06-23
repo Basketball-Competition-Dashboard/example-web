@@ -64,8 +64,8 @@ defineProps<{
                   v-if="
                     editable && table.isFieldEditable(index, field)
                   "
-                  spellcheck="false"
                   v-model="record[field]"
+                  spellcheck="false"
                   type="text" />
                 <span v-else>
                   {{ record[field] }}
@@ -123,10 +123,29 @@ defineProps<{
 
   .table-overflow
     display: block
-    height: 20vh
+    max-height: 17.5em
     overflow: auto
     overscroll-behavior: none
     width: 94%
+
+    $scrollbar-width: 0.3em
+    scrollbar-color: unset
+    scrollbar-gutter: stable
+    scrollbar-width: $scrollbar-width
+
+    &::-webkit-scrollbar
+      width: $scrollbar-width
+
+    &::-webkit-scrollbar-track
+      background-color: unset
+      border-radius: 0.5 * $scrollbar-width
+
+    &::-webkit-scrollbar-thumb
+      background-clip: content-box
+      -webkit-background-clip: content-box
+      background-color: #888888
+      border-radius: 0.5 * $scrollbar-width
+      border: 0.08rem solid #888888
 
   table
     border-collapse: separate
@@ -140,23 +159,22 @@ defineProps<{
 
     thead
       background-color: #ffffff
-      border-inline: 1px solid #c3c5cb
       position: sticky
       top: 0
       left: 0
 
       th
-        border-block: 1px solid #c3c5cb
+        border-block: 0.08rem solid #c3c5cb
         color: #464a53
         font-weight: 700
         font-size: 1em
-        padding-block: 0.6em
+        padding-block: 0.7em
 
       th:first-child
-        border-inline-start: 1px solid #c3c5cb
+        border-inline-start: 0.08rem solid #c3c5cb
 
       th:last-child
-        border-inline-end: 1px solid #c3c5cb
+        border-inline-end: 0.08rem solid #c3c5cb
 
     tbody
       tr
@@ -167,26 +185,28 @@ defineProps<{
           background-color: #f3f3f3
 
       td
-        border-block-end: 1px solid #dddfe1
+        border-block-end: 0.08rem solid #dddfe1
         color: #000000
         font-weight: 600
         font-size: 0.9em
-        padding-block: 1.2em
+        padding-block: 1.1em
+
+        & > *
+          padding-block: 0.2em
 
         input
-          border: 1px solid #000000
+          border: 0.08rem solid #000000
           border-radius: 0.15em
           caret-color: #4186d7
           font-family: inherit
           font-size: inherit
           font-weight: inherit
-          padding-block: 0.2em
-          padding-inline: 0.3em
+          padding-inline: 0.4em
           text-align: center
           width: 90%
 
           &:focus
-            outline: 2px solid #000000
+            outline: 0.08rem solid #000000
 
           &::selection
             background-color: #96bce9
