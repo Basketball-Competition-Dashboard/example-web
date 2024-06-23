@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue';
 import TableEditButton from './TableEditButton.vue';
 import { type TableStore } from '@/stores/table';
 
@@ -44,7 +45,39 @@ defineProps<{
                 v-for="({ name }, field) of table.getVisibleFields"
                 :key="field"
                 :id="field">
-                {{ name }}
+                <div
+                  style="
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: top;
+                    font-family: inherit;
+                    font-size: inherit;
+                    font-weight: inherit;
+                  ">
+                  {{ name }}
+                  <Icon
+                    width="0.8em"
+                    :icon="
+                      field === table.getReadSortField
+                        ? table.getReadSortOrder === 'ascending'
+                          ? 'akar-icons:chevron-up'
+                          : 'akar-icons:chevron-down'
+                        : 'akar-icons:drag-horizontal'
+                    "
+                    @click="
+                      table.setReadSortOrder(
+                        field === table.getReadSortField
+                          ? table.getReadSortOrder === 'ascending'
+                            ? 'descending'
+                            : 'ascending'
+                          : 'ascending',
+                      );
+                      table.setReadSortField(field);
+                      table.readRecords();
+                    " />
+                </div>
               </th>
               <th
                 class="edit-button"
