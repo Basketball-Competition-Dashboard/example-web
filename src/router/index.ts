@@ -13,24 +13,24 @@ export const router = createRouter({
       component: TeamView,
     },
     {
-      path: '/games',
-      name: '比賽紀錄',
-      component: GameView,
-    },
-    {
       path: '/player-profiles',
       name: '球員介紹',
       component: PlayerProfileView,
     },
     {
-      path: '/player-stats',
-      name: '比賽表現',
-      component: PlayerStatView,
-    },
-    {
       path: '/teams',
       name: '球隊介紹',
       component: TeamView,
+    },
+    {
+      path: '/games',
+      name: '比賽紀錄',
+      component: GameView,
+    },
+    {
+      path: '/player-stats',
+      name: '比賽表現',
+      component: PlayerStatView,
     },
   ],
 });

@@ -25,6 +25,7 @@ nav
   font-size: 2.25em
   height: 100vh
   overflow-y: auto
+  overscroll-behavior-y: contain
   padding-block: 1em
   padding-inline: 0.75em
   position: relative
