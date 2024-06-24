@@ -48,4 +48,7 @@ header
     font-size: 2.25em
     text-decoration: underline
     padding-inline: 1em
+
+  ::selection
+    background-color: #ffad33
 </style>

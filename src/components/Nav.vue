@@ -5,11 +5,31 @@ import { RouterLink } from 'vue-router';
 <template>
   <div class="nav-vue">
     <nav>
-      <RouterLink to="/">最新賽事</RouterLink>
-      <RouterLink to="/player-profiles">球員介紹</RouterLink>
-      <RouterLink to="/teams">球隊介紹</RouterLink>
-      <RouterLink to="/games">比賽紀錄</RouterLink>
-      <RouterLink to="/player-stats">比賽表現</RouterLink>
+      <RouterLink
+        id="home"
+        to="/">
+        最新賽事
+      </RouterLink>
+      <RouterLink
+        id="player-profiles"
+        to="/player-profiles">
+        球員介紹
+      </RouterLink>
+      <RouterLink
+        id="teams"
+        to="/teams">
+        球隊介紹
+      </RouterLink>
+      <RouterLink
+        id="games"
+        to="/games">
+        比賽紀錄
+      </RouterLink>
+      <RouterLink
+        id="player-stats"
+        to="/player-stats">
+        比賽表現
+      </RouterLink>
     </nav>
   </div>
 </template>
@@ -23,12 +43,13 @@ nav
   font-size: 2.25em
   height: 100vh
   overflow-y: auto
-  padding: 1em 0.85em
+  padding-block: 1em
+  padding-inline: 0.75em
   position: relative
+  user-select: none
+  -webkit-user-select: none
+  word-break: break-all
   width: 100%
-
-  *:last-child
-    margin-block-end: 100%
 
   a
     color: black
@@ -36,8 +57,12 @@ nav
     height: max-content
     padding-block-end: 1em
     position: relative
+    text-align: center
     text-decoration: none
-    width: max-content
+    width: auto
+
+    &:last-child
+      padding-block-end: 40vh
 
     &:hover
       color: initial
