@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
   modelValue: String,
@@ -31,11 +31,11 @@ watch(() => props.modelValue, (newValue) => {
 label
   text-align: left
   display: block
-  font-size: 3.5rem
+  font-size: 1rem
 input
   width: 100%
-  height: 8rem
-  font-size: 8rem
+  height: 3rem
+  font-size: 3rem
   border-radius: 23px
 
 

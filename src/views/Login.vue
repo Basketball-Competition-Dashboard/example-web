@@ -31,7 +31,7 @@ const handleSubmit = () => {
 
 <style scoped lang="sass">
 h1
-  font-size: 9rem
+  font-size: 3rem
   font-weight: bold
 form
   width: 40%
@@ -40,12 +40,12 @@ form
   justify-content: center
   display: flex
 button
-  font-size: 6rem
+  font-size: 2rem
   background-color: #1991D4
   color: #ffffff
   border-radius: 23px
-  padding: 3%
+  padding: 1%
   text-align: center
-  width: 60%
+  width: 45%
 
 </style>
