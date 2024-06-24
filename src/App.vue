@@ -9,7 +9,7 @@ const route = useRoute();
 
 useHead({
   title: () =>
-    `${String(route.name)} - 籃球戰情室 Basketball Competition Dashboard`,
+    `${String(route.name)} - 籃球戰情室 BCD`,
   meta: [
     {
       name: 'description',
