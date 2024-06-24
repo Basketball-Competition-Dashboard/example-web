@@ -3,7 +3,7 @@ import GameView from '@/views/GameView.vue';
 import PlayerProfile from '@/views/PlayerProfile.vue';
 import PlayerStat from '@/views/PlayerStat.vue';
 import TeamView from '@/views/TeamView.vue';
-import LoginPage from '@/views/LoginPage.vue';
+import Login from '@/views/Login.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,7 +31,7 @@ const router = createRouter({
     },
     {
       path: '/login',
-      component: LoginPage,
+      component: Login,
     },
   ],
 });

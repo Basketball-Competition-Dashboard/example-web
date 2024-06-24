@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { handleError, ref } from 'vue';
 import CustomInput from '@/components/CustomInput.vue';
+import {
+  postAuthSession,
+  deleteAuthSession,
+} from '@/generated/web-api';
 
 const title = ref('登入');
 const accountLabel = ref('帳號 :');

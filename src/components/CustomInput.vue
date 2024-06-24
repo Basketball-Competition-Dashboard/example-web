@@ -36,5 +36,7 @@ input
   width: 100%
   height: 8rem
   font-size: 8rem
+  border-radius: 23px
+
 
 </style>
