@@ -12,6 +12,12 @@ button {
   background: unset;
   border: unset;
 }
+button, input, select {
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
 body {
   background: #ffffff;
   color: #000000;

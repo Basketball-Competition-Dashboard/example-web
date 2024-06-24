@@ -21,7 +21,6 @@ defineEmits<{
 button
   border-radius: 0.15em
   font-family: Inter, sans-serif
-  font-size: inherit
   padding-block: 0.25em
   padding-inline: 0.35em
   user-select: none

@@ -1,118 +1,135 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import TableEditButton from './TableEditButton.vue';
 import { type TableStore } from '@/stores/table';
+import TablePaginator from './TablePaginator.vue';
+import TableEditButton from './TableEditButton.vue';
 
-defineProps<{
+const props = defineProps<{
   editable: boolean;
   table: TableStore;
   title: string;
 }>();
+
+const pageLengthEnums = [5, 10, 20, 50] as const;
+
+props.table.setReadPageOffset(0);
+props.table.setReadPageLength(pageLengthEnums[1]);
 </script>
 
 <template>
   <div id="table-vue">
-    <section class="top">
-      <h1 id="title">{{ title }}</h1>
-      <aside>
-        <section
-          class="edit-buttons"
-          v-if="editable">
-          <div
-            class="edit-button"
-            id="create">
-            <TableEditButton
-              mode="Create"
-              @click="table.createEmptyRecord" />
-          </div>
-          <div
-            class="edit-button"
-            id="delete"
-            :class="{ disabled: !table.getDeletable }">
-            <TableEditButton
-              mode="Delete"
-              @click="table.toggleDeleteMode" />
-          </div>
+    <div class="center-aligned">
+      <section class="top">
+        <h1 id="title">{{ title }}</h1>
+        <section class="edit-buttons">
+          <aside v-if="editable">
+            <div
+              class="edit-button"
+              id="create">
+              <TableEditButton
+                mode="Create"
+                @click="table.createEmptyRecord" />
+            </div>
+            <div
+              class="edit-button"
+              id="delete"
+              :class="{ disabled: !table.getDeletable }">
+              <TableEditButton
+                mode="Delete"
+                @click="table.toggleDeleteMode" />
+            </div>
+          </aside>
         </section>
-      </aside>
-    </section>
-    <section class="bottom">
-      <div class="table-overflow">
-        <table>
-          <thead>
-            <tr>
-              <th
-                v-for="({ name }, field) of table.getVisibleFields"
-                :key="field"
-                :id="field">
-                <div>
-                  {{ name }}
-                  <Icon
-                    :icon="
-                      field === table.getReadSortField
-                        ? table.getReadSortOrder === 'ascending'
-                          ? 'akar-icons:chevron-up'
-                          : 'akar-icons:chevron-down'
-                        : 'akar-icons:drag-horizontal'
+      </section>
+      <section class="center">
+        <div class="table-overflow">
+          <table>
+            <thead>
+              <tr>
+                <th
+                  v-for="({ name }, field) of table.getVisibleFields"
+                  :key="field"
+                  :id="field">
+                  <div>
+                    {{ name }}
+                    <Icon
+                      :icon="
+                        field === table.getReadSortField
+                          ? table.getReadSortOrder === 'ascending'
+                            ? 'akar-icons:chevron-up'
+                            : 'akar-icons:chevron-down'
+                          : 'akar-icons:drag-horizontal'
+                      "
+                      @click="
+                        table.setReadSortOrder(
+                          field === table.getReadSortField &&
+                            table.getReadSortOrder === 'ascending'
+                            ? 'descending'
+                            : 'ascending',
+                        );
+                        table.setReadSortField(field);
+                        table.readRecords();
+                      " />
+                  </div>
+                </th>
+                <th
+                  class="edit-button"
+                  v-if="editable"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(record, index) of table.getRecords"
+                :key="index"
+                :id="`${index}`">
+                <td
+                  v-for="(_, field) of table.getVisibleFields"
+                  :key="field"
+                  :id="field">
+                  <input
+                    v-if="
+                      editable && table.isFieldEditable(index, field)
                     "
-                    @click="
-                      table.setReadSortOrder(
-                        field === table.getReadSortField &&
-                          table.getReadSortOrder === 'ascending'
-                          ? 'descending'
-                          : 'ascending',
-                      );
-                      table.setReadSortField(field);
-                      table.readRecords();
-                    " />
-                </div>
-              </th>
-              <th
-                class="edit-button"
-                v-if="editable"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(record, index) of table.getRecords"
-              :key="index"
-              :id="`${index}`">
-              <td
-                v-for="(_, field) of table.getVisibleFields"
-                :key="field"
-                :id="field">
-                <input
-                  v-if="
-                    editable && table.isFieldEditable(index, field)
-                  "
-                  v-model="record[field]"
-                  spellcheck="false"
-                  type="text" />
-                <span v-else>
-                  {{ record[field] }}
-                </span>
-              </td>
-              <td
-                class="edit-button"
-                v-if="editable">
-                <TableEditButton
-                  :mode="table.getEditModes[index] ?? 'Update'"
-                  @click="table.editRecord(index)" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+                    v-model="record[field]"
+                    spellcheck="false"
+                    type="text" />
+                  <span v-else>
+                    {{ record[field] }}
+                  </span>
+                </td>
+                <td
+                  class="edit-button"
+                  v-if="editable">
+                  <TableEditButton
+                    :mode="table.getEditModes[index] ?? 'Update'"
+                    @click="table.editRecord(index)" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="bottom">
+        <aside class="paginator">
+          <TablePaginator
+            :page-length-enums="pageLengthEnums"
+            :table="table" />
+        </aside>
+      </section>
+    </div>
   </div>
 </template>
 
 <style scoped lang="sass">
-.top
+.center-aligned
   align-items: center
   display: flex
   flex-direction: column
+  width: 100%
+
+.top
   padding-block: 1em
+  width: 94%
 
   #title
     color: #000000
@@ -121,11 +138,10 @@ defineProps<{
     padding-block-start: 0.4em
     text-align: center
 
-  aside
+  .edit-buttons
     min-height: 1em
-    width: 94%
 
-    .edit-buttons
+    aside
       display: flex
       justify-content: flex-end
 
@@ -137,17 +153,15 @@ defineProps<{
           cursor: not-allowed
           filter: grayscale(1) opacity(0.5)
 
-.bottom
-  align-items: center
-  display: flex
-  flex-direction: column
+.center
+  width: 94%
 
   .table-overflow
+    border-block-end: 0.08rem solid #f4f7fc
     display: block
     max-height: 23em
     overflow-y: auto
     overscroll-behavior-y: contain
-    width: 94%
 
     $scrollbar-width: 0.3em
     scrollbar-color: unset
@@ -203,10 +217,10 @@ defineProps<{
           align-items: center
           display: flex
           flex-direction: column
-          justify-content: flex-start
           font-weight: inherit
+          justify-content: flex-start
 
-          svg
+          svg.iconify
             cursor: pointer
             font-size: 0.8em
             user-select: none
@@ -234,9 +248,6 @@ defineProps<{
           border: 0.08rem solid #000000
           border-radius: 0.15em
           caret-color: #4186d7
-          font-family: inherit
-          font-size: inherit
-          font-weight: inherit
           padding-inline: 0.4em
           text-align: center
           width: 90%
@@ -257,6 +268,18 @@ defineProps<{
         padding-block: 1.44em
         text-align: left
         width: 6.75em
+
+.bottom
+  width: 94%
+  padding-block-start: 2.22em
+
+  .paginator
+    background-color: #f4f7fc
+    display: flex
+    font-size: 1.11em
+    justify-content: flex-end
+    min-height: 1em
+    width: 100%
 
 ::selection
   background-color: #d9d9d9

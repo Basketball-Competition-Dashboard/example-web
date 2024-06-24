@@ -168,12 +168,8 @@ table.setDelete(async (record) => {
   }
 });
 onMounted(async () => {
-  table.setReadParameters({
-    pageLength: 10, // Hardcoded for now
-    pageOffset: 0, // Hardcoded for now
-    sortField: 'name',
-    sortOrder: 'descending',
-  });
+  table.setReadSortField('game_date');
+  table.setReadSortOrder('descending');
   await table.readRecords();
 });
 </script>
