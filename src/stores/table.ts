@@ -45,6 +45,7 @@ export type ReadParameters = {
 
 export const useTableStore = defineStore('table', {
   /* State definition and initialization */
+
   state: () =>
     <TableState>{
       deletable: false,
@@ -63,7 +64,9 @@ export const useTableStore = defineStore('table', {
       update: () => Promise.reject('table.update is not implemented'),
       delete: () => Promise.reject('table.delete is not implemented'),
     },
+
   /* Getters */
+
   getters: {
     getDeletable(state) {
       return state.deletable;
@@ -101,6 +104,7 @@ export const useTableStore = defineStore('table', {
     },
   },
   actions: {
+
     /* Setters */
 
     setDeletable(deletable: TableState['deletable']) {
@@ -204,8 +208,14 @@ export const useTableStore = defineStore('table', {
       }
       this.editModesToSwap.splice(index, 1);
       this.records.splice(index, 1);
+
+      /* Compensate for the missing record */
+
+      const residentLength = this.records.reduce((acc, record) => {
+        return acc + (record[isNewRecord] ? 0 : 1);
+      }, 0);
       const missingOffset =
-        this.readParameters.pageOffset + this.records.length;
+        this.readParameters.pageOffset + residentLength;
       const records = await this.read({
         ...this.readParameters,
         pageLength: 1,
