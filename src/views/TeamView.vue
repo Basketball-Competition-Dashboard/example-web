@@ -97,8 +97,8 @@ table.setUpdate(async (record) => {
 
 onMounted(async () => {
   table.setReadParameters({
-    pageLength: 10,
-    pageOffset: 0,
+    pageLength: 10, // Hardcoded for now
+    pageOffset: 0, // Hardcoded for now
     sortField: 'name',
     sortOrder: 'ascending',
   });
