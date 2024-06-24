@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="customInput">
     <label :for="label">{{ label }}</label>
     <input :id="label" v-model="inputValue" />
   </div>
@@ -24,3 +24,17 @@ watch(() => props.modelValue, (newValue) => {
   inputValue.value = newValue;
 });
 </script>
+
+<style scoped lang="sass">
+.customInput
+  margin: 2rem
+label
+  text-align: left
+  display: block
+  font-size: 3.5rem
+input
+  width: 100%
+  height: 8rem
+  font-size: 8rem
+
+</style>
