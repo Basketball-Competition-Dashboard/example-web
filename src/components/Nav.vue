@@ -43,7 +43,8 @@ nav
   font-size: 2.25em
   height: 100vh
   overflow-y: auto
-  padding: 1em 0.8em
+  padding-block: 1em
+  padding-inline: 0.75em
   position: relative
   user-select: none
   -webkit-user-select: none
