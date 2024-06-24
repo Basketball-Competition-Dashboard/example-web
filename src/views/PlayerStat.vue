@@ -179,10 +179,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="player-profile-view-vue">
+  <div id="player-stat-view-vue">
     <Table
       :editable="editable"
       :table="table"
-      title="球員介紹" />
+      title="比賽表現" />
   </div>
 </template>
