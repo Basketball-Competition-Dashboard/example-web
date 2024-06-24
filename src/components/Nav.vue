@@ -60,7 +60,6 @@ nav
     text-align: center
     text-decoration: none
     width: auto
-    word-break: break-all
 
     &:last-child
       padding-block-end: 40vh

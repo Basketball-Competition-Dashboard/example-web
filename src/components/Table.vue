@@ -174,9 +174,10 @@ defineProps<{
     border-spacing: 0
     font-family: "Anek Tamil", sans-serif
     font-size: 1.25em
+    hyphens: auto
     table-layout: fixed
     text-indent: 0
-    word-break: break-all
+    word-break: break-word
     width: 100%
 
     thead
