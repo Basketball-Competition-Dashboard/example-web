@@ -104,7 +104,6 @@ export const useTableStore = defineStore('table', {
     },
   },
   actions: {
-
     /* Setters */
 
     setDeletable(deletable: TableState['deletable']) {

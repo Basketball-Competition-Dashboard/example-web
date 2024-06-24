@@ -107,6 +107,6 @@ onMounted(async () => {
     <Table
       :editable="editable"
       :table="table"
-      title="球隊介紹" />
+      :title="String($route.name)" />
   </div>
 </template>
