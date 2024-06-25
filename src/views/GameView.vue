@@ -69,7 +69,8 @@ table.setFields({
     updatable: true,
     visible: true,
   },
-  winner: {
+  is_home_winner: {
+    // The field key name is compliant with the API Spec
     name: 'WINNER',
     type: String,
     creatable: true,
@@ -87,11 +88,11 @@ table.setCreate(async (record) => {
         home_score: record.home_score as number,
         away_score: record.away_score as number,
         is_home_winner:
-          record.winner === undefined ||
-          (record.winner !== record.home_name &&
-            record.winner !== record.away_name)
+          record.is_home_winner === undefined ||
+          (record.is_home_winner !== record.home_name &&
+            record.is_home_winner !== record.away_name)
             ? undefined
-            : record.winner === record.home_name,
+            : record.is_home_winner === record.home_name,
       },
     });
   } catch (error) {
@@ -103,7 +104,7 @@ table.setRead(async (parameters) => {
   try {
     return (await getGames(parameters)).map((record: RecordType) => {
       if (record.is_home_winner !== undefined) {
-        record.winner = record.is_home_winner
+        record.is_home_winner = record.is_home_winner
           ? record.home_name
           : record.away_name;
       }
@@ -122,9 +123,9 @@ table.setUpdate(async (record) => {
       requestBody: {
         score: record.home_score as number,
         is_winner:
-          record.winner === undefined
+          record.is_home_winner === undefined
             ? undefined
-            : record.home_name === record.winner,
+            : record.home_name === record.is_home_winner,
       },
     });
     await patchGamesByIdTeamsByTeamId({
@@ -133,9 +134,9 @@ table.setUpdate(async (record) => {
       requestBody: {
         score: record.away_score as number,
         is_winner:
-          record.winner === undefined
+          record.is_home_winner === undefined
             ? undefined
-            : record.away_name === record.winner,
+            : record.away_name === record.is_home_winner,
       },
     });
     return true;
@@ -156,6 +157,6 @@ onMounted(async () => {
     <Table
       :editable="editable"
       :table="table"
-      title="比賽紀錄" />
+      :title="String($route.name)" />
   </div>
 </template>

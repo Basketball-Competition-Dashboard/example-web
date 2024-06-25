@@ -1,7 +1,26 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import Header from '@/components/Header.vue';
-import Nav from '@/components/Nav.vue';
+import FeatureNav from '@/components/FeatureNav.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+useHead({
+  title: () => `${String(route.name)} - 籃球戰情室 BCD`,
+  meta: [
+    {
+      name: 'description',
+      content:
+        '籃球戰情室 Basketball Competition Dashboard - ' +
+        '提供完整的比賽數據分析 - ' +
+        '幫助您追蹤分析實時數據 - ' +
+        'Get instant access to in-depth game analysis. ' +
+        'Explore our data-driven platform today and discover our competition dashboard. ',
+    },
+  ],
+});
 </script>
 
 <template>
@@ -11,7 +30,7 @@ import Nav from '@/components/Nav.vue';
         <Header />
       </section>
       <aside id="sidebar">
-        <Nav />
+        <FeatureNav />
       </aside>
       <article id="content">
         <RouterView />

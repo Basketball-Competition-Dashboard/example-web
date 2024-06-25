@@ -1,34 +1,20 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { RouterLink, type RouteRecordNormalized } from 'vue-router';
+
+function isFeatureRoute(route: RouteRecordNormalized): boolean {
+  return route.path.startsWith('/features/');
+}
 </script>
 
 <template>
-  <div class="nav-vue">
+  <div class="feature-nav-vue">
     <nav>
       <RouterLink
-        id="home"
-        to="/">
-        最新賽事
-      </RouterLink>
-      <RouterLink
-        id="player-profiles"
-        to="/player-profiles">
-        球員介紹
-      </RouterLink>
-      <RouterLink
-        id="teams"
-        to="/teams">
-        球隊介紹
-      </RouterLink>
-      <RouterLink
-        id="games"
-        to="/games">
-        比賽紀錄
-      </RouterLink>
-      <RouterLink
-        id="player-stats"
-        to="/player-stats">
-        比賽表現
+        v-for="route in $router.getRoutes().filter(isFeatureRoute)"
+        :id="route.path"
+        :key="route.path"
+        :to="route.path">
+        {{ route.name }}
       </RouterLink>
     </nav>
   </div>
@@ -43,6 +29,7 @@ nav
   font-size: 2.25em
   height: 100vh
   overflow-y: auto
+  overscroll-behavior-y: contain
   padding-block: 1em
   padding-inline: 0.75em
   position: relative

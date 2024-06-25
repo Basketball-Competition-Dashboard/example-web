@@ -63,9 +63,9 @@ props.table.setReadPageLength(pageLengthEnums[1]);
                       @click="
                         table.setReadSortOrder(
                           field === table.getReadSortField &&
-                            table.getReadSortOrder === 'ascending'
-                            ? 'descending'
-                            : 'ascending',
+                            table.getReadSortOrder === 'descending'
+                            ? 'ascending'
+                            : 'descending',
                         );
                         table.setReadSortField(field);
                         table.readRecords();
