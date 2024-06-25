@@ -158,7 +158,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
   .table-overflow
     border-block-end: 0.08rem solid #f4f7fc
     display: block
-    max-height: 20em
+    max-height: 19em
     overflow-y: auto
     overscroll-behavior-y: contain
 
