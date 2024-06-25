@@ -13,7 +13,11 @@ const latestGameInfos = computed(() => {
       ];
       return {
         date: `${year}.${month}.${day} ${week}.`,
-        team: `${home_abbr} vs. ${away_abbr}`,
+        team: {
+          home: home_abbr,
+          away: away_abbr,
+          text: `${home_abbr} vs. ${away_abbr}`,
+        },
       };
     }) ?? []
   );
@@ -48,15 +52,24 @@ onMounted(async () => {
             class="game-info"
             :style="{ order: (index << 1) + (index & 1) }">
             <span class="game-date">{{ gameInfo.date }}</span>
-            <span class="game-team">{{ gameInfo.team }}</span>
+            <span class="game-team">{{ gameInfo.team.text }}</span>
           </div>
           <div
             class="game-arena"
             :style="{ order: (index << 1) + ((index & 1) ^ 1) }">
             <img
               alt="game-arena-background"
+              class="background"
               src="@/assets/game-arena-background.jpg"
               sizes="1346x860" />
+            <img
+              alt="game-arena-home-team-logo"
+              class="home team-logo"
+              :src="`/vendors/sportslogos.net/${gameInfo.team.home}.png`" />
+            <img
+              alt="game-arena-away-team-logo"
+              class="away team-logo"
+              :src="`/vendors/sportslogos.net/${gameInfo.team.away}.png`" />
           </div>
         </template>
       </div>
@@ -81,6 +94,7 @@ onMounted(async () => {
   position: sticky
   top: 0
   width: 100%
+  z-index: 2
 
   .title
     color: #000000
@@ -107,8 +121,11 @@ onMounted(async () => {
     padding-block-end: 1.5em
     width: 70%
 
-    & > *, .game-arena > img
+    & > *, .game-arena .background
       width: 100%
+
+    .game-arena
+      display: flex
 
     .game-info
       align-items: flex-start
@@ -123,4 +140,26 @@ onMounted(async () => {
       .game-team
         font-size: 0.8em
         font-weight: 400
+
+    .game-arena
+      position: relative
+
+      .background
+        position: relative
+        z-index: 0
+
+      .team-logo
+        border-radius: 25%
+        bottom: 0
+        margin-block: auto
+        position: absolute
+        top: 0
+        width: 35%
+        z-index: 1
+
+        &.home
+          left: 5%
+
+        &.away
+          right: 5%
 </style>
