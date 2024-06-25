@@ -141,10 +141,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="player-profile-view-vue">
-    <Table
-      :editable="editable"
-      :table="table"
-      :title="String($route.name)" />
-  </div>
+  <Table
+    id="player-profile-view-vue"
+    :editable="editable"
+    :table="table"
+    :title="String($route.name)" />
 </template>

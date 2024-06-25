@@ -7,49 +7,41 @@ function isFeatureRoute(route: RouteRecordNormalized): boolean {
 </script>
 
 <template>
-  <div class="feature-nav-vue">
-    <nav>
-      <RouterLink
-        v-for="route in $router.getRoutes().filter(isFeatureRoute)"
-        :id="route.path"
-        :key="route.path"
-        :to="route.path">
-        {{ route.name }}
-      </RouterLink>
-    </nav>
-  </div>
+  <nav class="feature-nav-vue">
+    <RouterLink
+      v-for="route in $router.getRoutes().filter(isFeatureRoute)"
+      :id="route.path"
+      :key="route.path"
+      :to="route.path">
+      {{ route.name }}
+    </RouterLink>
+  </nav>
 </template>
 
 <style scoped lang="sass">
-nav
+.feature-nav-vue
   align-items: center
   background-color: #d9d9d9
   display: flex
   flex-direction: column
   font-size: 2.25em
-  height: 100vh
-  overflow-y: auto
-  overscroll-behavior-y: contain
-  padding-block: 1em
+  height: 100%
+  padding-block: 1.1em
   padding-inline: 0.8em
   position: relative
   user-select: none
   -webkit-user-select: none
   width: 100%
+  overflow-y: auto
+  overscroll-behavior-y: contain
 
   a
+    background-color: inherit
     color: black
     display: flex
     height: max-content
-    padding-block-end: 1em
+    padding-block-end: 1.1em
     position: relative
     text-align: center
-    text-decoration: none
-    width: auto
-
-    &:last-child
-      padding-block-end: 40vh
-
-    &:hover
-      color: initial
+    width: max-content
 </style>
