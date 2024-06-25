@@ -4,7 +4,7 @@ import CustomInput from '@/components/CustomInput.vue';
 import {postAuthSession,} from '@/generated/web-api';
 import {
   hasSession,
-} from '@/generated/web-api/cookies.ts';
+} from '@/functions/cookies';
 import router from '@/router';
 
 const title = ref('登入');
