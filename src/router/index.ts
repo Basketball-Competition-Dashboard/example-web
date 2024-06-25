@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import GameView from '@/views/GameView.vue';
-import PlayerProfile from '@/views/PlayerProfile.vue';
-import PlayerStat from '@/views/PlayerStat.vue';
+import PlayerProfileView from '@/views/PlayerProfileView.vue';
+import PlayerStatView from '@/views/PlayerStatView.vue';
 import TeamView from '@/views/TeamView.vue';
 
 const router = createRouter({
@@ -18,11 +18,11 @@ const router = createRouter({
     },
     {
       path: '/player-profiles',
-      component: PlayerProfile,
+      component: PlayerProfileView,
     },
     {
       path: '/player-stats',
-      component: PlayerStat,
+      component: PlayerStatView,
     },
     {
       path: '/teams',
