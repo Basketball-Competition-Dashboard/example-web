@@ -52,14 +52,14 @@ table.setFields({
     visible: true,
   },
   rebound: {
-    name: 'REBOUND',
+    name: 'REB',
     type: Number,
     creatable: true,
     updatable: true,
     visible: true,
   },
   assist: {
-    name: 'ASSIST',
+    name: 'AST',
     type: Number,
     creatable: true,
     updatable: true,

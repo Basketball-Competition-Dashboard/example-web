@@ -268,7 +268,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
         font-size: 0.75em
         padding-block: 1.35em
         text-align: left
-        width: 6.75em
+        width: 6.4em
 
       div, span
         user-select: auto

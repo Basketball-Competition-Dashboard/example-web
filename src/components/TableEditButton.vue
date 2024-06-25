@@ -23,7 +23,7 @@ defineEmits<{
   font-size: inherit
   font-weight: 500
   padding-block: 0.25em
-  padding-inline: 0.40em
+  padding-inline: 0.35em
   user-select: none
   -webkit-user-select: none
   transition: filter 0.25s linear
