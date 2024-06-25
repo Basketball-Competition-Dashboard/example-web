@@ -25,7 +25,7 @@ body {
   color: #000000;
   display: block;
   font-family: Inter, sans-serif;
-  font-size: calc(6px + 0.78vmax + 0.02vmin);
+  font-size: calc(6px + 0.5vmax + 0.5vmin);
   font-weight: 500;
   line-height: 1.5;
   margin: 0;

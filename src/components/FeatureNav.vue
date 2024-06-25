@@ -31,7 +31,7 @@ nav
   overflow-y: auto
   overscroll-behavior-y: contain
   padding-block: 1em
-  padding-inline: 0.75em
+  padding-inline: 0.8em
   position: relative
   user-select: none
   -webkit-user-select: none
