@@ -35,7 +35,6 @@ nav
   position: relative
   user-select: none
   -webkit-user-select: none
-  word-break: break-all
   width: 100%
 
   a

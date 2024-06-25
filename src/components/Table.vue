@@ -133,6 +133,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
     color: #000000
     font-size: 2.5em
     font-weight: 600
+    min-width: max-content
     padding-block-start: 0.4em
     text-align: center
 
@@ -157,7 +158,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
   .table-overflow
     border-block-end: 0.08rem solid #f4f7fc
     display: block
-    max-height: 35vh
+    max-height: 20em
     overflow-y: auto
     overscroll-behavior-y: contain
 
