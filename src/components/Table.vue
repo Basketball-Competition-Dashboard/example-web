@@ -10,7 +10,7 @@ const props = defineProps<{
   title: string;
 }>();
 
-const pageLengthEnums = [5, 10, 20, 50] as const;
+const pageLengthEnums = [5, 10, 25] as const;
 
 props.table.setReadPageOffset(0);
 props.table.setReadPageLength(pageLengthEnums[1]);
@@ -19,7 +19,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
 <template>
   <div class="table-vue">
     <section class="top">
-      <h1 id="title">{{ title }}</h1>
+      <h1 class="title">{{ title }}</h1>
       <section class="edit-buttons">
         <aside v-if="editable">
           <div
@@ -128,7 +128,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
   padding-block: 1em
   width: 94%
 
-  #title
+  .title
     color: #000000
     font-size: 2.5em
     font-weight: 600
@@ -289,7 +289,4 @@ props.table.setReadPageLength(pageLengthEnums[1]);
     justify-content: flex-end
     min-height: 1em
     width: 100%
-
-::selection
-  background-color: #d9d9d9
 </style>
