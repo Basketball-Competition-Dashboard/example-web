@@ -51,7 +51,7 @@ table.setFields({
     visible: true,
   },
   rebound: {
-    name: 'REB',
+    name: 'REBOUND',
     type: Number,
     creatable: true,
     updatable: true,
