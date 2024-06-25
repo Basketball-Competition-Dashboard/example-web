@@ -29,46 +29,42 @@ async function movePageOffsetBy(direction: 1 | -1) {
 </script>
 
 <template>
-  <div id="table-paginator-vue">
-    <section class="horizontal">
-      <section id="page-length">
-        <span>Records per page:</span>
-        <select
-          :value="table.getReadPageLength"
-          @change="selectPageLength">
-          <option
-            v-for="pageLength of pageLengthEnums"
-            :key="pageLength"
-            :value="pageLength">
-            {{ pageLength }}
-          </option>
-        </select>
-        <Icon icon="akar-icons:chevron-down-small" />
-      </section>
-      <section id="page-number">
-        <button
-          id="page-number-dec"
-          @click="movePageOffsetBy(-1)">
-          <Icon icon="akar-icons:chevron-left-small" />
-        </button>
-        <span>
-          Page
-          {{
-            1 + Math.floor(table.getReadPageOffset / table.getReadPageLength)
-          }}
-        </span>
-        <button
-          id="page-number-inc"
-          @click="movePageOffsetBy(+1)">
-          <Icon icon="akar-icons:chevron-right-small" />
-        </button>
-      </section>
+  <div class="table-paginator-vue">
+    <section id="page-length">
+      <span>Records per page:</span>
+      <select
+        :value="table.getReadPageLength"
+        @change="selectPageLength">
+        <option
+          v-for="pageLength of pageLengthEnums"
+          :key="pageLength"
+          :value="pageLength">
+          {{ pageLength }}
+        </option>
+      </select>
+      <Icon icon="akar-icons:chevron-down-small" />
+    </section>
+    <section id="page-number">
+      <button
+        id="page-number-dec"
+        @click="movePageOffsetBy(-1)">
+        <Icon icon="akar-icons:chevron-left-small" />
+      </button>
+      <span>
+        Page
+        {{ 1 + Math.floor(table.getReadPageOffset / table.getReadPageLength) }}
+      </span>
+      <button
+        id="page-number-inc"
+        @click="movePageOffsetBy(+1)">
+        <Icon icon="akar-icons:chevron-right-small" />
+      </button>
     </section>
   </div>
 </template>
 
 <style scoped lang="sass">
-.horizontal
+.table-paginator-vue
   color: #687182
   display: flex
   padding-inline: 0.6em
