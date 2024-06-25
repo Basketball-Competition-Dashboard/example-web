@@ -9,26 +9,34 @@ export const router = createRouter({
   routes: [
     {
       path: '/',
-      name: '最新賽事',
-      component: TeamView,
+      redirect: '/features/games/latest',
     },
     {
-      path: '/player-profiles',
+      path: '/:pathMatch(.*)*',
+      redirect: '/features/games/latest',
+    },
+    {
+      path: '/features/games/latest',
+      name: '最新賽事',
+      component: GameView,
+    },
+    {
+      path: '/features/player-profiles',
       name: '球員介紹',
       component: PlayerProfileView,
     },
     {
-      path: '/teams',
+      path: '/features/teams',
       name: '球隊介紹',
       component: TeamView,
     },
     {
-      path: '/games',
+      path: '/features/games',
       name: '比賽紀錄',
       component: GameView,
     },
     {
-      path: '/player-stats',
+      path: '/features/player-stats',
       name: '比賽表現',
       component: PlayerStatView,
     },

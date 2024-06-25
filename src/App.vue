@@ -2,14 +2,13 @@
 import { RouterView } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import Header from '@/components/Header.vue';
-import Nav from '@/components/Nav.vue';
+import FeatureNav from '@/components/FeatureNav.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
 useHead({
-  title: () =>
-    `${String(route.name)} - 籃球戰情室 BCD`,
+  title: () => `${String(route.name)} - 籃球戰情室 BCD`,
   meta: [
     {
       name: 'description',
@@ -31,7 +30,7 @@ useHead({
         <Header />
       </section>
       <aside id="sidebar">
-        <Nav />
+        <FeatureNav />
       </aside>
       <article id="content">
         <RouterView />

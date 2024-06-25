@@ -1,13 +1,17 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { RouterLink, type RouteRecordNormalized } from 'vue-router';
+
+function isFeatureRoute(route: RouteRecordNormalized): boolean {
+  return route.path.startsWith('/features/');
+}
 </script>
 
 <template>
-  <div class="nav-vue">
+  <div class="feature-nav-vue">
     <nav>
       <RouterLink
-        v-for="route in $router.getRoutes()"
-        :id="route.path.slice(1) || 'home'"
+        v-for="route in $router.getRoutes().filter(isFeatureRoute)"
+        :id="route.path"
         :key="route.path"
         :to="route.path">
         {{ route.name }}
