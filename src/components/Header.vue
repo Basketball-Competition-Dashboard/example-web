@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { deleteSession,} from '@/generated/web-api/cookies.ts';
+import {deleteAuthSession,} from '@/generated/web-api';
+import router from '@/router';
+
+const handleSubmit = async () => {
+  try{
+    const response = await deleteAuthSession();
+  }catch(error){
+    alert(error)
+  }
+  deleteSession();
+  router.push('/login');
+}
+</script>
+
+
 <template>
   <div class="header-vue">
     <header id="grid">
@@ -6,7 +23,9 @@
         id="logo"
         src="@/assets/logo.png" />
       <h1 id="title">籃球戰情室</h1>
-      <button id="auth">Logout</button>
+      <form @submit.prevent="handleSubmit">
+        <button id="auth" type="submit">Logout</button>
+      </form>
     </header>
   </div>
 </template>

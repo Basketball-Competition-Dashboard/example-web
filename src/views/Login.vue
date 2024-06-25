@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { handleError, ref } from 'vue';
 import CustomInput from '@/components/CustomInput.vue';
+import {postAuthSession,} from '@/generated/web-api';
 import {
-  postAuthSession,
-  deleteAuthSession,
-} from '@/generated/web-api';
+  hasSession,
+} from '@/generated/web-api/cookies.ts';
+import router from '@/router';
 
 const title = ref('登入');
 const accountLabel = ref('帳號 :');
@@ -12,9 +13,20 @@ const account = ref('');
 const passwordLabel = ref('密碼 :');
 const password = ref('');
 
-const handleSubmit = () => {
-  console.log('account is ', account.value);
-  console.log('password is ', password.value);
+const handleSubmit = async () => {
+  try {
+    const response = await postAuthSession({
+      requestBody: {
+        name: account.value as string,
+        credential: password.value as string,
+      },
+    });
+    hasSession();
+    router.push('/')
+  } catch (error) {
+    alert(error);
+    return;
+  }
 }
 </script>
 
