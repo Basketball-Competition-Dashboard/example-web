@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { deleteSession,} from '@/generated/web-api/cookies.ts';
+import {deleteSession,} from '@/functions/cookies';
 import {deleteAuthSession,} from '@/generated/web-api';
 import router from '@/router';
 
