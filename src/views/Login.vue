@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { handleError, ref } from 'vue';
+import { ref } from 'vue';
 import CustomInput from '@/components/CustomInput.vue';
 import { postAuthSession } from '@/generated/web-api';
 import { hasSession } from '@/functions/cookies';
@@ -13,13 +13,12 @@ const password = ref('');
 
 const handleSubmit = async () => {
   try {
-    const response = await postAuthSession({
+    await postAuthSession({
       requestBody: {
         name: account.value as string,
         credential: password.value as string,
       },
     });
-    console.log(response);
     hasSession();
     router.push('/');
   } catch (error) {

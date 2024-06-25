@@ -11,5 +11,5 @@ export const deleteSession = (): void => {
 };
 
 export const isSession = (): boolean => {
-  return Cookies.get('has_session');
+  return !!Cookies.get('has_session');
 };
