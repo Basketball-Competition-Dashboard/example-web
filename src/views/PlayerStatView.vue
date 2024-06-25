@@ -114,22 +114,20 @@ table.setCreate(async (record) => {
 });
 table.setRead(async (parameters) => {
   try {
-    return (await getPlayersStats(parameters)).map(
-      (record: RecordType) => {
-        if (
-          typeof record.game_away_abbr === 'string' &&
-          typeof record.game_date === 'string' &&
-          typeof record.game_home_abbr === 'string'
-        ) {
-          record.game_date = [
-            record.game_date,
-            record.game_home_abbr,
-            record.game_away_abbr,
-          ].join(' ');
-        }
-        return record;
-      },
-    );
+    return (await getPlayersStats(parameters)).map((record: RecordType) => {
+      if (
+        typeof record.game_away_abbr === 'string' &&
+        typeof record.game_date === 'string' &&
+        typeof record.game_home_abbr === 'string'
+      ) {
+        record.game_date = [
+          record.game_date,
+          record.game_home_abbr,
+          record.game_away_abbr,
+        ].join(' ');
+      }
+      return record;
+    });
   } catch (error) {
     alert(error);
     return;

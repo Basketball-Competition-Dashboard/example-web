@@ -54,10 +54,7 @@ async function movePageOffsetBy(direction: 1 | -1) {
         <span>
           Page
           {{
-            1 +
-            Math.floor(
-              table.getReadPageOffset / table.getReadPageLength,
-            )
+            1 + Math.floor(table.getReadPageOffset / table.getReadPageLength)
           }}
         </span>
         <button

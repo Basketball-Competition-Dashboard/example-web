@@ -2,11 +2,7 @@
 import { onMounted } from 'vue';
 import { useTableStore } from '@/stores/table';
 import Table from '@/components/Table.vue';
-import {
-  getTeams,
-  patchTeamsById,
-  postTeam,
-} from '@/generated/web-api';
+import { getTeams, patchTeamsById, postTeam } from '@/generated/web-api';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();

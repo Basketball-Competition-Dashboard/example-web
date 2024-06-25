@@ -87,9 +87,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
                   :key="field"
                   :id="field">
                   <input
-                    v-if="
-                      editable && table.isFieldEditable(index, field)
-                    "
+                    v-if="editable && table.isFieldEditable(index, field)"
                     v-model="record[field]"
                     spellcheck="false"
                     type="text" />
