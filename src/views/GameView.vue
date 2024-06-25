@@ -7,6 +7,7 @@ import {
   patchGamesByIdTeamsByTeamId,
   postGame,
 } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -69,7 +70,8 @@ table.setFields({
     updatable: true,
     visible: true,
   },
-  winner: {
+  is_home_winner: {
+    // The field key name is compliant with the API Spec
     name: 'WINNER',
     type: String,
     creatable: true,
@@ -79,7 +81,7 @@ table.setFields({
 });
 table.setCreate(async (record) => {
   try {
-    return await postGame({
+    const response = await postGame({
       requestBody: {
         date: record.date as string,
         home_name: record.home_name as string,
@@ -87,15 +89,17 @@ table.setCreate(async (record) => {
         home_score: record.home_score as number,
         away_score: record.away_score as number,
         is_home_winner:
-          record.winner === undefined ||
-          (record.winner !== record.home_name &&
-            record.winner !== record.away_name)
+          record.is_home_winner === undefined ||
+          (record.is_home_winner !== record.home_name &&
+            record.is_home_winner !== record.away_name)
             ? undefined
-            : record.winner === record.home_name,
+            : record.is_home_winner === record.home_name,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
@@ -103,14 +107,14 @@ table.setRead(async (parameters) => {
   try {
     return (await getGames(parameters)).map((record: RecordType) => {
       if (record.is_home_winner !== undefined) {
-        record.winner = record.is_home_winner
+        record.is_home_winner = record.is_home_winner
           ? record.home_name
           : record.away_name;
       }
       return record;
     });
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -122,9 +126,9 @@ table.setUpdate(async (record) => {
       requestBody: {
         score: record.home_score as number,
         is_winner:
-          record.winner === undefined
+          record.is_home_winner === undefined
             ? undefined
-            : record.home_name === record.winner,
+            : record.home_name === record.is_home_winner,
       },
     });
     await patchGamesByIdTeamsByTeamId({
@@ -133,33 +137,29 @@ table.setUpdate(async (record) => {
       requestBody: {
         score: record.away_score as number,
         is_winner:
-          record.winner === undefined
+          record.is_home_winner === undefined
             ? undefined
-            : record.away_name === record.winner,
+            : record.away_name === record.is_home_winner,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
 onMounted(async () => {
-  table.setReadParameters({
-    pageLength: 4, // Hardcoded for now
-    pageOffset: 0, // Hardcoded for now
-    sortField: 'date',
-    sortOrder: 'descending',
-  });
+  table.setReadSortField('date');
+  table.setReadSortOrder('descending');
   await table.readRecords();
 });
 </script>
 
 <template>
-  <div id="team-view-vue">
-    <Table
-      :editable="editable"
-      :table="table"
-      title="比賽紀錄" />
-  </div>
+  <Table
+    id="team-view-vue"
+    :editable="editable"
+    :table="table"
+    :title="String($route.name)" />
 </template>

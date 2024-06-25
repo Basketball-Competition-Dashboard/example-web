@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import TableEditButton from './TableEditButton.vue';
 import { type TableStore } from '@/stores/table';
+import TablePaginator from './TablePaginator.vue';
+import TableEditButton from './TableEditButton.vue';
 
-defineProps<{
+const props = defineProps<{
   editable: boolean;
   table: TableStore;
   title: string;
 }>();
+
+const pageLengthEnums = [5, 10, 20, 50] as const;
+
+props.table.setReadPageOffset(0);
+props.table.setReadPageLength(pageLengthEnums[1]);
 </script>
 
 <template>
-  <div id="table-vue">
+  <div class="table-vue">
     <section class="top">
       <h1 id="title">{{ title }}</h1>
-      <aside>
-        <section
-          class="edit-buttons"
-          v-if="editable">
+      <section class="edit-buttons">
+        <aside v-if="editable">
           <div
             class="edit-button"
             id="create">
@@ -33,10 +37,10 @@ defineProps<{
               mode="Delete"
               @click="table.toggleDeleteMode" />
           </div>
-        </section>
-      </aside>
+        </aside>
+      </section>
     </section>
-    <section class="bottom">
+    <section class="center">
       <div class="table-overflow">
         <table>
           <thead>
@@ -58,9 +62,9 @@ defineProps<{
                     @click="
                       table.setReadSortOrder(
                         field === table.getReadSortField &&
-                          table.getReadSortOrder === 'ascending'
-                          ? 'descending'
-                          : 'ascending',
+                          table.getReadSortOrder === 'descending'
+                          ? 'ascending'
+                          : 'descending',
                       );
                       table.setReadSortField(field);
                       table.readRecords();
@@ -82,9 +86,7 @@ defineProps<{
                 :key="field"
                 :id="field">
                 <input
-                  v-if="
-                    editable && table.isFieldEditable(index, field)
-                  "
+                  v-if="editable && table.isFieldEditable(index, field)"
                   v-model="record[field]"
                   spellcheck="false"
                   type="text" />
@@ -104,28 +106,40 @@ defineProps<{
         </table>
       </div>
     </section>
+    <section class="bottom">
+      <aside class="paginator">
+        <TablePaginator
+          :page-length-enums="pageLengthEnums"
+          :table="table" />
+      </aside>
+    </section>
   </div>
 </template>
 
 <style scoped lang="sass">
-.top
+.table-vue
   align-items: center
   display: flex
   flex-direction: column
+  height: 100%
+  width: 100%
+
+.top
   padding-block: 1em
+  width: 94%
 
   #title
     color: #000000
     font-size: 2.5em
     font-weight: 600
+    min-width: max-content
     padding-block-start: 0.4em
     text-align: center
 
-  aside
+  .edit-buttons
     min-height: 1em
-    width: 94%
 
-    .edit-buttons
+    aside
       display: flex
       justify-content: flex-end
 
@@ -137,17 +151,15 @@ defineProps<{
           cursor: not-allowed
           filter: grayscale(1) opacity(0.5)
 
-.bottom
-  align-items: center
-  display: flex
-  flex-direction: column
+.center
+  width: 94%
 
   .table-overflow
+    border-block-end: 0.08rem solid #f4f7fc
     display: block
-    max-height: 23em
+    height: calc(93.5vh - 23.5em)
     overflow-y: auto
     overscroll-behavior-y: contain
-    width: 94%
 
     $scrollbar-width: 0.3em
     scrollbar-color: unset
@@ -174,6 +186,7 @@ defineProps<{
     border-spacing: 0
     font-family: "Anek Tamil", sans-serif
     font-size: 1.25em
+    height: 100%
     hyphens: auto
     table-layout: fixed
     text-indent: 0
@@ -203,10 +216,10 @@ defineProps<{
           align-items: center
           display: flex
           flex-direction: column
-          justify-content: flex-start
           font-weight: inherit
+          justify-content: flex-start
 
-          svg
+          svg.iconify
             cursor: pointer
             font-size: 0.8em
             user-select: none
@@ -234,9 +247,6 @@ defineProps<{
           border: 0.08rem solid #000000
           border-radius: 0.15em
           caret-color: #4186d7
-          font-family: inherit
-          font-size: inherit
-          font-weight: inherit
           padding-inline: 0.4em
           text-align: center
           width: 90%
@@ -250,18 +260,36 @@ defineProps<{
     td, th
       padding-inline: 1em
       text-align: center
+      user-select: none
+      -webkit-user-select: none
       vertical-align: middle
 
       &.edit-button
         font-size: 0.75em
-        padding-block: 1.44em
+        padding-block: 1.35em
         text-align: left
-        width: 6.75em
+        width: 6.4em
+
+      div, span
+        user-select: auto
+        -webkit-user-select: auto
+
+        &.edit-button
+          user-select: none
+          -webkit-user-select: none
+
+.bottom
+  padding-block-start: 2.2em
+  width: 94%
+
+  .paginator
+    background-color: #f4f7fc
+    display: flex
+    font-size: 1.1em
+    justify-content: flex-end
+    min-height: 1em
+    width: 100%
 
 ::selection
   background-color: #d9d9d9
-
-.edit-button
-  user-select: none
-  -webkit-user-select: none
 </style>

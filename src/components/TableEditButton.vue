@@ -8,20 +8,20 @@ defineEmits<{
 </script>
 
 <template>
-  <div id="table-edit-button-vue">
-    <button
-      @click="$emit('click')"
-      :data-mode="mode">
-      {{ mode }}
-    </button>
-  </div>
+  <button
+    class="table-edit-button-vue"
+    @click="$emit('click')"
+    :data-mode="mode">
+    {{ mode }}
+  </button>
 </template>
 
 <style scoped lang="sass">
-button
+.table-edit-button-vue
   border-radius: 0.15em
   font-family: Inter, sans-serif
   font-size: inherit
+  font-weight: 500
   padding-block: 0.25em
   padding-inline: 0.35em
   user-select: none

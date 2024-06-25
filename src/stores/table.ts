@@ -27,9 +27,7 @@ export interface TableState {
   readParameters: ReadParameters;
   records: RecordType[];
   create: (record: RecordType) => Promise<RecordType | undefined>;
-  read: (
-    parameters: ReadParameters,
-  ) => Promise<RecordType[] | undefined>;
+  read: (parameters: ReadParameters) => Promise<RecordType[] | undefined>;
   update: (record: RecordType) => Promise<boolean>;
   delete: (record: RecordType) => Promise<boolean>;
 }
@@ -97,14 +95,11 @@ export const useTableStore = defineStore('table', {
     },
     getVisibleFields(state): TableState['fields'] {
       return Object.fromEntries(
-        Object.entries(state.fields).filter(
-          ([_, { visible }]) => visible,
-        ),
+        Object.entries(state.fields).filter(([_, { visible }]) => visible),
       );
     },
   },
   actions: {
-
     /* Setters */
 
     setDeletable(deletable: TableState['deletable']) {
@@ -214,8 +209,7 @@ export const useTableStore = defineStore('table', {
       const residentLength = this.records.reduce((acc, record) => {
         return acc + (record[isNewRecord] ? 0 : 1);
       }, 0);
-      const missingOffset =
-        this.readParameters.pageOffset + residentLength;
+      const missingOffset = this.readParameters.pageOffset + residentLength;
       const records = await this.read({
         ...this.readParameters,
         pageLength: 1,
@@ -287,9 +281,7 @@ export const useTableStore = defineStore('table', {
       }
       if (mode === 'Save') {
         return Boolean(
-          this.fields[field]?.[
-            record[isNewRecord] ? 'creatable' : 'updatable'
-          ],
+          this.fields[field]?.[record[isNewRecord] ? 'creatable' : 'updatable'],
         );
       }
       return false;

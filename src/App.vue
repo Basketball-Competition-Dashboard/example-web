@@ -1,38 +1,66 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import Header from '@/components/Header.vue';
-import Nav from '@/components/Nav.vue';
+import FeatureNav from '@/components/FeatureNav.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+useHead({
+  title: () => `${String(route.name)} - 籃球戰情室 BCD`,
+  meta: [
+    {
+      name: 'description',
+      content:
+        '籃球戰情室 Basketball Competition Dashboard - ' +
+        '提供完整的比賽數據分析 - ' +
+        '幫助您追蹤分析實時數據 - ' +
+        'Get instant access to in-depth game analysis. ' +
+        'Explore our data-driven platform today and discover our competition dashboard. ',
+    },
+  ],
+});
 </script>
 
 <template>
   <div class="app-vue">
-    <div id="grid">
-      <section id="header">
-        <Header />
-      </section>
+    <section id="header">
+      <Header />
+    </section>
+    <section id="body">
       <aside id="sidebar">
-        <Nav />
+        <FeatureNav />
       </aside>
       <article id="content">
         <RouterView />
       </article>
-    </div>
+    </section>
   </div>
 </template>
 
 <style scoped lang="sass">
-#grid
-  display: grid
-  grid-template-areas: "header header" "sidebar content"
-  grid-template-columns: minmax(15%, min-content) auto
-  grid-template-rows: min-content 100%
+.app-vue
+  align-items: center
+  display: flex
+  flex-direction: column
+  height: 100%
+  width: 100%
 
   #header
-    grid-area: header
+    height: 9.7em
+    width: 100%
 
-  #sidebar
-    grid-area: sidebar
+  #body
+    display: flex
+    height: calc(100vh - 9em)
+    width: 100%
 
-  #content
-    grid-area: content
+    #sidebar
+      height: 100%
+      width: max-content
+
+    #content
+      height: max-content
+      width: 100%
 </style>

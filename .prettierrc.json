@@ -4,7 +4,7 @@
   "bracketSameLine": true,
   "bracketSpacing": true,
   "htmlWhitespaceSensitivity": "ignore",
-  "printWidth": 70,
+  "printWidth": 80,
   "semi": true,
   "singleAttributePerLine": true,
   "singleQuote": true,

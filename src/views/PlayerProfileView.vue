@@ -8,6 +8,7 @@ import {
   patchPlayersByIdProfile,
   postPlayerProfile,
 } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -73,7 +74,7 @@ table.setFields({
 });
 table.setCreate(async (record) => {
   try {
-    return await postPlayerProfile({
+    const response = await postPlayerProfile({
       requestBody: {
         name: record.name as string,
         team_name: record.team_name as string,
@@ -84,8 +85,10 @@ table.setCreate(async (record) => {
         country: record.country as string,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
@@ -93,7 +96,7 @@ table.setRead(async (parameters) => {
   try {
     return await getPlayersProfile(parameters);
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -111,9 +114,10 @@ table.setUpdate(async (record) => {
         country: record.country as string,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
@@ -122,28 +126,24 @@ table.setDelete(async (record) => {
     await deletePlayersByIdProfile({
       id: record.id as number,
     });
+    Toast.showSuccess('Delete');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Delete', error);
     return false;
   }
 });
 onMounted(async () => {
-  table.setReadParameters({
-    pageLength: 10, // Hardcoded for now
-    pageOffset: 0, // Hardcoded for now
-    sortField: 'name',
-    sortOrder: 'descending',
-  });
+  table.setReadSortField('name');
+  table.setReadSortOrder('ascending');
   await table.readRecords();
 });
 </script>
 
 <template>
-  <div id="player-profile-view-vue">
-    <Table
-      :editable="editable"
-      :table="table"
-      title="球員介紹" />
-  </div>
+  <Table
+    id="player-profile-view-vue"
+    :editable="editable"
+    :table="table"
+    :title="String($route.name)" />
 </template>

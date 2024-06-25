@@ -2,11 +2,8 @@
 import { onMounted } from 'vue';
 import { useTableStore } from '@/stores/table';
 import Table from '@/components/Table.vue';
-import {
-  getTeams,
-  patchTeamsById,
-  postTeam,
-} from '@/generated/web-api';
+import { getTeams, patchTeamsById, postTeam } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -58,7 +55,7 @@ table.setFields({
 });
 table.setCreate(async (record) => {
   try {
-    return await postTeam({
+    const response = await postTeam({
       requestBody: {
         name: record.name as string,
         abbr: record.abbr as string,
@@ -67,8 +64,10 @@ table.setCreate(async (record) => {
         coach: record.coach as string,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
@@ -76,7 +75,7 @@ table.setRead(async (parameters) => {
   try {
     return await getTeams(parameters);
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -88,29 +87,25 @@ table.setUpdate(async (record) => {
         coach: record.coach as string,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
 
 onMounted(async () => {
-  table.setReadParameters({
-    pageLength: 10, // Hardcoded for now
-    pageOffset: 0, // Hardcoded for now
-    sortField: 'name',
-    sortOrder: 'ascending',
-  });
+  table.setReadSortField('name');
+  table.setReadSortOrder('ascending');
   await table.readRecords();
 });
 </script>
 
 <template>
-  <div id="team-view-vue">
-    <Table
-      :editable="editable"
-      :table="table"
-      title="球隊介紹" />
-  </div>
+  <Table
+    id="team-view-vue"
+    :editable="editable"
+    :table="table"
+    :title="String($route.name)" />
 </template>
