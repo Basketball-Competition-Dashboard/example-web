@@ -8,16 +8,30 @@
   margin: 0;
   font-weight: 500;
 }
+a {
+  text-decoration: none;
+}
+a:hover {
+  color: initial;
+}
 button {
   background: unset;
   border: unset;
+}
+button,
+input,
+select {
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
 body {
   background: #ffffff;
   color: #000000;
   display: block;
   font-family: Inter, sans-serif;
-  font-size: calc(6px + 0.78vmax + 0.02vmin);
+  font-size: calc(6.5px + 0.5vmax + 0.5vmin);
   font-weight: 500;
   line-height: 1.5;
   margin: 0;

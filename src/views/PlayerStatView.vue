@@ -8,6 +8,7 @@ import {
   patchPlayersByIdStatsByGameId,
   postPlayerStat,
 } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -58,7 +59,7 @@ table.setFields({
     visible: true,
   },
   assist: {
-    name: 'ASSIST',
+    name: 'AST',
     type: Number,
     creatable: true,
     updatable: true,
@@ -93,7 +94,7 @@ table.setCreate(async (record) => {
     }
     const [game_date, game_home_abbr, game_away_abbr] =
       record.game_date.split(' ');
-    return await postPlayerStat({
+    const response = await postPlayerStat({
       requestBody: {
         game_away_abbr: game_away_abbr as string,
         game_date: game_date as string,
@@ -107,31 +108,31 @@ table.setCreate(async (record) => {
         steal: record.steal as number,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
 table.setRead(async (parameters) => {
   try {
-    return (await getPlayersStats(parameters)).map(
-      (record: RecordType) => {
-        if (
-          typeof record.game_away_abbr === 'string' &&
-          typeof record.game_date === 'string' &&
-          typeof record.game_home_abbr === 'string'
-        ) {
-          record.game_date = [
-            record.game_date,
-            record.game_home_abbr,
-            record.game_away_abbr,
-          ].join(' ');
-        }
-        return record;
-      },
-    );
+    return (await getPlayersStats(parameters)).map((record: RecordType) => {
+      if (
+        typeof record.game_away_abbr === 'string' &&
+        typeof record.game_date === 'string' &&
+        typeof record.game_home_abbr === 'string'
+      ) {
+        record.game_date = [
+          record.game_date,
+          record.game_home_abbr,
+          record.game_away_abbr,
+        ].join(' ');
+      }
+      return record;
+    });
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -149,9 +150,10 @@ table.setUpdate(async (record) => {
         steal: record.steal as number,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
@@ -161,28 +163,24 @@ table.setDelete(async (record) => {
       id: record.id as number,
       gameId: record.game_id as number,
     });
+    Toast.showSuccess('Delete');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Delete', error);
     return false;
   }
 });
 onMounted(async () => {
-  table.setReadParameters({
-    pageLength: 10, // Hardcoded for now
-    pageOffset: 0, // Hardcoded for now
-    sortField: 'name',
-    sortOrder: 'descending',
-  });
+  table.setReadSortField('game_date');
+  table.setReadSortOrder('descending');
   await table.readRecords();
 });
 </script>
 
 <template>
-  <div id="player-stat-view-vue">
-    <Table
-      :editable="editable"
-      :table="table"
-      title="比賽表現" />
-  </div>
+  <Table
+    id="player-stat-view-vue"
+    :editable="editable"
+    :table="table"
+    :title="String($route.name)" />
 </template>

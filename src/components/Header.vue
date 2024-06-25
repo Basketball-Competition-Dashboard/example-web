@@ -31,42 +31,31 @@ const handleSubmit = async () => {
 </template>
 
 <style scoped lang="sass">
-#grid
-  display: grid
-  grid-template-areas: "logo title auth"
-  grid-template-columns: min-content auto min-content
-  grid-template-rows: min-content
+header
+  background-color: #ffc368
+  display: flex
   align-items: center
 
   #logo
-    grid-area: logo
-
-  #title
-    grid-area: title
-
-  #auth
-    grid-area: auth
-
-header
-  background-color: #ffc368
-
-  img#logo
     aspect-ratio: 160 / 145
     color: #ffffff
     height: 9em
-    margin: 0.35em 1.5em
+    margin-block: 0.35em
+    margin-inline: 1.5em
 
-  h1#title
+  #title
     color: #000000
     font-size: 5em
     font-weight: 700
+    min-width: max-content
+    width: 100%
 
   button#auth
     color: #ffffff
     cursor: pointer
     font-size: 2.25em
-    text-decoration: underline
     padding-inline: 1em
+    text-decoration: underline
 
   ::selection
     background-color: #ffad33

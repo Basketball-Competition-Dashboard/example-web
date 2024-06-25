@@ -1,39 +1,44 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import GameView from '@/views/GameView.vue';
-import PlayerProfile from '@/views/PlayerProfile.vue';
-import PlayerStat from '@/views/PlayerStat.vue';
+import PlayerProfileView from '@/views/PlayerProfileView.vue';
+import PlayerStatView from '@/views/PlayerStatView.vue';
 import TeamView from '@/views/TeamView.vue';
 import Login from '@/views/Login.vue';
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: '最新賽事',
-      component: TeamView,
+      redirect: '/features/games/latest',
     },
     {
-      path: '/games',
+      path: '/:pathMatch(.*)*',
+      redirect: '/features/games/latest',
+    },
+    {
+      path: '/features/games/latest',
+      name: '最新賽事',
       component: GameView,
     },
     {
-      path: '/player-profiles',
-      component: PlayerProfile,
+      path: '/features/player-profiles',
+      name: '球員介紹',
+      component: PlayerProfileView,
     },
     {
-      path: '/player-stats',
-      component: PlayerStat,
-    },
-    {
-      path: '/teams',
+      path: '/features/teams',
+      name: '球隊介紹',
       component: TeamView,
     },
     {
       path: '/login',
       component: Login,
     },
+    {
+      path: '/features/player-stats',
+      name: '比賽表現',
+      component: PlayerStatView,
+    },
   ],
 });
-
-export default router;
