@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import GameView from '@/views/GameView.vue';
+import LatestGameView from '@/views/LatestGameView.vue';
 import PlayerProfileView from '@/views/PlayerProfileView.vue';
 import PlayerStatView from '@/views/PlayerStatView.vue';
 import TeamView from '@/views/TeamView.vue';
@@ -18,7 +19,7 @@ export const router = createRouter({
     {
       path: '/features/games/latest',
       name: '最新賽事',
-      component: GameView,
+      component: LatestGameView,
     },
     {
       path: '/features/player-profiles',
