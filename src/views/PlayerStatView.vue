@@ -8,6 +8,7 @@ import {
   patchPlayersByIdStatsByGameId,
   postPlayerStat,
 } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -93,7 +94,7 @@ table.setCreate(async (record) => {
     }
     const [game_date, game_home_abbr, game_away_abbr] =
       record.game_date.split(' ');
-    return await postPlayerStat({
+    const response = await postPlayerStat({
       requestBody: {
         game_away_abbr: game_away_abbr as string,
         game_date: game_date as string,
@@ -107,8 +108,10 @@ table.setCreate(async (record) => {
         steal: record.steal as number,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
@@ -129,7 +132,7 @@ table.setRead(async (parameters) => {
       return record;
     });
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -147,9 +150,10 @@ table.setUpdate(async (record) => {
         steal: record.steal as number,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
@@ -159,9 +163,10 @@ table.setDelete(async (record) => {
       id: record.id as number,
       gameId: record.game_id as number,
     });
+    Toast.showSuccess('Delete');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Delete', error);
     return false;
   }
 });

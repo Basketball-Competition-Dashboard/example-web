@@ -3,6 +3,7 @@ import { onMounted } from 'vue';
 import { useTableStore } from '@/stores/table';
 import Table from '@/components/Table.vue';
 import { getTeams, patchTeamsById, postTeam } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -54,7 +55,7 @@ table.setFields({
 });
 table.setCreate(async (record) => {
   try {
-    return await postTeam({
+    const response = await postTeam({
       requestBody: {
         name: record.name as string,
         abbr: record.abbr as string,
@@ -63,8 +64,10 @@ table.setCreate(async (record) => {
         coach: record.coach as string,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
@@ -72,7 +75,7 @@ table.setRead(async (parameters) => {
   try {
     return await getTeams(parameters);
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -84,9 +87,10 @@ table.setUpdate(async (record) => {
         coach: record.coach as string,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
