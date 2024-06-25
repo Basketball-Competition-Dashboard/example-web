@@ -43,7 +43,7 @@ useHead({
 #grid
   display: grid
   grid-template-areas: "header header" "sidebar content"
-  grid-template-columns: minmax(15%, min-content) auto
+  grid-template-columns: minmax(13em, min-content) auto
   grid-template-rows: min-content 100%
 
   #header

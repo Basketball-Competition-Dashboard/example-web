@@ -31,16 +31,17 @@
 header
   background-color: #ffc368
 
-  img#logo
+  #logo
     aspect-ratio: 160 / 145
     color: #ffffff
     height: 9em
     margin: 0.35em 1.5em
 
-  h1#title
+  #title
     color: #000000
     font-size: 5em
     font-weight: 700
+    min-width: max-content
 
   button#auth
     color: #ffffff
