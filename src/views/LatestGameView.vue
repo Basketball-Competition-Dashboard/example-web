@@ -1,4 +1,37 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { getGames, type Game } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
+
+const latestGames = ref<Game[] | undefined>();
+const latestGameInfos = computed(() => {
+  return (
+    latestGames.value?.map(({ date, home_abbr, away_abbr }) => {
+      const [year, month, day] = date.split('-');
+      const week = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
+        new Date(date).getDay()
+      ];
+      return {
+        date: `${year}.${month}.${day} ${week}.`,
+        team: `${home_abbr} vs. ${away_abbr}`,
+      };
+    }) ?? []
+  );
+});
+
+onMounted(async () => {
+  try {
+    latestGames.value = await getGames({
+      pageLength: 2,
+      pageOffset: 0,
+      sortField: 'date',
+      sortOrder: 'descending',
+    });
+  } catch (error) {
+    Toast.showFailure('Read', error);
+  }
+});
+</script>
 
 <template>
   <div class="latest-game-view-vue">
@@ -6,25 +39,26 @@
       <h1 class="title">{{ $route.name }}</h1>
     </section>
     <section class="center">
-      <div class="game-gallery">
-        <div class="game-info">
-          <div class="game-date">2021.09.01 Wed.</div>
-          <div class="game-team">NYK vs. LAL</div>
-        </div>
-        <img
-          alt="game-arena"
-          class="game-arena"
-          src="@/assets/game-arena.jpg"
-          sizes="1346x860" />
-        <img
-          alt="game-arena"
-          class="game-arena"
-          src="@/assets/game-arena.jpg"
-          sizes="1346x860" />
-        <div class="game-info">
-          <div class="game-date">2021.09.02 Thu.</div>
-          <div class="game-team">LAC vs. GSW</div>
-        </div>
+      <div class="game-news">
+        <template
+          v-for="(gameInfo, index) of latestGameInfos"
+          :key="index"
+          :id="index">
+          <div
+            class="game-info"
+            :style="{ order: (index << 1) + (index & 1) }">
+            <span class="game-date">{{ gameInfo.date }}</span>
+            <span class="game-team">{{ gameInfo.team }}</span>
+          </div>
+          <div
+            class="game-arena"
+            :style="{ order: (index << 1) + ((index & 1) ^ 1) }">
+            <img
+              alt="game-arena-background"
+              src="@/assets/game-arena-background.jpg"
+              sizes="1346x860" />
+          </div>
+        </template>
       </div>
     </section>
   </div>
@@ -63,7 +97,7 @@
   height: 100%
   width: 100%
 
-  .game-gallery
+  .game-news
     align-items: center
     display: grid
     gap: 1.5em
@@ -73,10 +107,9 @@
     padding-block-end: 1.5em
     width: 70%
 
-    & > *
-      font-size: 0.9em
+    & > *, .game-arena > img
       width: 100%
-    
+
     .game-info
       align-items: flex-start
       display: flex
@@ -84,10 +117,10 @@
       gap: 0.5em
 
       .game-date
-        font-size: 1em
+        font-size: 0.9em
         font-weight: 500
 
       .game-team
-        font-size: 0.9em
+        font-size: 0.8em
         font-weight: 400
 </style>
