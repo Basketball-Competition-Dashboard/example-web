@@ -7,6 +7,7 @@ import {
   patchGamesByIdTeamsByTeamId,
   postGame,
 } from '@/generated/web-api';
+import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
 const table = useTableStore();
@@ -80,7 +81,7 @@ table.setFields({
 });
 table.setCreate(async (record) => {
   try {
-    return await postGame({
+    const response = await postGame({
       requestBody: {
         date: record.date as string,
         home_name: record.home_name as string,
@@ -95,8 +96,10 @@ table.setCreate(async (record) => {
             : record.is_home_winner === record.home_name,
       },
     });
+    Toast.showSuccess('Create');
+    return response;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Create', error);
     return;
   }
 });
@@ -111,7 +114,7 @@ table.setRead(async (parameters) => {
       return record;
     });
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Read', error);
     return;
   }
 });
@@ -139,9 +142,10 @@ table.setUpdate(async (record) => {
             : record.away_name === record.is_home_winner,
       },
     });
+    Toast.showSuccess('Update');
     return true;
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Update', error);
     return false;
   }
 });
@@ -153,10 +157,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div id="team-view-vue">
-    <Table
-      :editable="editable"
-      :table="table"
-      :title="String($route.name)" />
-  </div>
+  <Table
+    id="team-view-vue"
+    :editable="editable"
+    :table="table"
+    :title="String($route.name)" />
 </template>

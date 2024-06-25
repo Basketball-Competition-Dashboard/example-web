@@ -35,7 +35,8 @@ header
     aspect-ratio: 160 / 145
     color: #ffffff
     height: 9em
-    margin: 0.35em 1.5em
+    margin-block: 0.35em
+    margin-inline: 1.5em
 
   #title
     color: #000000

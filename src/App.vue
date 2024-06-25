@@ -25,33 +25,42 @@ useHead({
 
 <template>
   <div class="app-vue">
-    <div id="grid">
-      <section id="header">
-        <Header />
-      </section>
+    <section id="header">
+      <Header />
+    </section>
+    <section id="body">
       <aside id="sidebar">
         <FeatureNav />
       </aside>
       <article id="content">
         <RouterView />
       </article>
-    </div>
+    </section>
   </div>
 </template>
 
 <style scoped lang="sass">
-#grid
-  display: grid
-  grid-template-areas: "header header" "sidebar content"
-  grid-template-columns: minmax(13em, min-content) auto
-  grid-template-rows: min-content 100%
+.app-vue
+  align-items: center
+  display: flex
+  flex-direction: column
+  height: 100%
+  width: 100%
 
   #header
-    grid-area: header
+    height: 9.7em
+    width: 100%
 
-  #sidebar
-    grid-area: sidebar
+  #body
+    display: flex
+    height: calc(100vh - 9em)
+    width: 100%
 
-  #content
-    grid-area: content
+    #sidebar
+      height: 100%
+      width: max-content
+
+    #content
+      height: max-content
+      width: 100%
 </style>
