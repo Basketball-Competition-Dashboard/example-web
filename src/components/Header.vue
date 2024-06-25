@@ -1,6 +1,6 @@
 <template>
   <div class="header-vue">
-    <header id="grid">
+    <header class="grid">
       <img
         alt="Logo with a basketball"
         id="logo"
@@ -12,7 +12,7 @@
 </template>
 
 <style scoped lang="sass">
-#grid
+.grid
   display: grid
   grid-template-areas: "logo title auth"
   grid-template-columns: min-content auto min-content
