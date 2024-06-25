@@ -6,11 +6,11 @@ import router from '@/router';
 const handleSubmit = async () => {
   try{
     const response = await deleteAuthSession();
+    deleteSession();
+    router.push('/login');
   }catch(error){
     alert(error)
   }
-  deleteSession();
-  router.push('/login');
 }
 </script>
 

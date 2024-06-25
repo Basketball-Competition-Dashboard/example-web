@@ -21,6 +21,7 @@ const handleSubmit = async () => {
         credential: password.value as string,
       },
     });
+    console.log(response);
     hasSession();
     router.push('/')
   } catch (error) {
