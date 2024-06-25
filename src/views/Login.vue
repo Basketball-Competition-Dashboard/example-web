@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { handleError, ref } from 'vue';
 import CustomInput from '@/components/CustomInput.vue';
-import {postAuthSession,} from '@/generated/web-api';
-import {
-  hasSession,
-} from '@/functions/cookies';
+import { postAuthSession } from '@/generated/web-api';
+import { hasSession } from '@/functions/cookies';
 import router from '@/router';
 
 const title = ref('登入');
@@ -23,23 +21,27 @@ const handleSubmit = async () => {
     });
     console.log(response);
     hasSession();
-    router.push('/')
+    router.push('/');
   } catch (error) {
     alert(error);
     return;
   }
-}
+};
 </script>
 
 <template>
   <div id="login">
-  <form @submit.prevent="handleSubmit">
-    <h1>{{ title }}</h1>
-    <CustomInput v-model="account" :label="accountLabel" />
-    <CustomInput v-model="password" :label="passwordLabel" />
-    <button type="submit">登入</button>
-  </form >
-</div>
+    <form @submit.prevent="handleSubmit">
+      <h1>{{ title }}</h1>
+      <CustomInput
+        v-model="account"
+        :label="accountLabel" />
+      <CustomInput
+        v-model="password"
+        :label="passwordLabel" />
+      <button type="submit">登入</button>
+    </form>
+  </div>
 </template>
 
 <style scoped lang="sass">
@@ -60,5 +62,4 @@ button
   padding: 1%
   text-align: center
   width: 45%
-
 </style>

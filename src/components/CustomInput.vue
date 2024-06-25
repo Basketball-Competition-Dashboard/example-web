@@ -1,7 +1,9 @@
 <template>
   <div class="customInput">
     <label :for="label">{{ label }}</label>
-    <input :id="label" v-model="inputValue" />
+    <input
+      :id="label"
+      v-model="inputValue" />
   </div>
 </template>
 
@@ -10,7 +12,7 @@ import { ref, watch } from 'vue';
 
 const props = defineProps({
   modelValue: String,
-  label: String
+  label: String,
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -20,9 +22,12 @@ watch(inputValue, (newValue) => {
   emit('update:modelValue', newValue);
 });
 
-watch(() => props.modelValue, (newValue) => {
-  inputValue.value = newValue;
-});
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    inputValue.value = newValue;
+  },
+);
 </script>
 
 <style scoped lang="sass">
@@ -37,6 +42,4 @@ input
   height: 3rem
   font-size: 3rem
   border-radius: 23px
-
-
 </style>
