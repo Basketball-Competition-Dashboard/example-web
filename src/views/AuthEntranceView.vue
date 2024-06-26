@@ -1,46 +1,48 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import CustomInput from '@/components/CustomInput.vue';
 import { useAuthSessionStore } from '@/stores/authSession';
 import { Toast } from '@/functions/toast';
+import { router } from '@/router';
 
-const title = ref('登入');
-const accountLabel = ref('帳號 :');
-const account = ref('');
-const passwordLabel = ref('密碼 :');
-const password = ref('');
-
+const name = ref<string | undefined>();
+const credential = ref<string | undefined>();
 const authSession = useAuthSessionStore();
 
-const handleSubmit = async () => {
+async function login() {
   try {
     await authSession.create({
-      name: account.value as string,
-      credential: password.value as string,
+      name: name.value as string,
+      credential: credential.value as string,
     });
-    window.location.href = '/';
+    router.replace('/');
   } catch (error) {
     Toast.showFailure('Login', error);
     return;
   }
-};
+}
 </script>
 
 <template>
-  <div id="auth-entrance-view">
-    <h1>{{ title }}</h1>
-    <CustomInput
-      v-model="account"
-      :label="accountLabel" />
-    <CustomInput
-      v-model="password"
-      :label="passwordLabel" />
-    <button @click="handleSubmit">登入</button>
-  </div>
+  <form
+    class="auth-entrance-view-vue"
+    @submit.prevent="login">
+    <h1>{{ $route.name }}</h1>
+    <label for="basketball-competition-dashboard-name">名稱</label>
+    <input
+      v-model="name"
+      type="text"
+      id="basketball-competition-dashboard-name" />
+    <label for="basketball-competition-dashboard-credential">密碼</label>
+    <input
+      v-model="credential"
+      type="password"
+      id="basketball-competition-dashboard-credential" />
+    <button type="submit">登入</button>
+  </form>
 </template>
 
 <style scoped lang="sass">
-#auth-entrance-view
+.auth-entrance-view-vue
   align-items: center
   display: flex
   flex-direction: column
@@ -60,4 +62,17 @@ button
   padding: 1%
   text-align: center
   width: 24%
+
+label
+  text-align: left
+  display: block
+  font-size: 1rem
+  font-weight: 600
+input
+  width: 100%
+  height: 3rem
+  font-size: 2rem
+  border-radius: 16px
+  border: 1.53px solid
+  border-color: #0000001a
 </style>

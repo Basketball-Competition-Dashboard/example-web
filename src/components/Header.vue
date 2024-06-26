@@ -5,14 +5,14 @@ import { Toast } from '@/functions/toast';
 
 const authSession = useAuthSessionStore();
 
-const handleSubmit = async () => {
+async function logout() {
   try {
     await authSession.delete();
     Toast.showSuccess('Logout');
   } catch (error) {
     Toast.showFailure('Logout', error);
   }
-};
+}
 </script>
 
 <template>
@@ -21,12 +21,12 @@ const handleSubmit = async () => {
       alt="Logo with a basketball"
       id="logo"
       sizes="160x145"
-      src="@/assets/logo.png" />
+      src="/logo.png" />
     <h1 id="title">籃球戰情室</h1>
     <button
       v-if="authSession.exists"
       id="auth"
-      @click="handleSubmit">
+      @click="logout">
       Logout
     </button>
     <RouterLink

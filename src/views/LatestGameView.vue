@@ -3,7 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import { getGames, type Game } from '@/generated/web-api';
 import { Alert } from '@/functions/alert';
 
-const playlistId = 'PL7B_aulXoMBN03877ABcI8eYG5JsmCDjC';
+const TEAMTYPE_ENUMS = ['home', 'away'] as const;
+const PLAYLIST_ID = 'PL7B_aulXoMBN03877ABcI8eYG5JsmCDjC';
 const latestGames = ref<Game[] | undefined>();
 const latestGameInfos = computed(() => {
   return (
@@ -69,13 +70,11 @@ function getOrderPairFromIndex(index: number): [number, number] {
               src="@/assets/game-arena-background.jpg"
               sizes="1346x860" />
             <img
-              alt="game-arena-home-team-logo"
-              class="home team-logo"
-              :src="`/vendors/sportslogos.net/${gameInfo.team.home}.png`" />
-            <img
-              alt="game-arena-away-team-logo"
-              class="away team-logo"
-              :src="`/vendors/sportslogos.net/${gameInfo.team.away}.png`" />
+              v-for="teamType in TEAMTYPE_ENUMS"
+              :alt="`game-arena-${teamType}-team-logo`"
+              :class="`${teamType} team-logo`"
+              :src="`/vendors/sportslogos.net/${gameInfo.team[teamType]}.png`"
+              onerror="this.src = '/logo.png'" />
           </div>
         </template>
         <div
@@ -102,7 +101,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
             class="playlist"
             loading="lazy"
             name="youtube-playlist"
-            :src="`https://www.youtube.com/embed?listType=playlist&list=${playlistId}&controls=1`"></iframe>
+            :src="`https://www.youtube.com/embed?listType=playlist&list=${PLAYLIST_ID}&controls=1`"></iframe>
         </div>
       </div>
     </section>
