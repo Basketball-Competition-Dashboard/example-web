@@ -16,6 +16,12 @@ async function selectPageLength({ target }: Event) {
   await props.table.readRecords();
 }
 async function movePageOffsetBy(direction: 1 | -1) {
+  if (
+    direction > 0 &&
+    props.table.getRecords.length < props.table.getReadPageLength
+  ) {
+    return;
+  }
   const delta = direction * props.table.getReadPageLength;
   const offset = props.table.getReadPageOffset + delta;
   if (offset < 0) {
