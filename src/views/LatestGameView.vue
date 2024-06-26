@@ -145,9 +145,10 @@ onMounted(async () => {
       position: relative
 
       .background
+        aspect-ratio: 1346 / 860
+        filter: brightness(1.2) contrast(1.2) opacity(0.7)
         position: relative
         z-index: 0
-        filter: brightness(1.2) contrast(1.2) opacity(0.7)
 
       .team-logo
         border-radius: 25%
