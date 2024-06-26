@@ -96,7 +96,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
           <img
             alt="game-arena-background"
             class="background"
-            style="visibility: hidden;"
+            style="visibility: hidden"
             src="@/assets/game-arena-background.jpg"
             sizes="1346x860" />
           <iframe
