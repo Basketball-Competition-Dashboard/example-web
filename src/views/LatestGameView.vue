@@ -26,7 +26,7 @@ const latestGameInfos = computed(() => {
 onMounted(async () => {
   try {
     latestGames.value = await getGames({
-      pageLength: 2,
+      pageLength: 10,
       pageOffset: 0,
       sortField: 'date',
       sortOrder: 'descending',
@@ -147,6 +147,7 @@ onMounted(async () => {
       .background
         position: relative
         z-index: 0
+        filter: brightness(1.2) contrast(1.2) opacity(0.7)
 
       .team-logo
         border-radius: 25%
