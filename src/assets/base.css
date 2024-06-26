@@ -41,6 +41,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
+iframe {
+  border: 0;
+}
 ::selection {
   background-color: #d9d9d9;
 }
