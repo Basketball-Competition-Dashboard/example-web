@@ -146,6 +146,5 @@ onMounted(async () => {
   <Table
     id="player-profile-view-vue"
     :editable="authSession.exists"
-    :table="table"
-    :title="String($route.name)" />
+    :table="table" />
 </template>

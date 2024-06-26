@@ -251,7 +251,7 @@ export const useTableStore = defineStore('table', {
       const recordTyped: RecordType = {};
       for (const [field, { type }] of Object.entries(this.fields)) {
         const value = record[field];
-        if (value !== undefined && value !== null) {
+        if (value !== undefined && value !== null && value !== '') {
           recordTyped[field] = type(value);
         }
       }
