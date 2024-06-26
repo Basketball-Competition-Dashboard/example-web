@@ -35,6 +35,7 @@ onMounted(async () => {
       sortOrder: 'descending',
     });
   } catch (error) {
+    latestGames.value = [];
     Alert.showFailure('Read', error);
   }
 });
@@ -82,6 +83,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
           class="game-info"
           :style="{
             order: getOrderPairFromIndex(latestGameInfos.length)[0],
+            visibility: latestGames ? 'visible' : 'hidden',
           }">
           <span class="game-desc-main">2023 ... 2024</span>
           <span class="game-desc-sub">精彩回顧</span>
@@ -94,7 +96,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
           <img
             alt="game-arena-background"
             class="background"
-            style="opacity: 0"
+            style="visibility: hidden;"
             src="@/assets/game-arena-background.jpg"
             sizes="1346x860" />
           <iframe
