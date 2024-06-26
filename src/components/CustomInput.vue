@@ -37,9 +37,12 @@ label
   text-align: left
   display: block
   font-size: 1rem
+  font-weight: 600
 input
   width: 100%
   height: 3rem
-  font-size: 3rem
-  border-radius: 23px
+  font-size: 2rem
+  border-radius: 16px
+  border: 1.53px solid
+  border-color: #0000001a
 </style>

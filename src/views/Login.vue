@@ -45,6 +45,7 @@ const handleSubmit = async () => {
 
 <style scoped lang="sass">
 h1
+  margin-top: 4.5rem
   font-size: 3rem
   font-weight: bold
 form
@@ -54,11 +55,12 @@ form
   justify-content: center
   display: flex
 button
+  margin-top: 2rem
   font-size: 2rem
-  background-color: #1991D4
+  background-color: #1991d496
+  border-radius: 23.01px
   color: #ffffff
-  border-radius: 23px
   padding: 1%
   text-align: center
-  width: 45%
+  width: 60%
 </style>
