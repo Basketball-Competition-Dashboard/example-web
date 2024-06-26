@@ -3,6 +3,7 @@
     <img
       alt="Logo with a basketball"
       id="logo"
+      sizes="160x145"
       src="@/assets/logo.png" />
     <h1 id="title">籃球戰情室</h1>
     <button id="auth">Logout</button>
