@@ -1,12 +1,40 @@
+<script setup lang="ts">
+import { RouterLink } from 'vue-router';
+import { useAuthSessionStore } from '@/stores/authSession';
+import { Toast } from '@/functions/toast';
+
+const authSession = useAuthSessionStore();
+
+async function logout() {
+  try {
+    await authSession.delete();
+    Toast.showSuccess('Logout');
+  } catch (error) {
+    Toast.showFailure('Logout', error);
+  }
+}
+</script>
+
 <template>
   <header class="header-vue">
     <img
       alt="Logo with a basketball"
       id="logo"
       sizes="160x145"
-      src="@/assets/logo.png" />
+      src="/logo.png" />
     <h1 id="title">籃球戰情室</h1>
-    <button id="auth">Logout</button>
+    <button
+      v-if="authSession.exists"
+      id="auth"
+      @click="logout">
+      Logout
+    </button>
+    <RouterLink
+      v-else
+      id="auth"
+      to="/auth/entrance">
+      Login
+    </RouterLink>
   </header>
 </template>
 
@@ -30,7 +58,7 @@ header
     min-width: max-content
     width: 100%
 
-  button#auth
+  #auth
     color: #ffffff
     cursor: pointer
     font-size: 2.25em
