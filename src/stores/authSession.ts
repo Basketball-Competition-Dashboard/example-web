@@ -24,14 +24,14 @@ export const useAuthSessionStore = defineStore('authSession', {
       Cookies.set('has_session_id', 'true', {
         expires: 365,
         path: '/',
-        sameSite: 'strict',
+        sameSite: 'Strict',
       });
       this.has_session_id = true;
     },
     async delete(): Promise<void> {
-      await deleteAuthSession();
       Cookies.remove('has_session_id');
       this.has_session_id = false;
+      await deleteAuthSession();
     },
   },
 });
