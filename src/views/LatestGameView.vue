@@ -102,7 +102,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
             class="playlist"
             loading="lazy"
             name="youtube-playlist"
-            :src="`https://www.youtube.com/embed?listType=playlist&list=${playlistId}&autoplay=1&controls=1&playsinline=1`"></iframe>
+            :src="`https://www.youtube.com/embed?listType=playlist&list=${playlistId}&controls=1`"></iframe>
         </div>
       </div>
     </section>
