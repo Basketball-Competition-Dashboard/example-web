@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
 import { type TableStore } from '@/stores/table';
+import ViewTitle from './ViewTitle.vue';
 import TablePaginator from './TablePaginator.vue';
 import TableEditButton from './TableEditButton.vue';
 
 const props = defineProps<{
   editable: boolean;
   table: TableStore;
-  title: string;
 }>();
 
 const pageLengthEnums = [5, 10, 25] as const;
@@ -19,7 +19,7 @@ props.table.setReadPageLength(pageLengthEnums[1]);
 <template>
   <div class="table-vue">
     <section class="top">
-      <h1 class="title">{{ title }}</h1>
+      <ViewTitle />
       <section class="edit-buttons">
         <aside v-if="editable">
           <div
@@ -125,16 +125,8 @@ props.table.setReadPageLength(pageLengthEnums[1]);
   width: 100%
 
 .top
-  padding-block: 1em
+  padding-block-end: 1em
   width: 94%
-
-  .title
-    color: #000000
-    font-size: 2.5em
-    font-weight: 600
-    min-width: max-content
-    padding-block-start: 0.4em
-    text-align: center
 
   .edit-buttons
     min-height: 1em

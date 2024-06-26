@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useAuthSessionStore } from '@/stores/authSession';
 import { Toast } from '@/functions/toast';
 import { router } from '@/router';
+import ViewTitle from '@/components/ViewTitle.vue';
 
 const name = ref<string | undefined>();
 const credential = ref<string | undefined>();
@@ -23,22 +24,29 @@ async function login() {
 </script>
 
 <template>
-  <form
-    class="auth-entrance-view-vue"
-    @submit.prevent="login">
-    <h1>{{ $route.name }}</h1>
-    <label for="basketball-competition-dashboard-name">名稱</label>
-    <input
-      v-model="name"
-      type="text"
-      id="basketball-competition-dashboard-name" />
-    <label for="basketball-competition-dashboard-credential">密碼</label>
-    <input
-      v-model="credential"
-      type="password"
-      id="basketball-competition-dashboard-credential" />
-    <button type="submit">登入</button>
-  </form>
+  <div class="auth-entrance-view-vue">
+    <section class="top">
+      <ViewTitle />
+    </section>
+    <form
+      class="center"
+      id="BCD-auth-entrance-form"
+      @submit.prevent="login">
+      <label for="BCD-name">名稱</label>
+      <input
+        v-model="name"
+        type="text"
+        id="BCD-name" />
+      <label for="BCD-credential">密碼</label>
+      <input
+        v-model="credential"
+        type="password"
+        id="BCD-credential" />
+      <div class="bottom-button">
+        <button type="submit">登入</button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped lang="sass">
@@ -46,33 +54,68 @@ async function login() {
   align-items: center
   display: flex
   flex-direction: column
+  height: calc(100vh - 9.7em)
   width: 100%
+  overflow-y: auto
+  overscroll-behavior-y: contain
 
-h1
-  margin-top: 4.5rem
-  font-size: 3rem
-  font-weight: bold
+  .top
+    background-color: #ffffff
+    left: 0
+    padding-block-end: 1em
+    position: sticky
+    top: 0
+    width: 100%
+    z-index: 1
 
-button
-  margin-top: 2rem
-  font-size: 2rem
-  background-color: #1991d496
-  border-radius: 23.01px
-  color: #ffffff
-  padding: 1%
-  text-align: center
-  width: 24%
+.center
+  align-items: center
+  display: flex
+  flex-direction: column
+  font-size: 2.5em
+  height: 100%
+  width: 45%
 
-label
-  text-align: left
-  display: block
-  font-size: 1rem
-  font-weight: 600
-input
-  width: 100%
-  height: 3rem
-  font-size: 2rem
-  border-radius: 16px
-  border: 1.53px solid
-  border-color: #0000001a
+  .bottom-button
+    padding-block: 1.6em
+    width: 100%
+    text-align: center
+
+    button
+      background-color: #1991d496
+      border-radius: 0.7em
+      color: #ffffff
+      cursor: pointer
+      font-size: 0.8em
+      font-weight: 700
+      min-width: max-content
+      padding: 0.4em
+      text-align: center
+      width: 68%
+
+  label
+    font-size: 0.6em
+    font-weight: 400
+    padding-block-start: 1em
+    padding-block-end: 0.25em
+    text-align: left
+    width: 100%
+
+  input
+    border: 0.1rem solid #cccccc
+    border-radius: 0.38em
+    caret-color: #4186d7
+    font-family: "Anek Tamil", sans-serif
+    font-size: 0.8em
+    font-weight: 400
+    padding-block: 0.1em
+    padding-inline: 0.4em
+    text-align: left
+    width: 100%
+
+    &:focus
+      outline: 0.1rem solid #888888
+
+    &::selection
+      background-color: #96bce9
 </style>
