@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { deleteSession, isSession } from '@/functions/cookies';
-import { deleteAuthSession } from '@/generated/web-api';
-import { router } from '@/router';
+import { useAuthSessionStore } from '@/stores/authSession';
+import { Toast } from '@/functions/toast';
+
+const authSession = useAuthSessionStore();
 
 const handleSubmit = async () => {
   try {
-    await deleteAuthSession();
-    deleteSession();
-    router.go(0);
+    await authSession.delete();
+    Toast.showSuccess('Logout');
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Logout', error);
   }
 };
 </script>
@@ -24,7 +24,7 @@ const handleSubmit = async () => {
       src="@/assets/logo.png" />
     <h1 id="title">籃球戰情室</h1>
     <button
-      v-if="isSession()"
+      v-if="authSession.exists"
       id="auth"
       @click="handleSubmit">
       Logout

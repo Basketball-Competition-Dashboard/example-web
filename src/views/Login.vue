@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import CustomInput from '@/components/CustomInput.vue';
-import { postAuthSession } from '@/generated/web-api';
-import { hasSession } from '@/functions/cookies';
+import { useAuthSessionStore } from '@/stores/authSession';
+import { Toast } from '@/functions/toast';
 
 const title = ref('登入');
 const accountLabel = ref('帳號 :');
@@ -10,18 +10,17 @@ const account = ref('');
 const passwordLabel = ref('密碼 :');
 const password = ref('');
 
+const authSession = useAuthSessionStore();
+
 const handleSubmit = async () => {
   try {
-    await postAuthSession({
-      requestBody: {
-        name: account.value as string,
-        credential: password.value as string,
-      },
+    await authSession.create({
+      name: account.value as string,
+      credential: password.value as string,
     });
-    hasSession();
     window.location.href = '/';
   } catch (error) {
-    alert(error);
+    Toast.showFailure('Login', error);
     return;
   }
 };
