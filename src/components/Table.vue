@@ -233,6 +233,9 @@ props.table.setReadPageLength(pageLengthEnums[1]);
         font-size: 0.9em
         padding-block: 1.1em
 
+        *
+          font-weight: inherit
+
         & > *
           padding-block: 0.2em
 

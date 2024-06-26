@@ -108,7 +108,7 @@ async function login() {
     caret-color: #4186d7
     font-family: "Anek Tamil", sans-serif
     font-size: 0.8em
-    font-weight: 400
+    font-weight: 500
     padding-block: 0.1em
     padding-inline: 0.4em
     text-align: left
