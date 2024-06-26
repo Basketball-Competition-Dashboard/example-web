@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { RouterLink } from 'vue-router';
+import { deleteSession, isSession } from '@/functions/cookies';
+import { deleteAuthSession } from '@/generated/web-api';
+import { router } from '@/router';
+
+const handleSubmit = async () => {
+  try {
+    await deleteAuthSession();
+    deleteSession();
+    router.go(0);
+  } catch (error) {
+    alert(error);
+  }
+};
+</script>
+
 <template>
   <header class="header-vue">
     <img
@@ -6,7 +23,18 @@
       sizes="160x145"
       src="@/assets/logo.png" />
     <h1 id="title">籃球戰情室</h1>
-    <button id="auth">Logout</button>
+    <button
+      v-if="isSession()"
+      id="auth"
+      @click="handleSubmit">
+      Logout
+    </button>
+    <RouterLink
+      v-else
+      id="auth"
+      to="/auth/entrance">
+      Login
+    </RouterLink>
   </header>
 </template>
 
@@ -30,7 +58,7 @@ header
     min-width: max-content
     width: 100%
 
-  button#auth
+  #auth
     color: #ffffff
     cursor: pointer
     font-size: 2.25em
