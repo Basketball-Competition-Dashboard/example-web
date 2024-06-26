@@ -54,6 +54,7 @@ useHead({
   #body
     display: flex
     height: calc(100vh - 9em)
+    height: calc(100dvh - 9em)
     width: 100%
 
     #sidebar

@@ -55,6 +55,7 @@ async function login() {
   display: flex
   flex-direction: column
   height: calc(100vh - 9.7em)
+  height: calc(100dvh - 9.7em)
   width: 100%
   overflow-y: auto
   overscroll-behavior-y: contain

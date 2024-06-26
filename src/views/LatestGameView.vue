@@ -115,6 +115,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
   display: flex
   flex-direction: column
   height: calc(100vh - 9.7em)
+  height: calc(100dvh - 9.7em)
   overflow-y: auto
   overscroll-behavior-y: contain
   width: 100%
