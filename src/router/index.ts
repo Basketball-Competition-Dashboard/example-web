@@ -32,13 +32,18 @@ export const router = createRouter({
       component: TeamView,
     },
     {
-      path: '/login',
-      component: Login,
+      path: '/features/games',
+      name: '比賽紀錄',
+      component: GameView,
     },
     {
       path: '/features/player-stats',
       name: '比賽表現',
       component: PlayerStatView,
+    },
+    {
+      path: '/login',
+      component: Login,
     },
   ],
 });
