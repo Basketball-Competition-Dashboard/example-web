@@ -7,6 +7,7 @@ import {
   patchGamesByIdTeamsByTeamId,
   postGame,
 } from '@/generated/web-api';
+import { Alert } from '@/functions/alert';
 import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
@@ -114,7 +115,7 @@ table.setRead(async (parameters) => {
       return record;
     });
   } catch (error) {
-    Toast.showFailure('Read', error);
+    Alert.showFailure('Read', error);
     return;
   }
 });

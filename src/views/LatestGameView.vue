@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { getGames, type Game } from '@/generated/web-api';
-import { Toast } from '@/functions/toast';
+import { Alert } from '@/functions/alert';
 
 const latestGames = ref<Game[] | undefined>();
 const latestGameInfos = computed(() => {
@@ -32,7 +32,7 @@ onMounted(async () => {
       sortOrder: 'descending',
     });
   } catch (error) {
-    Toast.showFailure('Read', error);
+    Alert.showFailure('Read', error);
   }
 });
 </script>
