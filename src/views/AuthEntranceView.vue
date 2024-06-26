@@ -27,7 +27,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div id="login">
+  <div id="auth-entrance-view">
     <h1>{{ title }}</h1>
     <CustomInput
       v-model="account"
@@ -40,7 +40,7 @@ const handleSubmit = async () => {
 </template>
 
 <style scoped lang="sass">
-#login
+#auth-entrance-view
   align-items: center
   display: flex
   flex-direction: column

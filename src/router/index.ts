@@ -4,7 +4,7 @@ import LatestGameView from '@/views/LatestGameView.vue';
 import PlayerProfileView from '@/views/PlayerProfileView.vue';
 import PlayerStatView from '@/views/PlayerStatView.vue';
 import TeamView from '@/views/TeamView.vue';
-import Login from '@/views/Login.vue';
+import AuthEntranceView from '@/views/AuthEntranceView.vue';
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,7 +45,7 @@ export const router = createRouter({
     {
       path: '/auth/entrance',
       name: '管理系統入口',
-      component: Login,
+      component: AuthEntranceView,
     },
   ],
 });
