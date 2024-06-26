@@ -10,8 +10,9 @@ import {
 } from '@/generated/web-api';
 import { Alert } from '@/functions/alert';
 import { Toast } from '@/functions/toast';
+import { useAuthSessionStore } from '@/stores/authSession';
 
-const editable = true; // Hardcoded for now
+const authSession = useAuthSessionStore();
 const table = useTableStore();
 
 table.setDeletable(true);
@@ -144,7 +145,7 @@ onMounted(async () => {
 <template>
   <Table
     id="player-profile-view-vue"
-    :editable="editable"
+    :editable="authSession.exists"
     :table="table"
     :title="String($route.name)" />
 </template>
