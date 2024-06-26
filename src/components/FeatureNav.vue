@@ -28,7 +28,6 @@ function isFeatureRoute(route: RouteRecordNormalized): boolean {
   height: 100%
   padding-block: 1.1em
   padding-inline: 0.8em
-  position: relative
   user-select: none
   -webkit-user-select: none
   width: 100%
@@ -41,7 +40,6 @@ function isFeatureRoute(route: RouteRecordNormalized): boolean {
     display: flex
     height: max-content
     padding-block-end: 1.1em
-    position: relative
     text-align: center
     width: max-content
 </style>

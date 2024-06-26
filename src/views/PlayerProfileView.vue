@@ -8,6 +8,7 @@ import {
   patchPlayersByIdProfile,
   postPlayerProfile,
 } from '@/generated/web-api';
+import { Alert } from '@/functions/alert';
 import { Toast } from '@/functions/toast';
 
 const editable = true; // Hardcoded for now
@@ -96,7 +97,7 @@ table.setRead(async (parameters) => {
   try {
     return await getPlayersProfile(parameters);
   } catch (error) {
-    Toast.showFailure('Read', error);
+    Alert.showFailure('Read', error);
     return;
   }
 });

@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { deleteSession } from '@/functions/cookies';
+import { RouterLink } from 'vue-router';
+import { deleteSession, isSession } from '@/functions/cookies';
 import { deleteAuthSession } from '@/generated/web-api';
-import router from '@/router';
+import { router } from '@/router';
 
 const handleSubmit = async () => {
   try {
     await deleteAuthSession();
     deleteSession();
-    router.push('/login');
+    router.go(0);
   } catch (error) {
     alert(error);
   }
@@ -15,22 +16,26 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="header-vue">
-    <header id="grid">
-      <img
-        alt="Logo with a basketball"
-        id="logo"
-        src="@/assets/logo.png" />
-      <h1 id="title">籃球戰情室</h1>
-      <form @submit.prevent="handleSubmit">
-        <button
-          id="auth"
-          type="submit">
-          Logout
-        </button>
-      </form>
-    </header>
-  </div>
+  <header class="header-vue">
+    <img
+      alt="Logo with a basketball"
+      id="logo"
+      sizes="160x145"
+      src="@/assets/logo.png" />
+    <h1 id="title">籃球戰情室</h1>
+    <button
+      v-if="isSession()"
+      id="auth"
+      @click="handleSubmit">
+      Logout
+    </button>
+    <RouterLink
+      v-else
+      id="auth"
+      to="/auth/entrance">
+      Login
+    </RouterLink>
+  </header>
 </template>
 
 <style scoped lang="sass">
@@ -53,7 +58,7 @@ header
     min-width: max-content
     width: 100%
 
-  button#auth
+  #auth
     color: #ffffff
     cursor: pointer
     font-size: 2.25em

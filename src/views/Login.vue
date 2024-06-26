@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import CustomInput from '@/components/CustomInput.vue';
 import { postAuthSession } from '@/generated/web-api';
 import { hasSession } from '@/functions/cookies';
-import router from '@/router';
 
 const title = ref('登入');
 const accountLabel = ref('帳號 :');
@@ -20,7 +19,7 @@ const handleSubmit = async () => {
       },
     });
     hasSession();
-    router.push('/');
+    window.location.href = '/';
   } catch (error) {
     alert(error);
     return;
@@ -30,30 +29,29 @@ const handleSubmit = async () => {
 
 <template>
   <div id="login">
-    <form @submit.prevent="handleSubmit">
-      <h1>{{ title }}</h1>
-      <CustomInput
-        v-model="account"
-        :label="accountLabel" />
-      <CustomInput
-        v-model="password"
-        :label="passwordLabel" />
-      <button type="submit">登入</button>
-    </form>
+    <h1>{{ title }}</h1>
+    <CustomInput
+      v-model="account"
+      :label="accountLabel" />
+    <CustomInput
+      v-model="password"
+      :label="passwordLabel" />
+    <button @click="handleSubmit">登入</button>
   </div>
 </template>
 
 <style scoped lang="sass">
+#login
+  align-items: center
+  display: flex
+  flex-direction: column
+  width: 100%
+
 h1
   margin-top: 4.5rem
   font-size: 3rem
   font-weight: bold
-form
-  width: 40%
-  text-align: center
-#login
-  justify-content: center
-  display: flex
+
 button
   margin-top: 2rem
   font-size: 2rem
@@ -62,5 +60,5 @@ button
   color: #ffffff
   padding: 1%
   text-align: center
-  width: 60%
+  width: 24%
 </style>
