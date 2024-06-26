@@ -96,7 +96,7 @@ table.setCreate(async (record) => {
     }
     const [game_date, game_home_abbr, game_away_abbr] =
       record.game_date.split(' ');
-    const response = await postPlayerStat({
+    let response: RecordType = await postPlayerStat({
       requestBody: {
         game_away_abbr: game_away_abbr as string,
         game_date: game_date as string,
@@ -110,6 +110,7 @@ table.setCreate(async (record) => {
         steal: record.steal as number,
       },
     });
+    response = formatGameDate(response);
     Toast.showSuccess('Create');
     return response;
   } catch (error) {
@@ -119,20 +120,7 @@ table.setCreate(async (record) => {
 });
 table.setRead(async (parameters) => {
   try {
-    return (await getPlayersStats(parameters)).map((record: RecordType) => {
-      if (
-        typeof record.game_away_abbr === 'string' &&
-        typeof record.game_date === 'string' &&
-        typeof record.game_home_abbr === 'string'
-      ) {
-        record.game_date = [
-          record.game_date,
-          record.game_home_abbr,
-          record.game_away_abbr,
-        ].join(' ');
-      }
-      return record;
-    });
+    return (await getPlayersStats(parameters)).map(formatGameDate);
   } catch (error) {
     Alert.showFailure('Read', error);
     return;
@@ -172,17 +160,28 @@ table.setDelete(async (record) => {
     return false;
   }
 });
+
 onMounted(async () => {
   table.setReadSortField('game_date');
   table.setReadSortOrder('descending');
   await table.readRecords();
 });
+
+function formatGameDate(record: RecordType): RecordType {
+  return {
+    ...record,
+    game_date: [
+      record.game_date,
+      record.game_home_abbr,
+      record.game_away_abbr,
+    ].join(' '),
+  };
+}
 </script>
 
 <template>
   <Table
     id="player-stat-view-vue"
     :editable="authSession.exists"
-    :table="table"
-    :title="String($route.name)" />
+    :table="table" />
 </template>
