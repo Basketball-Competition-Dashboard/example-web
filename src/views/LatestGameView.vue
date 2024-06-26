@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { getGames, type Game } from '@/generated/web-api';
 import { Alert } from '@/functions/alert';
+import ViewTitle from '@/components/ViewTitle.vue';
 
 const TEAMTYPE_ENUMS = ['home', 'away'] as const;
 const PLAYLIST_ID = 'PL7B_aulXoMBN03877ABcI8eYG5JsmCDjC';
@@ -47,7 +48,7 @@ function getOrderPairFromIndex(index: number): [number, number] {
 <template>
   <div class="latest-game-view-vue">
     <section class="top">
-      <h1 class="title">{{ $route.name }}</h1>
+      <ViewTitle />
     </section>
     <section class="bottom">
       <div class="game-news">
@@ -121,18 +122,11 @@ function getOrderPairFromIndex(index: number): [number, number] {
 .top
   background-color: #ffffff
   left: 0
-  padding-block: 2em
+  padding-block-end: 2em
   position: sticky
   top: 0
   width: 100%
   z-index: 2
-
-  .title
-    color: #000000
-    font-size: 2.5em
-    font-weight: 600
-    width: 100%
-    text-align: center
 
 .bottom
   align-items: center

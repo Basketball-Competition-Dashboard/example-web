@@ -83,7 +83,7 @@ table.setFields({
 });
 table.setCreate(async (record) => {
   try {
-    const response = await postGame({
+    let response: RecordType = await postGame({
       requestBody: {
         date: record.date as string,
         home_name: record.home_name as string,
@@ -98,6 +98,7 @@ table.setCreate(async (record) => {
             : record.is_home_winner === record.home_name,
       },
     });
+    response = formatIsHomeWinner(response);
     Toast.showSuccess('Create');
     return response;
   } catch (error) {
@@ -107,14 +108,7 @@ table.setCreate(async (record) => {
 });
 table.setRead(async (parameters) => {
   try {
-    return (await getGames(parameters)).map((record: RecordType) => {
-      if (record.is_home_winner !== undefined) {
-        record.is_home_winner = record.is_home_winner
-          ? record.home_name
-          : record.away_name;
-      }
-      return record;
-    });
+    return (await getGames(parameters)).map(formatIsHomeWinner);
   } catch (error) {
     Alert.showFailure('Read', error);
     return;
@@ -151,17 +145,29 @@ table.setUpdate(async (record) => {
     return false;
   }
 });
+
 onMounted(async () => {
   table.setReadSortField('date');
   table.setReadSortOrder('descending');
   await table.readRecords();
 });
+
+function formatIsHomeWinner(record: RecordType): RecordType {
+  return {
+    ...record,
+    is_home_winner:
+      record.is_home_winner === undefined
+        ? undefined
+        : record.is_home_winner
+          ? record.home_name
+          : record.away_name,
+  };
+}
 </script>
 
 <template>
   <Table
     id="team-view-vue"
     :editable="authSession.exists"
-    :table="table"
-    :title="String($route.name)" />
+    :table="table" />
 </template>

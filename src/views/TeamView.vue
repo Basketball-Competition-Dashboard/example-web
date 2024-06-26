@@ -108,6 +108,5 @@ onMounted(async () => {
   <Table
     id="team-view-vue"
     :editable="authSession.exists"
-    :table="table"
-    :title="String($route.name)" />
+    :table="table" />
 </template>
