@@ -115,7 +115,7 @@ async function login() {
     width: 100%
 
     &:focus
-      outline: 0.1rem solid #888888
+      outline: 0.1rem solid #cccccc
 
     &::selection
       background-color: #96bce9
