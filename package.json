@@ -4,18 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "run-s codegen-* format check-* \"build-only {@}\" --",
-    "build-only": "vite build",
+    "build": "run-s generate-* format check-* \"only-build {@}\" --",
     "check-type": "vue-tsc --build --force",
-    "codegen-web-api": "openapi-ts --output src/generated/web-api/ --input https://raw.githubusercontent.com/Basketball-Competition-Dashboard/doc/main/api/web/openapi.yml",
-    "dev": "run-s codegen-* dev-only",
-    "dev-only": "vite dev",
+    "dev": "run-s \"generate-web-api --base http://localhost:5000/api/web\" only-dev",
     "format": "prettier --write .",
+    "generate-web-api": "openapi-ts --output src/generated/web-api/ --input https://raw.githubusercontent.com/Basketball-Competition-Dashboard/doc/main/api/web/openapi.yml",
+    "only-build": "vite build",
+    "only-dev": "vite dev",
     "preview": "python3 ../main.py",
     "test-e2e": "run-s test-e2e-*",
     "test-e2e-api-impl-writeread": "start-server-and-test preview http://127.0.0.1:5000 'cypress run --e2e --spec \"cypress/e2e/api-impl-writeread/**/*.test.ts\"'",
-    "test-e2e-api-stub-readonly": "start-server-and-test preview http://127.0.0.1:5000 'cypress run --e2e --spec \"cypress/e2e/api-stub-readonly/**/*.test.ts\"'",
-    "test-unit": "vitest"
+    "test-e2e-api-stub-readonly": "start-server-and-test preview http://127.0.0.1:5000 'cypress run --e2e --spec \"cypress/e2e/api-stub-readonly/**/*.test.ts\"'"
   },
   "dependencies": {
     "@unhead/vue": "1.9.14",
