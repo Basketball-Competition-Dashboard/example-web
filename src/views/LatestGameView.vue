@@ -104,6 +104,12 @@ function getOrderPairFromIndex(index: number): [number, number] {
             class="playlist"
             loading="lazy"
             name="youtube-playlist"
+            sandbox="
+              allow-popups
+              allow-popups-to-escape-sandbox
+              allow-same-origin
+              allow-scripts
+            "
             :src="`https://www.youtube.com/embed?listType=playlist&list=${PLAYLIST_ID}&controls=1`"></iframe>
         </div>
       </div>
