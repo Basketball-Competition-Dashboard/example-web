@@ -16,6 +16,7 @@ async function login() {
       credential: credential.value as string,
     });
     router.replace('/');
+    Toast.showSuccess('Login');
   } catch (error) {
     Toast.showFailure('Login', error);
     return;
